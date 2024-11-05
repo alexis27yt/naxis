@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia de Amor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-stars"></div> <!-- Fondo de estrellas -->
+    <header>
+        <h1>Nuestra Historia de Amor</h1>
+        <p class="date">06 - Jul - 2019</p>
+
+        <button id="wish-btn" class="wish-btn">Haz un Deseo</button>
+        <p id="wish-display" class="wish-display neon-text"></p>
+
+    </header>
+
+    <div id="random-message" class="random-message"></div>
+
+    <!-- Tiempo de novios -->
+    <section class="time-section">
+        <h2>Tiempo de novios</h2>
+        <p id="relationship-time">Calculando...</p>
+    </section>
+
+    <section class="countdown-section">
+        <h2>Tiempo hasta nuestro próximo aniversario:</h2>
+        <p id="anniversary-countdown">Calculando...</p>
+    </section>
+    
+
+    <main>
+
+        <!-- Contenedor Modal para la Imagen Expansible -->
+        <div class="modal" id="image-modal">
+            <span class="close" id="close-modal">&times;</span>
+            <img class="modal-content" id="modal-image">
+        </div>
+
+        <div class="gallery">
+            <img src="img/imagen1.jpeg" alt="Imagen 1" class="photo" data-speed="2">
+            <img src="img/imagen2.jpeg" alt="Imagen 2" class="photo" data-speed="4">
+            <img src="img/imagen3.jpeg" alt="Imagen 3" class="photo" data-speed="3">
+            <img src="img/imagen4.jpeg" alt="Imagen 4" class="photo" data-speed="2">
+            <img src="img/imagen5.jpeg" alt="Imagen 5" class="photo" data-speed="4">
+            <img src="img/imagen6.jpeg" alt="Imagen 6" class="photo" data-speed="3">
+            <img src="img/imagen7.jpeg" alt="Imagen 7" class="photo" data-speed="5">
+            <img src="img/imagen8.jpeg" alt="Imagen 8" class="photo" data-speed="4">
+        </div>
+    </main>
+
+    <footer>
+        <p>Con amor para siempre ❤️</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

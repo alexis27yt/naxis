@@ -1,0 +1,269 @@
+/* Estilo básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1a2e; /* Fondo oscuro para resaltar el tema nocturno */
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
+}
+
+header {
+    text-align: center;
+    padding: 2rem;
+}
+
+h1 {
+    font-size: 3rem;
+    color: #ff4d4d;
+    text-shadow: 2px 2px 5px #000;
+    margin-bottom: 0.5rem;
+}
+
+.date {
+    font-size: 1.5rem;
+    color: #ff7373;
+    text-shadow: 1px 1px 3px #000;
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px #ff7373, 0 0 20px #ff7373;
+    }
+    to {
+        text-shadow: 0 0 20px #ff4d4d, 0 0 30px #ff4d4d;
+    }
+}
+
+/* Fondo de estrellas */
+.background-stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+    opacity: 0.7;
+    z-index: -1;
+}
+
+/* Galería Parallax */
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.photo {
+    width: 45%;
+    max-width: 300px;
+    border-radius: 15px;
+    transform-origin: center;
+    animation: float 3s infinite alternate;
+    transition: transform 0.3s;
+}
+
+@keyframes float {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-20px);
+    }
+}
+
+.photo:hover {
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0px 20px 30px rgba(255, 255, 255, 0.5);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: #ff4d4d;
+    text-shadow: 1px 1px 3px #000;
+}
+
+/* Corazones que siguen el mouse */
+.heart {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: #ff4d4d;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    opacity: 0.8;
+    pointer-events: none;
+    animation: riseHeart 2s ease-out forwards;
+}
+
+@keyframes riseHeart {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+    }
+    to {
+        transform: translateY(-100px) scale(1.5);
+        opacity: 0;
+    }
+}
+
+.poem-section {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: rgba(255, 77, 77, 0.1);
+    border-radius: 10px;
+    margin: 1rem 10%;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.poem {
+    font-size: 1.2rem;
+    color: #ff7373;
+    font-style: italic;
+    line-height: 1.5;
+    text-shadow: 1px 1px 3px #000;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.time-section {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: rgba(255, 204, 204, 0.1);
+    border-radius: 10px;
+    margin: 1rem 10%;
+    color: #ff7373;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+/* Estilos para el Modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 10px;
+    animation: zoomIn 0.5s ease; /* Animación de expansión */
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+/* Animación de Zoom */
+@keyframes zoomIn {
+    from {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.random-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #ff7373;
+    margin: 1rem 0;
+    animation: fadeInOut 5s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+.falling-star {
+    position: absolute;
+    top: 0;
+    width: 5px;
+    height: 5px;
+    background: white;
+    opacity: 0.8;
+    border-radius: 50%;
+    animation: fall 2s ease-out forwards;
+}
+
+@keyframes fall {
+    from {
+        transform: translate(0, 0) scale(1);
+    }
+    to {
+        transform: translate(50vw, 100vh) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.countdown-section {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: rgba(255, 77, 77, 0.1);
+    border-radius: 10px;
+    color: #ff7373;
+    font-size: 1.3rem;
+    margin: 1rem 10%;
+}
+
+.neon-text {
+    color: #ff4d4d;
+    text-shadow: 0 0 5px #ff4d4d, 0 0 10px #ff4d4d, 0 0 20px #ff7373, 0 0 30px #ff7373, 0 0 40px #ff7373;
+}
+
+.wish-btn {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.wish-display {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #ff7373;
+    margin-top: 10px;
+    animation: fadeIn 1s ease;
+}
+
+
+
+
