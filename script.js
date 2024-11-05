@@ -28,25 +28,44 @@ document.addEventListener("DOMContentLoaded", () => {
         const startDate = new Date('2019-07-06T00:00:00');
         const now = new Date();
 
-        const totalSeconds = Math.floor((now - startDate) / 1000);
-        const years = Math.floor(totalSeconds / (365 * 24 * 3600));
-        const remainingAfterYears = totalSeconds % (365 * 24 * 3600);
-        
-        const months = Math.floor(remainingAfterYears / (30 * 24 * 3600));
-        const remainingAfterMonths = remainingAfterYears % (30 * 24 * 3600);
-        
-        const days = Math.floor(remainingAfterMonths / (24 * 3600));
-        const remainingAfterDays = remainingAfterMonths % (24 * 3600);
-        
-        const hours = Math.floor(remainingAfterDays / 3600);
-        const remainingAfterHours = remainingAfterDays % 3600;
-        
-        const minutes = Math.floor(remainingAfterHours / 60);
-        const seconds = remainingAfterHours % 60;
+        let years = now.getFullYear() - startDate.getFullYear();
+        let months = now.getMonth() - startDate.getMonth();
+        let days = now.getDate() - startDate.getDate();
+        let hours = now.getHours() - startDate.getHours();
+        let minutes = now.getMinutes() - startDate.getMinutes();
+        let seconds = now.getSeconds() - startDate.getSeconds();
+
+        // Ajuste si los meses o días están en negativo
+        if (seconds < 0) {
+            seconds += 60;
+            minutes--;
+        }
+        if (minutes < 0) {
+            minutes += 60;
+            hours--;
+        }
+        if (hours < 0) {
+            hours += 24;
+            days--;
+        }
+        if (days < 0) {
+            // Calcular días en el mes anterior
+            const previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+            days += previousMonth.getDate();
+            months--;
+        }
+        if (months < 0) {
+            months += 12;
+            years--;
+        }
 
         document.getElementById('relationship-time').innerText = 
             `${years} años, ${months} meses, ${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
     }
+
+    // Llamar a la función para actualizar el tiempo de noviazgo
+    updateRelationshipTime();
+
 
     function updateCountdown() {
         const today = new Date();
