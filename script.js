@@ -454,9 +454,71 @@ document.addEventListener("DOMContentLoaded", () => {
     
     
     document.getElementById("wish-btn").addEventListener("click", () => {
-        const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-        document.getElementById("wish-display").innerText = randomWish;
+        const wishDisplay = document.getElementById("wish-display");
+        wishDisplay.innerText = wishes[Math.floor(Math.random() * wishes.length)];
+    
+        // Genera una breve lluvia de estrellas fugaces
+        for (let i = 0; i < 5; i++) {
+            createFallingStar(); // Usa tu función de estrellas fugaces
+        }
     });
+    
+
+    const audio = document.getElementById("background-music");
+    audio.muted = true;
+    audio.volume = 0.5; // Ajusta el volumen al 50%
+
+    document.body.addEventListener("click", () => {
+        audio.muted = false;
+        audio.play();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            audio.pause(); // Pausa cuando cambia de pestaña
+        } else {
+            audio.play(); // Reanuda al regresar
+        }
+    });
+
+    function createFloatingHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('floating-heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000); // Elimina el corazón después de 5s
+    }
+    
+    setInterval(createFloatingHeart, 2000); // Cada 2 segundos aparece un nuevo corazón
+
+    function createFloatingHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('floating-heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000); // Elimina el corazón después de 5s
+    }
+    
+    setInterval(createFloatingHeart, 2000); // Cada 2 segundos aparece un nuevo corazón
+
+    window.addEventListener("load", () => {
+        setTimeout(() => {
+            document.getElementById("welcome-message").style.display = "none";
+        }, 5000); // Desaparece después de 5 segundos
+    });
+    
+    function createFloatingCloud() {
+        const cloud = document.createElement('div');
+        cloud.classList.add('floating-cloud');
+        cloud.style.bottom = Math.random() * 20 + 'vh';
+        cloud.style.animationDuration = Math.random() * 10 + 20 + 's';
+        cloud.innerText = "💖 Te amo 💖"; // Puedes añadir varios mensajes
+    
+        document.body.appendChild(cloud);
+        setTimeout(() => cloud.remove(), 20000); // Se elimina después de 20s
+    }
+    
+    setInterval(createFloatingCloud, 5000); // Cada 5 segundos aparece una nueva nube
     
     
 });
