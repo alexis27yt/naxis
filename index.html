@@ -5,32 +5,42 @@
 <title>Lista de Primera Despensa</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Manifest PWA -->
+<!-- Manifest PWA (opcional si ya lo tienes) -->
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#f8fafc">
 
 <style>
     :root{
-        /* Paleta PASTEL */
+        /* Paleta PASTEL (mobile-first) */
         --bg:#f7f7fb;
         --bg2:#fefefe;
         --card:#ffffff;
         --card2:#fffdf9;
         --ring:#e7eaf3;
-        --text:#334155;       /* slate-700 */
-        --muted:#6b7280;      /* neutral muted */
-        --brand:#a78bfa;      /* violet-400 */
-        --brand-2:#93c5fd;    /* blue-300 */
-        --success:#86efac;    /* green-300 */
-        --danger:#fca5a5;     /* red-300 */
-        --warning:#fde68a;    /* amber-200 */
+        --text:#334155;
+        --muted:#6b7280;
+        --brand:#a78bfa;
+        --brand-2:#93c5fd;
+        --success:#86efac;
+        --danger:#fca5a5;
+        --warning:#fde68a;
         --chip:#eef2ff;
         --chip-ring:#dbeafe;
         --item:#f8fafc;
         --item-checked:#e0f2fe;
         --item-exp:#fee2e2;
-        --shadow: 0 10px 30px rgba(148,163,184,.18);
-        --shadow-card: 0 12px 34px rgba(148,163,184,.22);
+        --shadow: 0 6px 18px rgba(148,163,184,.18);
+        --shadow-card: 0 10px 26px rgba(148,163,184,.22);
+
+        /* Tamaños base pensados para móvil */
+        --fs-xs:12px;
+        --fs-sm:13px;
+        --fs-md:14px;
+        --fs-lg:15px;
+
+        --radius:12px;
+        --radius-lg:16px;
+        --gap:10px;
     }
 
     *{box-sizing:border-box}
@@ -38,56 +48,67 @@
     body{
         margin:0;
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
+        font-size: var(--fs-md);
         color:var(--text);
         background:
-            radial-gradient(800px 400px at 100% -10%, rgba(167,139,250,.23), transparent 60%),
-            radial-gradient(600px 320px at 0% 100%, rgba(147,197,253,.23), transparent 60%),
+            radial-gradient(600px 300px at 100% -10%, rgba(167,139,250,.20), transparent 60%),
+            radial-gradient(500px 260px at 0% 100%, rgba(147,197,253,.20), transparent 60%),
             linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
-        padding:0;
+        -webkit-tap-highlight-color: transparent;
     }
 
     /* UNA sola columna */
     .container{
         max-width: 860px;
         margin: 0 auto;
-        padding: 18px 16px 80px;
+        padding: 12px 12px 92px; /* espacio extra para la barra inferior fija */
         display:flex;
         flex-direction:column;
-        gap:16px;
+        gap:12px;
     }
 
-    /* Toolbar fija */
+    /* Toolbar fija y compacta */
     .toolbar{
         position:sticky; top:0; z-index:50;
         backdrop-filter: saturate(140%) blur(10px);
-        background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.7));
+        background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.75));
         border-bottom:1px solid var(--ring);
     }
     .toolbar-inner{
-        max-width: 860px; margin: 0 auto; padding: 10px 12px;
-        display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+        max-width: 860px; margin: 0 auto; padding: 8px 10px;
+        display:grid; grid-template-columns: 1fr; gap:8px;
     }
+    .brand-row{ display:flex; align-items:center; gap:8px; }
     h1{
-        font-size: clamp(1.05rem, 1.8vw, 1.35rem);
-        font-weight: 800; letter-spacing:.2px; margin:0 8px 0 0; color:#1f2937; white-space:nowrap;
+        font-size: var(--fs-lg);
+        font-weight: 800; letter-spacing:.2px; margin:0; color:#1f2937;
     }
 
     .search{
-        flex:1 1 260px; display:flex; align-items:center; gap:8px;
-        background:#ffffff; border:1px solid var(--ring); border-radius: 12px; padding: 10px 12px;
+        display:flex; align-items:center; gap:8px;
+        background:#ffffff; border:1px solid var(--ring); border-radius: var(--radius); padding: 8px 10px;
         box-shadow: var(--shadow);
     }
     .search input{
-        flex:1; background:transparent; border:0; outline:0; color:var(--text); font-size:.95rem;
+        flex:1; background:transparent; border:0; outline:0; color:var(--text); font-size:var(--fs-md);
     }
+
+    /* Acciones: carrusel horizontal para móviles (todo visible con scroll) */
+    .actions{
+        display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px;
+        scroll-snap-type:x mandatory;
+    }
+    .actions .btn{ scroll-snap-align:start; flex:0 0 auto; }
 
     .btn{
         border:1px solid var(--ring); color:#1f2937;
         background:linear-gradient(180deg, #ffffff, #f4f6ff);
-        padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700;
+        padding:8px 10px; border-radius:var(--radius); cursor:pointer; font-weight:700;
         transition:.15s transform, .2s filter, .2s box-shadow; white-space:nowrap;
-        box-shadow: var(--shadow);
+        box-shadow: var(--shadow); font-size:var(--fs-sm); touch-action: manipulation;
+        height:34px; display:inline-flex; align-items:center; gap:6px;
     }
+    .btn svg{ width:16px; height:16px }
     .btn:hover{ transform:translateY(-1px); filter:brightness(1.03) }
     .btn:active{ transform:translateY(0) }
     .btn-print{ background:linear-gradient(180deg, #f5f3ff, #eef2ff); border-color:#ddd6fe }
@@ -97,125 +118,147 @@
     /* Panel progreso + totales */
     .panel{
         background: linear-gradient(180deg, var(--card), var(--card2));
-        border:1px solid var(--ring); border-radius:16px; padding:14px;
-        display:flex; flex-direction:column; gap:12px; box-shadow: var(--shadow);
+        border:1px solid var(--ring); border-radius:var(--radius-lg); padding:10px;
+        display:flex; flex-direction:column; gap:10px; box-shadow: var(--shadow);
     }
     .progress{
-        height: 18px; border-radius: 999px; background:#f1f5f9; border:1px solid var(--ring); overflow:hidden;
+        height: 14px; border-radius: 999px; background:#f1f5f9; border:1px solid var(--ring); overflow:hidden;
     }
     .progress .bar{
-        height:100%; width:0%; color:#0a0f1f;
+        height:100%; width:0%;
         background: linear-gradient(90deg, var(--brand), var(--brand-2));
         display:flex; align-items:center; justify-content:center;
-        font-size:.78rem; font-weight:900; letter-spacing:.3px; transition: width .25s ease; white-space:nowrap;
+        font-size: var(--fs-xs); font-weight:900; letter-spacing:.2px; transition: width .25s ease; color:#0a0f1f;
     }
 
     .totales{
-        display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px;
+        display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;
     }
     .tcard{
-        background:#fff; border:1px solid var(--ring); border-radius:14px; text-align:center; padding:10px 8px;
+        background:#fff; border:1px solid var(--ring); border-radius:var(--radius); text-align:center; padding:8px;
     }
-    .tcard h4{ margin:0 0 5px 0; color:var(--muted); font-size:.8rem; font-weight:700; letter-spacing:.3px; text-transform:uppercase; }
-    .tcard .val{ font-size:1.05rem; font-weight:900; color:#111827; }
+    .tcard h4{ margin:0 0 3px 0; color:var(--muted); font-size:var(--fs-xs); font-weight:700; letter-spacing:.2px; text-transform:uppercase; }
+    .tcard .val{ font-size:var(--fs-md); font-weight:900; color:#111827; }
 
     /* Card categoría */
     .card{
         background: linear-gradient(180deg, #ffffff, #fafafa);
-        border:1px solid var(--ring); border-radius:16px; overflow:hidden; box-shadow: var(--shadow-card);
+        border:1px solid var(--ring); border-radius:var(--radius-lg); overflow:hidden; box-shadow: var(--shadow-card);
     }
     .card header{
-        padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+        padding:10px; display:flex; align-items:center; justify-content:space-between; gap:8px;
         border-bottom:1px solid var(--ring);
     }
-    .title{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .title{ display:flex; align-items:center; gap:8px; min-width:0; }
     .title h2{
-        margin:0; font-size:1rem; letter-spacing:.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-        display:flex; align-items:center; gap:8px;
+        margin:0; font-size:var(--fs-md); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+        display:flex; align-items:center; gap:6px;
     }
     .contador{
-        font-size:.75rem; background: var(--chip); border:1px solid var(--chip-ring); color:#3730a3;
-        padding:2px 8px; border-radius:999px; font-weight:900;
+        font-size:var(--fs-xs); background: var(--chip); border:1px solid var(--chip-ring); color:#3730a3;
+        padding:2px 6px; border-radius:999px; font-weight:900;
     }
 
-    .meta{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    .meta{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
 
     .sort{
-        appearance:none; padding:8px 12px; border-radius:10px; border:1px solid var(--ring);
-        background:#fff; color:var(--text); font-weight:700; cursor:pointer; min-width:170px; box-shadow: var(--shadow);
+        appearance:none; padding:6px 8px; border-radius:10px; border:1px solid var(--ring);
+        background:#fff; color:var(--text); font-weight:700; cursor:pointer; min-width:140px; box-shadow: var(--shadow);
+        font-size:var(--fs-sm); height:32px;
     }
     .total-cat{
-        background: #ecfeff; border:1px solid #bae6fd; color:#075985; font-weight:900; padding:8px 12px; border-radius:999px; white-space:nowrap;
-        box-shadow: var(--shadow);
+        background: #ecfeff; border:1px solid #bae6fd; color:#075985; font-weight:900; padding:6px 8px; border-radius:999px; white-space:nowrap;
+        box-shadow: var(--shadow); font-size:var(--fs-sm);
     }
 
     /* Botón acordeón */
     .toggle{
-        border:none; background:#fff; border:1px solid var(--ring); border-radius:10px; width:36px; height:36px;
+        border:1px solid var(--ring); background:#fff; border-radius:10px; width:32px; height:32px;
         display:grid; place-items:center; cursor:pointer; box-shadow: var(--shadow);
     }
     .chev{ transition: transform .2s ease; }
     .collapsed .chev{ transform: rotate(-90deg); }
 
     /* Lista de ítems */
-    .items{ list-style:none; margin:0; padding:10px 10px 12px 10px; display:flex; flex-direction:column; gap:10px; }
+    .items{ list-style:none; margin:0; padding:8px; display:flex; flex-direction:column; gap:8px; }
     .items.collapsed{ display:none; }
 
     .item{
-        display:flex; align-items:center; gap:10px; background: var(--item);
-        border:1px solid var(--ring); border-radius:12px; padding:10px; transition:.2s ease; flex-wrap:wrap;
+        display:flex; align-items:center; gap:8px; background: var(--item);
+        border:1px solid var(--ring); border-radius:var(--radius); padding:8px; transition:.2s ease; flex-wrap:wrap;
     }
-    .item:hover{ box-shadow: 0 0 0 2px rgba(147,197,253,.35) inset }
+    .item:hover{ box-shadow: 0 0 0 2px rgba(147,197,253,.30) inset }
     .item.checked{ background: var(--item-checked); }
-    .item.expensive{ box-shadow: 0 0 0 2px rgba(252,165,165,.9) inset; background: var(--item-exp); }
+    .item.expensive{ box-shadow: 0 0 0 2px rgba(252,165,165,.85) inset; background: var(--item-exp); }
 
-    .check{ transform:scale(1.2); cursor:pointer; accent-color:#8b5cf6; }
-    .name{ flex:1 1 180px; min-width:150px; font-weight:700; letter-spacing:.2px; }
+    .check{ transform:scale(1.1); cursor:pointer; accent-color:#8b5cf6; }
+    .name{ flex:1 1 150px; min-width:120px; font-weight:700; letter-spacing:.2px; font-size:var(--fs-md); }
 
-    .pc{ display:flex; align-items:center; gap:8px; flex:1 1 auto; flex-wrap:wrap; }
+    .pc{ display:flex; align-items:center; gap:6px; flex:1 1 auto; flex-wrap:wrap; }
     .pc input[type="number"]{
-        width: 92px; background:#fff; border:1px solid var(--ring); border-radius:10px; padding:8px 10px; color:#111827; font-weight:700;
+        width: 80px; background:#fff; border:1px solid var(--ring); border-radius:10px; padding:6px 8px; color:#111827; font-weight:700; font-size:var(--fs-sm); height:32px;
     }
     .subtotal{
-        min-width:110px; text-align:right; font-weight:900; background:#fff; border:1px solid var(--ring); border-radius:10px; padding:8px 10px;
+        min-width:96px; text-align:right; font-weight:900; background:#fff; border:1px solid var(--ring); border-radius:10px; padding:6px 8px;
+        font-size:var(--fs-sm); height:32px; display:flex; align-items:center; justify-content:flex-end;
     }
     .del{
-        background:#fff1f2; border:1px solid #fecaca; color:#991b1b; border-radius:10px; padding:8px 10px; cursor:pointer; font-weight:900;
+        background:#fff1f2; border:1px solid #fecaca; color:#991b1b; border-radius:10px; padding:6px 8px; cursor:pointer; font-weight:900; font-size:var(--fs-sm);
+        height:32px; display:inline-flex; align-items:center;
     }
-    .del:hover{ filter:brightness(1.03) }
 
     /* Admin panel */
     .admin{
         background: linear-gradient(180deg, var(--card), #fdfcff);
-        border:1px solid var(--ring); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:10px; box-shadow: var(--shadow);
+        border:1px solid var(--ring); border-radius:var(--radius-lg); padding:10px; display:flex; flex-direction:column; gap:8px; box-shadow: var(--shadow);
     }
-    .admin h3{ margin:0; font-size:.95rem; color:#1f2937; letter-spacing:.3px }
+    .admin h3{ margin:0; font-size:var(--fs-md); color:#1f2937; letter-spacing:.2px }
     .admin .group{ display:flex; flex-wrap:wrap; gap:8px }
     .admin input[type="text"], .admin select{
-        background:#fff; border:1px solid var(--ring); color:var(--text); padding:10px 12px; border-radius:12px; font-weight:700; box-shadow: var(--shadow);
+        background:#fff; border:1px solid var(--ring); color:var(--text); padding:8px 10px; border-radius:var(--radius); font-weight:700; box-shadow: var(--shadow);
+        font-size:var(--fs-sm); height:34px;
     }
-    .admin .note{ font-size:.8rem; color:var(--muted) }
+    .admin .note{ font-size:var(--fs-xs); color:var(--muted) }
 
     /* Overlay confirmación */
     .overlay{
-        position:fixed; inset:0; z-index:90; background: rgba(2,6,23,.25);
+        position:fixed; inset:0; z-index:90; background: rgba(2,6,23,.20);
         display:flex; align-items:center; justify-content:center; backdrop-filter: blur(2px);
     }
     .confirm{
-        background:#fff; border:1px solid var(--ring); color:var(--text); padding:18px 16px; border-radius:16px; width:min(92vw,420px);
-        box-shadow: var(--shadow-card); text-align:center;
+        background:#fff; border:1px solid var(--ring); color:var(--text); padding:14px; border-radius:var(--radius-lg); width:min(92vw,420px);
+        box-shadow: var(--shadow-card); text-align:center; font-size:var(--fs-md);
     }
-    .confirm p{ margin:0 0 12px 0 }
-    .confirm .row{ display:flex; gap:10px; justify-content:center }
-    .cbtn{ padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:900; border:1px solid var(--ring); box-shadow: var(--shadow) }
+    .confirm p{ margin:0 0 10px 0 }
+    .confirm .row{ display:flex; gap:8px; justify-content:center }
+    .cbtn{ padding:8px 10px; border-radius:var(--radius); cursor:pointer; font-weight:900; border:1px solid var(--ring); box-shadow: var(--shadow); font-size:var(--fs-sm) }
     .cbtn.y{ background:#fee2e2; color:#7f1d1d; border-color:#fecaca }
     .cbtn.n{ background:#eef2ff; color:#1e3a8a; border-color:#c7d2fe }
 
-    @media (max-width:640px){
-        .totales{ grid-template-columns:1fr; }
-        .title h2{ font-size:.95rem }
-        .sort{ min-width:140px }
-        .name{ min-width:120px }
+    /* Barra inferior fija (resumen rápido móvil) */
+    .bottom-bar{
+        position:fixed; left:0; right:0; bottom:0; z-index:60;
+        background:rgba(255,255,255,.98); border-top:1px solid var(--ring); backdrop-filter: blur(6px);
+        display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px;
+        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    }
+    .bb-metrics{ display:flex; gap:10px; align-items:center; font-size:var(--fs-sm); }
+    .bb-chip{
+        background:#fff; border:1px solid var(--ring); border-radius:999px; padding:6px 8px; box-shadow: var(--shadow);
+        display:flex; gap:6px; align-items:center; font-weight:800;
+    }
+    .bb-chip strong{ font-weight:900; }
+
+    /* Ajustes para pantallas más grandes (tablets/escritorio) */
+    @media (min-width:640px){
+        :root{ --fs-xs:12px; --fs-sm:13px; --fs-md:15px; --fs-lg:18px; }
+        .toolbar-inner{ grid-template-columns: 1fr 1fr; align-items:center }
+        .actions{ justify-content:flex-end; overflow:visible }
+        .btn{ height:36px }
+        .progress{ height:16px }
+        .pc input[type="number"]{ width:90px }
+        .subtotal{ min-width:110px }
+        .totales{ grid-template-columns: repeat(3, minmax(0,1fr)); }
     }
 </style>
 </head>
@@ -223,206 +266,232 @@
 
 <!-- TOOLBAR FIJA -->
 <div class="toolbar">
-    <div class="toolbar-inner">
-        <h1>Primera Despensa</h1>
-
-        <div class="search">
-            <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg>
-            <input id="busqueda" placeholder="Buscar producto…">
-        </div>
-
-        <button class="btn" id="btn-expandir">Expandir todo</button>
-        <button class="btn btn-outline" id="btn-colapsar">Colapsar todo</button>
-
-        <button class="btn btn-print" id="btn-imprimir">Resumen imprimible</button>
-        <button class="btn btn-danger" id="btn-borrar">Borrar estado</button>
-        <button class="btn" id="btn-instalar" style="display:none;">Instalar app</button>
+  <div class="toolbar-inner">
+    <div class="brand-row">
+      <h1>Primera Despensa</h1>
     </div>
+
+    <div class="search">
+      <svg width="16" height="16" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg>
+      <input id="busqueda" placeholder="Buscar producto…">
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="btn-expandir" title="Expandir todo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>Expandir
+      </button>
+      <button class="btn btn-outline" id="btn-colapsar" title="Colapsar todo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14"/></svg>Colapsar
+      </button>
+      <button class="btn btn-print" id="btn-imprimir" title="Imprimir / guardar PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9V2h12v7M6 18h12v4H6zM6 14h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2v1a2 2 0 002 2z"/></svg>Imprimir
+      </button>
+      <button class="btn btn-danger" id="btn-borrar" title="Borrar estado">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>Borrar
+      </button>
+      <button class="btn" id="btn-instalar" style="display:none;" title="Instalar app">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>Instalar
+      </button>
+    </div>
+  </div>
 </div>
 
 <div class="container">
 
-    <!-- PANEL DE PROGRESO + TOTALES -->
-    <section class="panel">
-        <div class="progress"><div class="bar" id="barra-progreso">0%</div></div>
-        <div class="totales">
-            <div class="tcard">
-                <h4>Productos seleccionados</h4>
-                <div class="val" id="total-seleccionados">0</div>
-            </div>
-            <div class="tcard">
-                <h4>Cantidad total</h4>
-                <div class="val" id="total-cantidad">0</div>
-            </div>
-            <div class="tcard">
-                <h4>Total</h4>
-                <div class="val" id="total-dinero">$0.00</div>
-            </div>
-        </div>
-    </section>
+  <!-- PANEL DE PROGRESO + TOTALES -->
+  <section class="panel">
+    <div class="progress"><div class="bar" id="barra-progreso">0%</div></div>
+    <div class="totales">
+      <div class="tcard">
+        <h4>Seleccionados</h4>
+        <div class="val" id="total-seleccionados">0</div>
+      </div>
+      <div class="tcard">
+        <h4>Cantidad</h4>
+        <div class="val" id="total-cantidad">0</div>
+      </div>
+      <div class="tcard">
+        <h4>Total</h4>
+        <div class="val" id="total-dinero">$0.00</div>
+      </div>
+    </div>
+  </section>
 
-    <!-- ADMIN -->
-    <section class="admin">
-        <h3>Agregar / Quitar productos</h3>
-        <div class="group">
-            <input type="text" id="nuevo-producto" placeholder="Nombre del producto">
-            <select id="categoria-nueva">
-                <option value="higiene">Higiene Personal</option>
-                <option value="limpieza">Limpieza del Hogar</option>
-                <option value="alimentos">Alimentos Básicos</option>
-                <option value="conservas">Conservas</option>
-                <option value="otros">Otros</option>
-            </select>
-            <button class="btn" id="agregar-producto">Agregar</button>
-        </div>
-        <small class="note">Marca ✓ para incluirlo. Captura Cantidad y Costo unitario. Se guarda automáticamente en tu navegador.</small>
-    </section>
+  <!-- ADMIN -->
+  <section class="admin">
+    <h3>Agregar / Quitar productos</h3>
+    <div class="group">
+      <input type="text" id="nuevo-producto" placeholder="Nombre del producto">
+      <select id="categoria-nueva">
+        <option value="higiene">Higiene Personal</option>
+        <option value="limpieza">Limpieza del Hogar</option>
+        <option value="alimentos">Alimentos Básicos</option>
+        <option value="conservas">Conservas</option>
+        <option value="otros">Otros</option>
+      </select>
+      <button class="btn" id="agregar-producto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>Agregar
+      </button>
+    </div>
+    <small class="note">Marca ✓ para incluirlo. Captura Cantidad y Costo unitario. Se guarda automáticamente en tu navegador.</small>
+  </section>
 
-    <!-- CATEGORÍAS (UNA sola columna con ACORDEÓN) -->
-    <section class="card higiene">
-        <header>
-            <div class="title">
-                <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
-                <h2>Higiene Personal <span class="contador"></span></h2>
-            </div>
-            <div class="meta">
-                <select class="sort">
-                    <option value="none">Ordenar…</option>
-                    <option value="nombre">Nombre (A–Z)</option>
-                    <option value="costo">Costo unitario (↑)</option>
-                    <option value="subtotal">Subtotal (↑)</option>
-                    <option value="checked">Marcados primero</option>
-                </select>
-                <span class="total-cat" data-cat="higiene">$0.00</span>
-            </div>
-        </header>
-        <ul class="items">
-            <li class="item"><input class="check" type="checkbox" id="jabon"><div class="name"><label for="jabon">Jabón de tocador</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="jabonliquido"><div class="name"><label for="jabonliquido">Jabón líquido para manos</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="shampoo"><div class="name"><label for="shampoo">Shampoo</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="pasta"><div class="name"><label for="pasta">Pasta dental</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="cepillo"><div class="name"><label for="cepillo">Cepillo de dientes</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="papel"><div class="name"><label for="papel">Papel higiénico</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="toallitas"><div class="name"><label for="toallitas">Toallitas húmedas</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="toallas"><div class="name"><label for="toallas">Toallas femeninas / tampones</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="desodorante"><div class="name"><label for="desodorante">Desodorante</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="gel"><div class="name"><label for="gel">Gel antibacterial</label></div></li>
-        </ul>
-    </section>
+  <!-- CATEGORÍAS (UNA sola columna con ACORDEÓN) -->
+  <section class="card higiene">
+    <header>
+      <div class="title">
+        <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+        <h2>Higiene Personal <span class="contador"></span></h2>
+      </div>
+      <div class="meta">
+        <select class="sort">
+          <option value="none">Ordenar…</option>
+          <option value="nombre">Nombre (A–Z)</option>
+          <option value="costo">Costo unitario (↑)</option>
+          <option value="subtotal">Subtotal (↑)</option>
+          <option value="checked">Marcados primero</option>
+        </select>
+        <span class="total-cat" data-cat="higiene">$0.00</span>
+      </div>
+    </header>
+    <ul class="items">
+      <li class="item"><input class="check" type="checkbox" id="jabon"><div class="name"><label for="jabon">Jabón de tocador</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="jabonliquido"><div class="name"><label for="jabonliquido">Jabón líquido para manos</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="shampoo"><div class="name"><label for="shampoo">Shampoo</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="pasta"><div class="name"><label for="pasta">Pasta dental</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="cepillo"><div class="name"><label for="cepillo">Cepillo de dientes</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="papel"><div class="name"><label for="papel">Papel higiénico</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="toallitas"><div class="name"><label for="toallitas">Toallitas húmedas</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="toallas"><div class="name"><label for="toallas">Toallas femeninas / tampones</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="desodorante"><div class="name"><label for="desodorante">Desodorante</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="gel"><div class="name"><label for="gel">Gel antibacterial</label></div></li>
+    </ul>
+  </section>
 
-    <section class="card limpieza">
-        <header>
-            <div class="title">
-                <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
-                <h2>Limpieza del Hogar <span class="contador"></span></h2>
-            </div>
-            <div class="meta">
-                <select class="sort">
-                    <option value="none">Ordenar…</option>
-                    <option value="nombre">Nombre (A–Z)</option>
-                    <option value="costo">Costo unitario (↑)</option>
-                    <option value="subtotal">Subtotal (↑)</option>
-                    <option value="checked">Marcados primero</option>
-                </select>
-                <span class="total-cat" data-cat="limpieza">$0.00</span>
-            </div>
-        </header>
-        <ul class="items">
-            <li class="item"><input class="check" type="checkbox" id="detergente"><div class="name"><label for="detergente">Detergente para ropa</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="suavizante"><div class="name"><label for="suavizante">Suavizante de ropa</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="cloro"><div class="name"><label for="cloro">Cloro / lejía</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="limpiador"><div class="name"><label for="limpiador">Limpiador multiusos</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="escoba"><div class="name"><label for="escoba">Escoba</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="trapeador"><div class="name"><label for="trapeador">Trapeador</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="basura"><div class="name"><label for="basura">Bolsas de basura</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="esponja"><div class="name"><label for="esponja">Esponja / estropajo</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="desinfectante"><div class="name"><label for="desinfectante">Desinfectante</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="guantes"><div class="name"><label for="guantes">Guantes de limpieza</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="limpia-vidrios"><div class="name"><label for="limpia-vidrios">Limpiavidrios</label></div></li>
-        </ul>
-    </section>
+  <section class="card limpieza">
+    <header>
+      <div class="title">
+        <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+        <h2>Limpieza del Hogar <span class="contador"></span></h2>
+      </div>
+      <div class="meta">
+        <select class="sort">
+          <option value="none">Ordenar…</option>
+          <option value="nombre">Nombre (A–Z)</option>
+          <option value="costo">Costo unitario (↑)</option>
+          <option value="subtotal">Subtotal (↑)</option>
+          <option value="checked">Marcados primero</option>
+        </select>
+        <span class="total-cat" data-cat="limpieza">$0.00</span>
+      </div>
+    </header>
+    <ul class="items">
+      <li class="item"><input class="check" type="checkbox" id="detergente"><div class="name"><label for="detergente">Detergente para ropa</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="suavizante"><div class="name"><label for="suavizante">Suavizante de ropa</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="cloro"><div class="name"><label for="cloro">Cloro / lejía</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpiador"><div class="name"><label for="limpiador">Limpiador multiusos</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="escoba"><div class="name"><label for="escoba">Escoba</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="trapeador"><div class="name"><label for="trapeador">Trapeador</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="basura"><div class="name"><label for="basura">Bolsas de basura</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="esponja"><div class="name"><label for="esponja">Esponja / estropajo</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="desinfectante"><div class="name"><label for="desinfectante">Desinfectante</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="guantes"><div class="name"><label for="guantes">Guantes de limpieza</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpia-vidrios"><div class="name"><label for="limpia-vidrios">Limpiavidrios</label></div></li>
+    </ul>
+  </section>
 
-    <section class="card alimentos">
-        <header>
-            <div class="title">
-                <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
-                <h2>Alimentos Básicos <span class="contador"></span></h2>
-            </div>
-            <div class="meta">
-                <select class="sort">
-                    <option value="none">Ordenar…</option>
-                    <option value="nombre">Nombre (A–Z)</option>
-                    <option value="costo">Costo unitario (↑)</option>
-                    <option value="subtotal">Subtotal (↑)</option>
-                    <option value="checked">Marcados primero</option>
-                </select>
-                <span class="total-cat" data-cat="alimentos">$0.00</span>
-            </div>
-        </header>
-        <ul class="items">
-            <li class="item"><input class="check" type="checkbox" id="arroz"><div class="name"><label for="arroz">Arroz</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="frijol"><div class="name"><label for="frijol">Frijol</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="aceite"><div class="name"><label for="aceite">Aceite</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="sal"><div class="name"><label for="sal">Sal</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="azucar"><div class="name"><label for="azucar">Azúcar</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="harina"><div class="name"><label for="harina">Harina</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="cafe"><div class="name"><label for="cafe">Café / té</label></div></li>
-        </ul>
-    </section>
+  <section class="card alimentos">
+    <header>
+      <div class="title">
+        <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+        <h2>Alimentos Básicos <span class="contador"></span></h2>
+      </div>
+      <div class="meta">
+        <select class="sort">
+          <option value="none">Ordenar…</option>
+          <option value="nombre">Nombre (A–Z)</option>
+          <option value="costo">Costo unitario (↑)</option>
+          <option value="subtotal">Subtotal (↑)</option>
+          <option value="checked">Marcados primero</option>
+        </select>
+        <span class="total-cat" data-cat="alimentos">$0.00</span>
+      </div>
+    </header>
+    <ul class="items">
+      <li class="item"><input class="check" type="checkbox" id="arroz"><div class="name"><label for="arroz">Arroz</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="frijol"><div class="name"><label for="frijol">Frijol</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="aceite"><div class="name"><label for="aceite">Aceite</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="sal"><div class="name"><label for="sal">Sal</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="azucar"><div class="name"><label for="azucar">Azúcar</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="harina"><div class="name"><label for="harina">Harina</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="cafe"><div class="name"><label for="cafe">Café / té</label></div></li>
+    </ul>
+  </section>
 
-    <section class="card conservas">
-        <header>
-            <div class="title">
-                <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
-                <h2>Conservas <span class="contador"></span></h2>
-            </div>
-            <div class="meta">
-                <select class="sort">
-                    <option value="none">Ordenar…</option>
-                    <option value="nombre">Nombre (A–Z)</option>
-                    <option value="costo">Costo unitario (↑)</option>
-                    <option value="subtotal">Subtotal (↑)</option>
-                    <option value="checked">Marcados primero</option>
-                </select>
-                <span class="total-cat" data-cat="conservas">$0.00</span>
-            </div>
-        </header>
-        <ul class="items">
-            <li class="item"><input class="check" type="checkbox" id="atun"><div class="name"><label for="atun">Atún en lata</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="sopa"><div class="name"><label for="sopa">Sopa instantánea / sopas en sobre</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="vegetales"><div class="name"><label for="vegetales">Vegetales enlatados</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="fruta"><div class="name"><label for="fruta">Frutas enlatadas</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="miel"><div class="name"><label for="miel">Miel / mantequilla</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="jugo"><div class="name"><label for="jugo">Jugo en caja</label></div></li>
-        </ul>
-    </section>
+  <section class="card conservas">
+    <header>
+      <div class="title">
+        <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+        <h2>Conservas <span class="contador"></span></h2>
+      </div>
+      <div class="meta">
+        <select class="sort">
+          <option value="none">Ordenar…</option>
+          <option value="nombre">Nombre (A–Z)</option>
+          <option value="costo">Costo unitario (↑)</option>
+          <option value="subtotal">Subtotal (↑)</option>
+          <option value="checked">Marcados primero</option>
+        </select>
+        <span class="total-cat" data-cat="conservas">$0.00</span>
+      </div>
+    </header>
+    <ul class="items">
+      <li class="item"><input class="check" type="checkbox" id="atun"><div class="name"><label for="atun">Atún en lata</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="sopa"><div class="name"><label for="sopa">Sopa instantánea / sopas en sobre</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="vegetales"><div class="name"><label for="vegetales">Vegetales enlatados</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="fruta"><div class="name"><label for="fruta">Frutas enlatadas</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="miel"><div class="name"><label for="miel">Miel / mantequilla</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="jugo"><div class="name"><label for="jugo">Jugo en caja</label></div></li>
+    </ul>
+  </section>
 
-    <section class="card otros">
-        <header>
-            <div class="title">
-                <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
-                <h2>Otros <span class="contador"></span></h2>
-            </div>
-            <div class="meta">
-                <select class="sort">
-                    <option value="none">Ordenar…</option>
-                    <option value="nombre">Nombre (A–Z)</option>
-                    <option value="costo">Costo unitario (↑)</option>
-                    <option value="subtotal">Subtotal (↑)</option>
-                    <option value="checked">Marcados primero</option>
-                </select>
-                <span class="total-cat" data-cat="otros">$0.00</span>
-            </div>
-        </header>
-        <ul class="items">
-            <li class="item"><input class="check" type="checkbox" id="pilas"><div class="name"><label for="pilas">Pilas</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="velas"><div class="name"><label for="velas">Velas</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="cerillos"><div class="name"><label for="cerillos">Cerillos / encendedores</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="pañales"><div class="name"><label for="pañales">Pañales</label></div></li>
-            <li class="item"><input class="check" type="checkbox" id="toallitas-bb"><div class="name"><label for="toallitas-bb">Toallitas bebé</label></div></li>
-        </ul>
-    </section>
+  <section class="card otros">
+    <header>
+      <div class="title">
+        <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+        <h2>Otros <span class="contador"></span></h2>
+      </div>
+      <div class="meta">
+        <select class="sort">
+          <option value="none">Ordenar…</option>
+          <option value="nombre">Nombre (A–Z)</option>
+          <option value="costo">Costo unitario (↑)</option>
+          <option value="subtotal">Subtotal (↑)</option>
+          <option value="checked">Marcados primero</option>
+        </select>
+        <span class="total-cat" data-cat="otros">$0.00</span>
+      </div>
+    </header>
+    <ul class="items">
+      <li class="item"><input class="check" type="checkbox" id="pilas"><div class="name"><label for="pilas">Pilas</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="velas"><div class="name"><label for="velas">Velas</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="cerillos"><div class="name"><label for="cerillos">Cerillos / encendedores</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="pañales"><div class="name"><label for="pañales">Pañales</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="toallitas-bb"><div class="name"><label for="toallitas-bb">Toallitas bebé</label></div></li>
+    </ul>
+  </section>
 
+</div>
+
+<!-- BARRA INFERIOR FIJA (MÓVIL) -->
+<div class="bottom-bar">
+  <div class="bb-metrics">
+    <div class="bb-chip">✓ <strong id="bb-sel">0</strong></div>
+    <div class="bb-chip">$ <strong id="bb-total">0.00</strong></div>
+  </div>
+  <button class="btn btn-print" id="btn-imprimir-bottom" title="Imprimir / guardar PDF">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9V2h12v7M6 18h12v4H6zM6 14h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2v1a2 2 0 002 2z"/></svg>Imprimir
+  </button>
 </div>
 
 <script>
@@ -434,322 +503,329 @@ const LS_KEY='despensa_v3_state';
 
 /* ====== Estado (localStorage) ====== */
 function readState(){
-    const data=[];
-    qSA('.card').forEach(card=>{
-        const cat=[...card.classList].find(c=>['higiene','limpieza','alimentos','conservas','otros'].includes(c));
-        qSA('.items > .item', card).forEach(li=>{
-            const chk = qS('.check', li);
-            const label = li.querySelector('label');
-            const id = chk?.id || (label?.textContent.trim().toLowerCase().replace(/\s+/g,'-'));
-            const cant = Number(qS('input.cant', li)?.value)||0;
-            const cost = Number(qS('input.precio', li)?.value)||0;
-            data.push({ id, nombre: label?.textContent.trim()||'', categoria:cat, checked:!!chk?.checked, cantidad:cant, costo:cost });
-        });
+  const data=[];
+  qSA('.card').forEach(card=>{
+    const cat=[...card.classList].find(c=>['higiene','limpieza','alimentos','conservas','otros'].includes(c));
+    qSA('.items > .item', card).forEach(li=>{
+      const chk = qS('.check', li);
+      const label = li.querySelector('label');
+      const id = chk?.id || (label?.textContent.trim().toLowerCase().replace(/\s+/g,'-'));
+      const cant = Number(qS('input.cant', li)?.value)||0;
+      const cost = Number(qS('input.precio', li)?.value)||0;
+      data.push({ id, nombre: label?.textContent.trim()||'', categoria:cat, checked:!!chk?.checked, cantidad:cant, costo:cost });
     });
-    return data;
+  });
+  return data;
 }
 function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(readState())); }
 function loadState(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'null'); }catch{ return null; } }
 function applyState(state){
-    if(!state) return;
-    const map=new Map(state.map(i=>[i.id,i]));
-    qSA('.card').forEach(card=>{
-        qSA('.items > .item', card).forEach(li=>{
-            const chk= qS('.check', li);
-            const label= li.querySelector('label');
-            const id = chk?.id || (label?.textContent.trim().toLowerCase().replace(/\s+/g,'-'));
-            const item= map.get(id);
-            if(!item) return;
-            if(chk) chk.checked = !!item.checked;
-            const cant=qS('input.cant', li); if(cant) cant.value = item.cantidad ?? 1;
-            const precio=qS('input.precio', li); if(precio) precio.value = item.costo ?? 0;
-            li.classList.toggle('checked', chk?.checked);
-        });
+  if(!state) return;
+  const map=new Map(state.map(i=>[i.id,i]));
+  qSA('.card').forEach(card=>{
+    qSA('.items > .item', card).forEach(li=>{
+      const chk= qS('.check', li);
+      const label= li.querySelector('label');
+      const id = chk?.id || (label?.textContent.trim().toLowerCase().replace(/\s+/g,'-'));
+      const item= map.get(id);
+      if(!item) return;
+      if(chk) chk.checked = !!item.checked;
+      const cant=qS('input.cant', li); if(cant) cant.value = item.cantidad ?? 1;
+      const precio=qS('input.precio', li); if(precio) precio.value = item.costo ?? 0;
+      li.classList.toggle('checked', chk?.checked);
     });
+  });
 }
 
 /* ====== UI de Item ====== */
 function ensureControls(li){
-    if(qS('.pc', li)) return;
-    const pc = document.createElement('div'); pc.className='pc';
+  if(qS('.pc', li)) return;
+  const pc = document.createElement('div'); pc.className='pc';
 
-    const inQ=document.createElement('input'); inQ.type='number'; inQ.className='cant'; inQ.min='0'; inQ.step='1'; inQ.value='1'; inQ.title='Cantidad';
-    const inP=document.createElement('input'); inP.type='number'; inP.className='precio'; inP.min='0'; inP.step='0.01'; inP.placeholder='Costo $'; inP.title='Costo unitario (MXN)';
-    const sub=document.createElement('div'); sub.className='subtotal'; sub.textContent=money(0);
-    const del=document.createElement('button'); del.className='del'; del.type='button'; del.textContent='Eliminar';
+  const inQ=document.createElement('input'); inQ.type='number'; inQ.className='cant'; inQ.min='0'; inQ.step='1'; inQ.value='1'; inQ.title='Cantidad';
+  const inP=document.createElement('input'); inP.type='number'; inP.className='precio'; inP.min='0'; inP.step='0.01'; inP.placeholder='Costo $'; inP.title='Costo unitario (MXN)';
+  const sub=document.createElement('div'); sub.className='subtotal'; sub.textContent=money(0);
+  const del=document.createElement('button'); del.className='del'; del.type='button'; del.textContent='Eliminar';
 
-    pc.append(inQ,inP,sub,del); li.appendChild(pc);
+  pc.append(inQ,inP,sub,del); li.appendChild(pc);
 
-    const recalc=()=>{ sub.textContent=money((Number(inQ.value)||0)*(Number(inP.value)||0)); updateAll(); saveState(); };
-    inQ.addEventListener('input', recalc);
-    inP.addEventListener('input', recalc);
+  const recalc=()=>{ sub.textContent=money((Number(inQ.value)||0)*(Number(inP.value)||0)); updateAll(); saveState(); };
+  inQ.addEventListener('input', recalc);
+  inP.addEventListener('input', recalc);
 
-    const chk=qS('.check', li);
-    if(chk){
-        chk.addEventListener('change',()=>{ li.classList.toggle('checked', chk.checked); updateAll(); saveState(); });
-    }
+  const chk=qS('.check', li);
+  if(chk){
+    chk.addEventListener('change',()=>{ li.classList.toggle('checked', chk.checked); updateAll(); saveState(); });
+  }
 
-    // eliminar
-    del.addEventListener('click',()=>{
-        const name=li.querySelector('label')?.textContent.trim()||'el producto';
-        confirmUI(`¿Eliminar “${name}”?`, ()=>{ li.remove(); updateAll(); saveState(); });
-    });
+  // eliminar
+  del.addEventListener('click',()=>{
+    const name=li.querySelector('label')?.textContent.trim()||'el producto';
+    confirmUI(`¿Eliminar “${name}”?`, ()=>{ li.remove(); updateAll(); saveState(); });
+  });
 }
 function prepareList(container){
-    qSA('.item', container).forEach(li=>{
-        ensureControls(li);
-        const chk = qS('.check', li);
-        if(chk) li.classList.toggle('checked', chk.checked);
-    });
+  qSA('.item', container).forEach(li=>{
+    ensureControls(li);
+    const chk = qS('.check', li);
+    if(chk) li.classList.toggle('checked', chk.checked);
+  });
 }
 
 /* ====== Cálculos ====== */
 function updateAll(){
-    const bar = qS('#barra-progreso');
-    let totalChecks=0, checked=0, totalQty=0, totalMoney=0;
-    const perCat={higiene:0,limpieza:0,alimentos:0,conservas:0,otros:0};
-    const subs=[];
+  const bar = qS('#barra-progreso');
+  let totalChecks=0, checked=0, totalQty=0, totalMoney=0;
+  const perCat={higiene:0,limpieza:0,alimentos:0,conservas:0,otros:0};
+  const subs=[];
 
-    qSA('.card').forEach(card=>{
-        const cat=[...card.classList].find(c=>perCat.hasOwnProperty(c));
-        const checks=qSA('.item .check', card);
-        let cInCard=0;
-        checks.forEach(chk=>{
-            totalChecks++;
-            const li=chk.closest('.item');
-            const q=Number(qS('input.cant', li)?.value)||0;
-            const p=Number(qS('input.precio', li)?.value)||0;
-            const s=q*p;
-            if(s>0) subs.push({li, sub:s});
-            if(chk.checked){ cInCard++; totalQty+=q; totalMoney+=s; perCat[cat]+=s; }
-        });
-        const cont=qS('.contador', card); if(cont) cont.textContent=`(${cInCard}/${checks.length})`;
+  qSA('.card').forEach(card=>{
+    const cat=[...card.classList].find(c=>perCat.hasOwnProperty(c));
+    const checks=qSA('.item .check', card);
+    let cInCard=0;
+    checks.forEach(chk=>{
+      totalChecks++;
+      const li=chk.closest('.item');
+      const q=Number(qS('input.cant', li)?.value)||0;
+      const p=Number(qS('input.precio', li)?.value)||0;
+      const s=q*p;
+      if(s>0) subs.push({li, sub:s});
+      if(chk.checked){ cInCard++; totalQty+=q; totalMoney+=s; perCat[cat]+=s; }
     });
+    const cont=qS('.contador', card); if(cont) cont.textContent=`(${cInCard}/${checks.length})`;
+  });
 
-    checked=qSA('.item .check:checked').length;
-    const pct= totalChecks? Math.round((checked/totalChecks)*100):0;
-    bar.style.width=pct+'%';
-    bar.textContent= pct===100? '🎉 Completado!' : (pct+'%');
+  checked=qSA('.item .check:checked').length;
+  const pct= totalChecks? Math.round((checked/totalChecks)*100):0;
+  bar.style.width=pct+'%';
+  bar.textContent= pct===100? '🎉 Completado!' : (pct+'%');
 
-    qS('#total-seleccionados').textContent=checked;
-    qS('#total-cantidad').textContent=totalQty;
-    qS('#total-dinero').textContent=money(totalMoney);
+  qS('#total-seleccionados').textContent=checked;
+  qS('#total-cantidad').textContent=totalQty;
+  qS('#total-dinero').textContent=money(totalMoney);
 
-    qSA('.total-cat').forEach(span=>{
-        const k=span.getAttribute('data-cat');
-        span.textContent=money(perCat[k]||0);
-    });
+  // También actualiza barra inferior (móvil)
+  const bbSel = qS('#bb-sel'), bbTot = qS('#bb-total');
+  if(bbSel) bbSel.textContent = String(checked);
+  if(bbTot) bbTot.textContent = (Number(totalMoney).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}));
 
-    // Marcar "más caros" (>=90% del mayor subtotal > 0)
-    const maxSub=Math.max(0, ...subs.map(s=>s.sub));
-    const thr=maxSub*0.9;
-    qSA('.item').forEach(li=>li.classList.remove('expensive'));
-    if(maxSub>0){
-        subs.forEach(({li,sub})=>{ if(sub>=thr) li.classList.add('expensive'); });
-    }
+  qSA('.total-cat').forEach(span=>{
+    const k=span.getAttribute('data-cat');
+    span.textContent=money(perCat[k]||0);
+  });
 
-    // Asegura subtotales renderizados
-    qSA('.item').forEach(li=>{
-        const q=Number(qS('input.cant',li)?.value)||0;
-        const p=Number(qS('input.precio',li)?.value)||0;
-        const s=q*p;
-        const sub=qS('.subtotal', li); if(sub) sub.textContent=money(s);
-    });
+  // Marcar "más caros" (>=90% del mayor subtotal > 0)
+  const maxSub=Math.max(0, ...subs.map(s=>s.sub));
+  const thr=maxSub*0.9;
+  qSA('.item').forEach(li=>li.classList.remove('expensive'));
+  if(maxSub>0){
+    subs.forEach(({li,sub})=>{ if(sub>=thr) li.classList.add('expensive'); });
+  }
+
+  // Asegura subtotales renderizados
+  qSA('.item').forEach(li=>{
+    const q=Number(qS('input.cant',li)?.value)||0;
+    const p=Number(qS('input.precio',li)?.value)||0;
+    const s=q*p;
+    const sub=qS('.subtotal', li); if(sub) sub.textContent=money(s);
+  });
 }
 
 /* ====== Orden ====== */
 function sortList(ul, mode){
-    const items=qSA(':scope > .item', ul);
-    const name=li=> (li.querySelector('label')?.textContent||'').trim().toLowerCase();
-    const costo=li=> Number(qS('.precio', li)?.value)||0;
-    const sub= li=> (Number(qS('.cant', li)?.value)||0)*(Number(qS('.precio', li)?.value)||0);
-    const checked=li=> qS('.check', li)?.checked?1:0;
+  const items=qSA(':scope > .item', ul);
+  const name=li=> (li.querySelector('label')?.textContent||'').trim().toLowerCase();
+  const costo=li=> Number(qS('.precio', li)?.value)||0;
+  const sub= li=> (Number(qS('.cant', li)?.value)||0)*(Number(qS('.precio', li)?.value)||0);
+  const checked=li=> qS('.check', li)?.checked?1:0;
 
-    let arr=[...items];
-    switch(mode){
-        case 'nombre': arr.sort((a,b)=>name(a).localeCompare(name(b))); break;
-        case 'costo' : arr.sort((a,b)=>costo(a)-costo(b)); break;
-        case 'subtotal': arr.sort((a,b)=>sub(a)-sub(b)); break;
-        case 'checked': arr.sort((a,b)=>checked(b)-checked(a)); break;
-        default: return;
-    }
-    arr.forEach(li=>ul.appendChild(li));
+  let arr=[...items];
+  switch(mode){
+    case 'nombre': arr.sort((a,b)=>name(a).localeCompare(name(b))); break;
+    case 'costo' : arr.sort((a,b)=>costo(a)-costo(b)); break;
+    case 'subtotal': arr.sort((a,b)=>sub(a)-sub(b)); break;
+    case 'checked': arr.sort((a,b)=>checked(b)-checked(a)); break;
+    default: return;
+  }
+  arr.forEach(li=>ul.appendChild(li));
 }
 
 /* ====== Confirm UI ====== */
 function confirmUI(text, onYes){
-    const ov=document.createElement('div'); ov.className='overlay';
-    ov.innerHTML=`
-        <div class="confirm">
-            <p>${text}</p>
-            <div class="row">
-                <button class="cbtn y">Sí</button>
-                <button class="cbtn n">No</button>
-            </div>
-        </div>`;
-    document.body.appendChild(ov);
-    qS('.cbtn.y', ov).addEventListener('click', ()=>{ onYes?.(); ov.remove(); });
-    qS('.cbtn.n', ov).addEventListener('click', ()=>ov.remove());
+  const ov=document.createElement('div'); ov.className='overlay';
+  ov.innerHTML=`
+    <div class="confirm">
+      <p>${text}</p>
+      <div class="row">
+        <button class="cbtn y">Sí</button>
+        <button class="cbtn n">No</button>
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+  qS('.cbtn.y', ov).addEventListener('click', ()=>{ onYes?.(); ov.remove(); });
+  qS('.cbtn.n', ov).addEventListener('click', ()=>ov.remove());
 }
 
 /* ====== Acordeones ====== */
 function setCollapsed(card, collapsed){
-    const items = qS('.items', card);
-    const btn = qS('.toggle', card);
-    if(!items || !btn) return;
-    items.classList.toggle('collapsed', collapsed);
-    card.classList.toggle('collapsed', collapsed);
-    btn.setAttribute('aria-expanded', String(!collapsed));
+  const items = qS('.items', card);
+  const btn = qS('.toggle', card);
+  if(!items || !btn) return;
+  items.classList.toggle('collapsed', collapsed);
+  card.classList.toggle('collapsed', collapsed);
+  btn.setAttribute('aria-expanded', String(!collapsed));
 }
 function collapseAll(v){
-    qSA('.card').forEach(card=> setCollapsed(card, v));
+  qSA('.card').forEach(card=> setCollapsed(card, v));
 }
 
 /* ====== PWA: Install prompt ====== */
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    const btn = qS('#btn-instalar');
-    btn.style.display = 'inline-block';
-    btn.onclick = async () => {
-        btn.disabled = true;
-        try{
-            deferredPrompt.prompt();
-            await deferredPrompt.userChoice;
-        }finally{
-            deferredPrompt = null;
-            btn.style.display = 'none';
-        }
-    };
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = qS('#btn-instalar');
+  btn.style.display = 'inline-flex';
+  btn.onclick = async () => {
+    btn.disabled = true;
+    try{
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+    }finally{
+      deferredPrompt = null;
+      btn.style.display = 'none';
+    }
+  };
 });
 
-/* Registrar Service Worker */
+/* Registrar Service Worker (si existe) */
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(()=>{});
-    });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
 }
 
 /* ====== Inicialización ====== */
 document.addEventListener('DOMContentLoaded', ()=>{
-    // Inyectar controles en todos los ítems
-    qSA('.items').forEach(prepareList);
+  // Inyectar controles en todos los ítems
+  qSA('.items').forEach(prepareList);
 
-    // Cargar estado guardado
-    applyState(loadState());
+  // Cargar estado guardado
+  applyState(loadState());
 
-    // Buscar
-    const search=qS('#busqueda');
-    search.addEventListener('input', ()=>{
-        const term=search.value.toLowerCase();
-        qSA('.card').forEach(card=>{
-            let showCard=false;
-            qSA('.item', card).forEach(li=>{
-                const txt=li.innerText.toLowerCase();
-                const vis=txt.includes(term);
-                li.style.display = vis? 'flex':'none';
-                if(vis) showCard=true;
-            });
-            card.style.display = showCard? 'block':'none';
-        });
-    });
-
-    // Orden por categoría
-    qSA('.card .sort').forEach(sel=>{
-        sel.addEventListener('change', ()=>{
-            const ul= sel.closest('.card').querySelector('.items');
-            sortList(ul, sel.value);
-            saveState();
-        });
-    });
-
-    // Acordeón por tarjeta
+  // Buscar
+  const search=qS('#busqueda');
+  search.addEventListener('input', ()=>{
+    const term=search.value.toLowerCase();
     qSA('.card').forEach(card=>{
-        const btn = qS('.toggle', card);
-        if(btn){
-            btn.addEventListener('click', ()=>{
-                const collapsed = !btn.getAttribute('aria-expanded') || btn.getAttribute('aria-expanded')==='true' ? true : false;
-                setCollapsed(card, collapsed);
-            });
-        }
+      let showCard=false;
+      qSA('.item', card).forEach(li=>{
+        const txt=li.innerText.toLowerCase();
+        const vis=txt.includes(term);
+        li.style.display = vis? 'flex':'none';
+        if(vis) showCard=true;
+      });
+      card.style.display = showCard? 'block':'none';
     });
+  });
 
-    // Expandir/Colapsar todo
-    qS('#btn-expandir').addEventListener('click', ()=> collapseAll(false));
-    qS('#btn-colapsar').addEventListener('click', ()=> collapseAll(true));
+  // Orden por categoría
+  qSA('.card .sort').forEach(sel=>{
+    sel.addEventListener('change', ()=>{
+      const ul= sel.closest('.card').querySelector('.items');
+      sortList(ul, sel.value);
+      saveState();
+    });
+  });
 
-    updateAll();
-    saveState();
+  // Acordeón por tarjeta
+  qSA('.card').forEach(card=>{
+    const btn = qS('.toggle', card);
+    if(btn){
+      btn.addEventListener('click', ()=>{
+        const collapsed = !btn.getAttribute('aria-expanded') || btn.getAttribute('aria-expanded')==='true' ? true : false;
+        setCollapsed(card, collapsed);
+      });
+    }
+  });
+
+  // Expandir/Colapsar todo
+  qS('#btn-expandir').addEventListener('click', ()=> collapseAll(false));
+  qS('#btn-colapsar').addEventListener('click', ()=> collapseAll(true));
+
+  updateAll();
+  saveState();
 });
+
+/* ====== Imprimir (función reutilizable) ====== */
+function printResumen(){
+  const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
+  if(!selected.length){ alert('No hay productos seleccionados.'); return; }
+
+  // Agrupar por categoría
+  const groups={};
+  selected.forEach(li=>{
+    const card=li.closest('.card');
+    const cat=[...card.classList].find(c=>['higiene','limpieza','alimentos','conservas','otros'].includes(c))||'otros';
+    (groups[cat]??=[]).push(li);
+  });
+
+  let grand=0;
+  const w=window.open('','_blank');
+  const css=`body{font-family:Segoe UI,Arial,sans-serif;padding:16px;color:#111;font-size:13px}
+  h1{margin:0 0 6px} h2{margin:12px 0 6px;font-size:14px}
+  table{width:100%;border-collapse:collapse;margin-bottom:10px}
+  th,td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left}
+  th{background:#f3f4f6} tfoot td{font-weight:700}`;
+  let html=`<html><head><meta charset="UTF-8"><title>Resumen</title><style>${css}</style></head><body>`;
+  html+=`<h1>Resumen de compra</h1><small>${new Date().toLocaleString('es-MX')}</small>`;
+
+  Object.entries(groups).forEach(([cat, lis])=>{
+    let tot=0;
+    html+=`<h2>${cat.charAt(0).toUpperCase()+cat.slice(1)}</h2>`;
+    html+=`<table><thead><tr><th>Producto</th><th>Cant.</th><th>Costo</th><th>Subtotal</th></tr></thead><tbody>`;
+    lis.forEach(li=>{
+      const name=li.querySelector('label')?.textContent.trim()||'';
+      const q=Number(qS('.cant',li)?.value)||0;
+      const p=Number(qS('.precio',li)?.value)||0;
+      const s=q*p; tot+=s;
+      html+=`<tr><td>${name}</td><td>${q}</td><td>${money(p)}</td><td>${money(s)}</td></tr>`;
+    });
+    html+=`</tbody><tfoot><tr><td colspan="3">Total categoría</td><td>${money(tot)}</td></tr></tfoot></table>`;
+    grand+=tot;
+  });
+
+  html+=`<h2>Total</h2><p style="font-size:14px;font-weight:900">${money(grand)}</p>`;
+  html+=`</body></html>`;
+  w.document.write(html); w.document.close(); w.focus(); w.print();
+}
+qS('#btn-imprimir').addEventListener('click', printResumen);
+qS('#btn-imprimir-bottom').addEventListener('click', printResumen);
 
 /* ====== Agregar producto ====== */
 qS('#agregar-producto').addEventListener('click', ()=>{
-    const nombre=qS('#nuevo-producto').value.trim();
-    const categoria=qS('#categoria-nueva').value;
-    if(!nombre) return alert('Escribe un nombre de producto.');
-    const ul=qS(`.card.${categoria} .items`);
-    const id= nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-');
+  const nombre=qS('#nuevo-producto').value.trim();
+  const categoria=qS('#categoria-nueva').value;
+  if(!nombre) return alert('Escribe un nombre de producto.');
+  const ul=qS(`.card.${categoria} .items`);
+  const id= nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-');
 
-    const li=document.createElement('li'); li.className='item';
-    li.innerHTML=`<input class="check" type="checkbox" id="${id}">
-                  <div class="name"><label for="${id}">${nombre}</label></div>`;
-    ul.appendChild(li);
+  const li=document.createElement('li'); li.className='item';
+  li.innerHTML=`<input class="check" type="checkbox" id="${id}">
+                <div class="name"><label for="${id}">${nombre}</label></div>`;
+  ul.appendChild(li);
 
-    ensureControls(li);
-    qS('#nuevo-producto').value='';
-    updateAll(); saveState();
-});
-
-/* ====== Imprimir ====== */
-qS('#btn-imprimir').addEventListener('click', ()=>{
-    const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
-    if(!selected.length){ alert('No hay productos seleccionados.'); return; }
-
-    // Agrupar por categoría
-    const groups={};
-    selected.forEach(li=>{
-        const card=li.closest('.card');
-        const cat=[...card.classList].find(c=>['higiene','limpieza','alimentos','conservas','otros'].includes(c))||'otros';
-        (groups[cat]??=[]).push(li);
-    });
-
-    let grand=0;
-    const w=window.open('','_blank');
-    const css=`body{font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#111}
-    h1{margin:0 0 6px} h2{margin:18px 0 8px}
-    table{width:100%;border-collapse:collapse;margin-bottom:14px}
-    th,td{border:1px solid #e5e7eb;padding:8px 10px;text-align:left}
-    th{background:#f3f4f6} tfoot td{font-weight:700}`;
-    let html=`<html><head><meta charset="UTF-8"><title>Resumen</title><style>${css}</style></head><body>`;
-    html+=`<h1>Resumen de compra</h1><small>${new Date().toLocaleString('es-MX')}</small>`;
-
-    Object.entries(groups).forEach(([cat, lis])=>{
-        let tot=0;
-        html+=`<h2>${cat.charAt(0).toUpperCase()+cat.slice(1)}</h2>`;
-        html+=`<table><thead><tr><th>Producto</th><th>Cant.</th><th>Costo</th><th>Subtotal</th></tr></thead><tbody>`;
-        lis.forEach(li=>{
-            const name=li.querySelector('label')?.textContent.trim()||'';
-            const q=Number(qS('.cant',li)?.value)||0;
-            const p=Number(qS('.precio',li)?.value)||0;
-            const s=q*p; tot+=s;
-            html+=`<tr><td>${name}</td><td>${q}</td><td>${money(p)}</td><td>${money(s)}</td></tr>`;
-        });
-        html+=`</tbody><tfoot><tr><td colspan="3">Total categoría</td><td>${money(tot)}</td></tr></tfoot></table>`;
-        grand+=tot;
-    });
-
-    html+=`<h2>Total</h2><p style="font-size:1.2rem;font-weight:900">${money(grand)}</p>`;
-    html+=`</body></html>`;
-    w.document.write(html); w.document.close(); w.focus(); w.print();
+  ensureControls(li);
+  qS('#nuevo-producto').value='';
+  updateAll(); saveState();
 });
 
 /* ====== Borrar estado ====== */
 qS('#btn-borrar').addEventListener('click', ()=>{
-    confirmUI('¿Borrar todo el estado guardado (checks, cantidades, costos)?', ()=>{
-        localStorage.removeItem(LS_KEY);
-        window.location.reload();
-    });
+  confirmUI('¿Borrar todo el estado guardado (checks, cantidades, costos)?', ()=>{
+    localStorage.removeItem(LS_KEY);
+    window.location.reload();
+  });
 });
 </script>
 
