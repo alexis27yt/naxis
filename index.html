@@ -14,12 +14,42 @@
     }
 
     .canva-container {
-        max-width: 1000px;
+        max-width: 1100px;
         width: 100%;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 20px;
     }
+
+    h1 {
+        grid-column: 1/-1;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        margin-bottom: 16px;
+    }
+
+    .top-actions {
+        grid-column: 1/-1;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: .5rem;
+    }
+    .top-actions button,
+    .top-actions input[type="text"] {
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        background: #fff;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .top-actions button:hover { filter: brightness(0.97); }
+    .btn-print { background: #111827; color: #fff; border-color: #111827; }
+    .btn-clear { background: #ef4444; color: #fff; border-color: #ef4444; }
 
     .card {
         background: white;
@@ -28,22 +58,60 @@
         display: flex;
         flex-direction: column;
         transition: transform 0.2s;
+        overflow: hidden;
     }
 
-    .card h2 {
+    .card header {
         margin: 0;
-        padding: 12px;
-        border-radius: 12px 12px 0 0;
+        padding: 10px 12px;
         color: white;
-        text-align: center;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+    }
+    .card header .left h2 {
+        margin: 0;
+        font-size: 1.06rem;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+    .card header .contador {
+        font-size: 0.8rem;
+        background: rgba(255,255,255,0.3);
+        padding: 2px 6px;
+        border-radius: 12px;
+    }
+    .card header .right {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+    .right select {
+        padding: 6px 8px;
+        border-radius: 6px;
+        border: 1px solid rgba(255,255,255,0.7);
+        background: rgba(255,255,255,0.9);
+        font-size: .85rem;
+        min-width: 150px;
         cursor: pointer;
-        user-select: none;
-        position: relative;
+    }
+    .right .total-cat {
+        background: rgba(255,255,255,0.15);
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: .9rem;
+        white-space: nowrap;
     }
 
     .card ul {
         list-style: none;
-        padding: 0;
+        padding: 10px 0 6px 0;
         margin: 0;
         flex: 1;
         max-height: 1000px;
@@ -51,20 +119,12 @@
         transition: max-height 0.3s ease;
     }
 
-    .card h2 .contador {
-        font-size: 0.8rem;
-        background: rgba(255,255,255,0.3);
-        padding: 2px 6px;
-        border-radius: 12px;
-        margin-left: 8px;
-    }
-
     /* Colores por sección */
-    .higiene h2 { background-color: #3498db; }
-    .limpieza h2 { background-color: #27ae60; }
-    .alimentos h2 { background-color: #f1c40f; color: #333; }
-    .conservas h2 { background-color: #e67e22; }
-    .otros h2 { background-color: #9b59b6; }
+    .higiene header { background-color: #3498db; }
+    .limpieza header { background-color: #27ae60; }
+    .alimentos header { background-color: #f1c40f; color: #333; }
+    .conservas header { background-color: #e67e22; }
+    .otros header { background-color: #9b59b6; }
 
     li {
         background: #ecf0f1;
@@ -74,21 +134,16 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        transition: background 0.3s, transform 0.2s;
+        transition: background 0.25s, transform 0.2s, border 0.2s;
+        flex-wrap: wrap;
+        border: 1px solid transparent;
     }
 
-    li.highlight {
-        background: #ffeaa7 !important;
-    }
+    li.highlight { background: #ffeaa7 !important; }
+    li.checked { background: #d7f5f5; transform: scale(1.01); }
+    li.expensive { border-color: #ef4444; background: #fee2e2; } /* más caro */
 
-    li.checked {
-        background: #81ecec;
-        transform: scale(1.02);
-    }
-
-    li:hover {
-        background: #dcdde1;
-    }
+    li:hover { background: #dcdde1; }
 
     input[type="checkbox"] {
         transform: scale(1.2);
@@ -96,28 +151,48 @@
     }
 
     label {
-        flex: 1;
+        flex: 1 1 160px;
         cursor: pointer;
+        min-width: 140px;
     }
 
-    h1 {
-        grid-column: 1/-1;
-        text-align: center;
-        color: #2c3e50;
-        font-size: 2rem;
-        margin-bottom: 20px;
+    .pc-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1 1 auto;
+        flex-wrap: wrap;
+    }
+
+    .pc-wrap input[type="number"] {
+        width: 90px;
+        padding: 6px 8px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        font-size: 0.9rem;
+        background: #fff;
+    }
+
+    .pc-wrap .subtotal {
+        min-width: 98px;
+        font-weight: 700;
+    }
+
+    .pc-wrap .eliminar {
+        background: transparent;
+        border: none;
+        font-size: 1.1rem;
+        cursor: pointer;
     }
 
     #filtro {
         grid-column: 1/-1;
-        margin-bottom: 20px;
         display: flex;
         justify-content: center;
     }
-
     #filtro input {
         width: 100%;
-        max-width: 400px;
+        max-width: 460px;
         padding: 10px 15px;
         font-size: 1rem;
         border-radius: 25px;
@@ -125,7 +200,6 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         transition: box-shadow 0.3s;
     }
-
     #filtro input:focus {
         outline: none;
         box-shadow: 0 0 8px rgba(52,152,219,0.6);
@@ -134,7 +208,7 @@
 
     .progress-container {
         grid-column: 1/-1;
-        margin-bottom: 20px;
+        margin: 10px 0 10px 0;
     }
 
     .progress-bar {
@@ -145,7 +219,6 @@
         height: 25px;
         box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
     }
-
     .progress-bar-inner {
         height: 100%;
         width: 0;
@@ -157,10 +230,30 @@
         transition: width 0.3s ease;
     }
 
-    @media(max-width:600px){
-        .canva-container { grid-template-columns: 1fr; }
-        li { margin: 6px 8px; }
-        #filtro input { max-width: 100%; }
+    .totales {
+        grid-column: 1/-1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .total-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        padding: 12px 14px;
+        text-align: center;
+    }
+    .total-card h4 {
+        margin: 0 0 6px;
+        color: #334155;
+        font-size: .95rem;
+        font-weight: 600;
+    }
+    .total-card .val {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #111827;
     }
 
     .admin-panel {
@@ -168,18 +261,16 @@
         padding: 20px;
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        margin-bottom: 30px;
-        max-width: 800px;
+        margin: 12px 0 30px 0;
+        max-width: 900px;
         margin-left: auto;
         margin-right: auto;
     }
-
     .admin-panel h3 {
         text-align: center;
         margin-bottom: 15px;
         color: #333;
     }
-
     .admin-panel .input-group {
         display: flex;
         flex-wrap: wrap;
@@ -187,7 +278,6 @@
         justify-content: center;
         margin-bottom: 10px;
     }
-
     .admin-panel input[type="text"],
     .admin-panel select {
         padding: 10px;
@@ -196,8 +286,8 @@
         flex: 1 1 200px;
         min-width: 150px;
         font-size: 14px;
+        background: #fff;
     }
-
     .admin-panel button {
         background: #28a745;
         color: white;
@@ -208,11 +298,7 @@
         font-weight: bold;
         transition: background 0.3s;
     }
-
-    .admin-panel button:hover {
-        background: #218838;
-    }
-
+    .admin-panel button:hover { background: #218838; }
     .admin-panel .nota {
         display: block;
         text-align: center;
@@ -220,44 +306,27 @@
         font-size: 12px;
     }
 
-    /* Overlay semitransparente */
+    /* Overlay confirmación */
     .overlay-confirm {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0;
         background: rgba(0,0,0,0.4);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 9999;
     }
-
-    /* Caja de confirmación */
     .confirm-box {
         background: #fff;
         padding: 20px 25px;
         border-radius: 12px;
         box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         text-align: center;
-        max-width: 400px;
+        max-width: 420px;
         width: 90%;
     }
-
-    /* Texto */
-    .confirm-box p {
-        font-size: 16px;
-        color: #333;
-        margin-bottom: 20px;
-    }
-
-    /* Botones */
-    .confirm-buttons {
-        display: flex;
-        justify-content: space-around;
-    }
-
+    .confirm-box p { font-size: 16px; color: #333; margin-bottom: 20px; }
+    .confirm-buttons { display: flex; justify-content: space-around; }
     .btn-confirm {
         padding: 10px 20px;
         border: none;
@@ -266,28 +335,27 @@
         cursor: pointer;
         transition: all 0.2s;
     }
+    .btn-confirm.yes { background: #dc3545; color: #fff; }
+    .btn-confirm.no { background: #6c757d; color: #fff; }
+    .btn-confirm:hover { transform: scale(1.05); }
 
-    .btn-confirm.yes {
-        background: #dc3545;
-        color: #fff;
+    @media(max-width:600px){
+        .canva-container { grid-template-columns: 1fr; }
+        li { margin: 6px 8px; }
+        #filtro input { max-width: 100%; }
+        .right { justify-content: flex-start; }
     }
-
-    .btn-confirm.no {
-        background: #6c757d;
-        color: #fff;
-    }
-
-    .btn-confirm:hover {
-        transform: scale(1.05);
-    }
-
 </style>
 </head>
 <body>
 
 <div class="canva-container">
-
     <h1>Lista de Primera Despensa</h1>
+
+    <div class="top-actions">
+        <button class="btn-print" id="btn-imprimir">Resumen imprimible</button>
+        <button class="btn-clear" id="btn-borrar">Borrar todo (estado)</button>
+    </div>
 
     <div id="filtro">
         <input type="text" id="busqueda" placeholder="Buscar producto...">
@@ -298,7 +366,23 @@
             <div class="progress-bar-inner" id="barra-progreso">0%</div>
         </div>
 
-        <!-- Panel de administración de productos -->
+        <!-- Totales globales -->
+        <div class="totales">
+            <div class="total-card">
+                <h4>Productos seleccionados</h4>
+                <div class="val" id="total-seleccionados">0</div>
+            </div>
+            <div class="total-card">
+                <h4>Cantidad total</h4>
+                <div class="val" id="total-cantidad">0</div>
+            </div>
+            <div class="total-card">
+                <h4>Total $</h4>
+                <div class="val" id="total-dinero">$0.00</div>
+            </div>
+        </div>
+
+        <!-- Panel de administración -->
         <div id="admin-panel" class="admin-panel">
             <h3>Agregar / Quitar productos</h3>
             <div class="input-group">
@@ -312,12 +396,25 @@
                 </select>
                 <button id="agregar-producto">Agregar</button>
             </div>
-            <small class="nota">Haz clic en 🗑️ para eliminar un producto. Todas las acciones piden confirmación.</small>
+            <small class="nota">Marca ✓ para incluirlo en el cálculo. Captura Cantidad y Costo unitario. El subtotal se calcula solo. 🗑️ elimina (pide confirmación). Se guarda automáticamente en tu navegador.</small>
         </div>
     </div>
 
+    <!-- TARJETAS -->
     <div class="card higiene">
-        <h2>Higiene Personal</h2>
+        <header>
+            <div class="left"><h2>Higiene Personal <span class="contador"></span></h2></div>
+            <div class="right">
+                <select class="sort-select">
+                    <option value="none">Ordenar…</option>
+                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="costo">Costo unitario (↑)</option>
+                    <option value="subtotal">Subtotal (↑)</option>
+                    <option value="checked">Marcados primero</option>
+                </select>
+                <span class="total-cat" data-cat="higiene">$0.00</span>
+            </div>
+        </header>
         <ul>
             <li><input type="checkbox" id="jabon"><label for="jabon">Jabon de tocador</label></li>
             <li><input type="checkbox" id="jabonliquido"><label for="jabonliquido">Jabon liquido para manos</label></li>
@@ -333,7 +430,19 @@
     </div>
 
     <div class="card limpieza">
-        <h2>Limpieza del Hogar</h2>
+        <header>
+            <div class="left"><h2>Limpieza del Hogar <span class="contador"></span></h2></div>
+            <div class="right">
+                <select class="sort-select">
+                    <option value="none">Ordenar…</option>
+                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="costo">Costo unitario (↑)</option>
+                    <option value="subtotal">Subtotal (↑)</option>
+                    <option value="checked">Marcados primero</option>
+                </select>
+                <span class="total-cat" data-cat="limpieza">$0.00</span>
+            </div>
+        </header>
         <ul>
             <li><input type="checkbox" id="detergente"><label for="detergente">Detergente para ropa</label></li>
             <li><input type="checkbox" id="suavizante"><label for="suavizante">Suavizante de ropa</label></li>
@@ -350,7 +459,19 @@
     </div>
 
     <div class="card alimentos">
-        <h2>Alimentos Básicos</h2>
+        <header>
+            <div class="left"><h2>Alimentos Básicos <span class="contador"></span></h2></div>
+            <div class="right">
+                <select class="sort-select">
+                    <option value="none">Ordenar…</option>
+                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="costo">Costo unitario (↑)</option>
+                    <option value="subtotal">Subtotal (↑)</option>
+                    <option value="checked">Marcados primero</option>
+                </select>
+                <span class="total-cat" data-cat="alimentos">$0.00</span>
+            </div>
+        </header>
         <ul>
             <li><input type="checkbox" id="arroz"><label for="arroz">Arroz</label></li>
             <li><input type="checkbox" id="frijol"><label for="frijol">Frijol</label></li>
@@ -363,9 +484,21 @@
     </div>
 
     <div class="card conservas">
-        <h2>Conservas</h2>
+        <header>
+            <div class="left"><h2>Conservas <span class="contador"></span></h2></div>
+            <div class="right">
+                <select class="sort-select">
+                    <option value="none">Ordenar…</option>
+                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="costo">Costo unitario (↑)</option>
+                    <option value="subtotal">Subtotal (↑)</option>
+                    <option value="checked">Marcados primero</option>
+                </select>
+                <span class="total-cat" data-cat="conservas">$0.00</span>
+            </div>
+        </header>
         <ul>
-            <li><input type="checkbox" id="atún"><label for="atún">Atún en lata</label></li>
+            <li><input type="checkbox" id="atun"><label for="atun">Atún en lata</label></li>
             <li><input type="checkbox" id="sopa"><label for="sopa">Sopa instantánea / sopas en sobre</label></li>
             <li><input type="checkbox" id="vegetales"><label for="vegetales">Vegetales enlatados</label></li>
             <li><input type="checkbox" id="fruta"><label for="fruta">Frutas enlatadas</label></li>
@@ -375,7 +508,19 @@
     </div>
 
     <div class="card otros">
-        <h2>Otros</h2>
+        <header>
+            <div class="left"><h2>Otros <span class="contador"></span></h2></div>
+            <div class="right">
+                <select class="sort-select">
+                    <option value="none">Ordenar…</option>
+                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="costo">Costo unitario (↑)</option>
+                    <option value="subtotal">Subtotal (↑)</option>
+                    <option value="checked">Marcados primero</option>
+                </select>
+                <span class="total-cat" data-cat="otros">$0.00</span>
+            </div>
+        </header>
         <ul>
             <li><input type="checkbox" id="pilas"><label for="pilas">Pilas</label></li>
             <li><input type="checkbox" id="velas"><label for="velas">Velas</label></li>
@@ -388,118 +533,395 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function(){
+/* =================== UTILIDADES =================== */
+const money = (v) => {
+    const n = isFinite(v) ? Number(v) : 0;
+    return n.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 2 });
+};
+const qS  = (sel, ctx=document) => ctx.querySelector(sel);
+const qSA = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
 
-        const cards = document.querySelectorAll('.card');
-        const barra = document.getElementById('barra-progreso');
-        const busqueda = document.getElementById('busqueda');
+/* =================== LOCAL STORAGE =================== */
+const LS_KEY = 'despensa_v2_items';
 
-        // Actualizar contador y progreso
-        function actualizarProgreso(){
-            let total = 0, seleccionados = 0;
-            cards.forEach(card=>{
-                const items = card.querySelectorAll('li input[type="checkbox"]');
-                let count = 0;
-                items.forEach(chk=>{
-                    if(chk.checked) count++;
-                });
-                card.querySelector('.contador').innerText = `(${count}/${items.length})`;
-                total += items.length;
-                seleccionados += count;
-            });
-            let porcentaje = total? Math.round((seleccionados/total)*100):0;
-            barra.style.width = porcentaje+'%';
-            barra.innerText = porcentaje+'%';
-            if(porcentaje===100) barra.innerText = '🎉 Completado! 🎉';
-        }
-
-        // Marcar checkbox
-        const checkboxes = document.querySelectorAll('li input[type="checkbox"]');
-        checkboxes.forEach(chk=>{
-            chk.addEventListener('change', ()=>{
-                chk.parentElement.classList.toggle('checked', chk.checked);
-                actualizarProgreso();
+function readStateFromDOM() {
+    const data = [];
+    qSA('.card').forEach(card => {
+        const categoria = [...card.classList].find(c => ['higiene','limpieza','alimentos','conservas','otros'].includes(c));
+        qSA('ul > li', card).forEach(li => {
+            const chk = li.querySelector('input[type="checkbox"]');
+            const label = li.querySelector('label');
+            const id = chk?.id || label?.textContent.trim().toLowerCase().replace(/\s+/g,'-');
+            const cant = Number(li.querySelector('.cant')?.value) || 0;
+            const precio = Number(li.querySelector('.precio')?.value) || 0;
+            data.push({
+                id,
+                nombre: label ? label.textContent.trim() : (id || ''),
+                categoria,
+                checked: !!chk?.checked,
+                cantidad: cant,
+                costo: precio
             });
         });
-
-        // Filtrar
-        busqueda.addEventListener('input', function(){
-            const term = this.value.toLowerCase();
-            cards.forEach(card=>{
-                let matchCat = false;
-                const items = card.querySelectorAll('li');
-                items.forEach(li=>{
-                    const texto = li.innerText.toLowerCase();
-                    const visible = texto.includes(term);
-                    li.style.display = visible?'flex':'none';
-                    li.classList.toggle('highlight', visible && term!=='');
-                    if(visible) matchCat = true;
-                });
-                card.style.display = matchCat?'flex':'none';
-            });
-        });
-
-        actualizarProgreso();
     });
-
-    document.getElementById('agregar-producto').addEventListener('click', ()=>{
-        const nombre = document.getElementById('nuevo-producto').value.trim();
-        const categoria = document.getElementById('categoria-nueva').value;
-        if(!nombre) return alert('Escribe un nombre de producto.');
-
-        const card = document.querySelector(`.card.${categoria} ul`);
-        const id = nombre.toLowerCase().replace(/\s+/g,'-'); // id único simple
-        const li = document.createElement('li');
-        li.innerHTML = `<input type="checkbox" id="${id}">
-                        <label for="${id}">${nombre}</label>
-                        <button class="eliminar" style="margin-left:10px;">🗑️</button>`;
-        card.appendChild(li);
-
-        // Evento para el checkbox
-        const chk = li.querySelector('input[type="checkbox"]');
-        chk.addEventListener('change', ()=>{
-            li.classList.toggle('checked', chk.checked);
-            actualizarProgreso();
+    return data;
+}
+function saveState() {
+    localStorage.setItem(LS_KEY, JSON.stringify(readStateFromDOM()));
+}
+function loadState() {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
+}
+function applyState(state) {
+    if (!state) return;
+    // Index por id
+    const map = new Map(state.map(i => [i.id, i]));
+    qSA('.card').forEach(card => {
+        qSA('ul > li', card).forEach(li => {
+            const chk = li.querySelector('input[type="checkbox"]');
+            const label = li.querySelector('label');
+            const id = chk?.id || label?.textContent.trim().toLowerCase().replace(/\s+/g,'-');
+            if (!id) return;
+            const item = map.get(id);
+            if (!item) return;
+            if (chk) chk.checked = !!item.checked;
+            const cant = li.querySelector('.cant');
+            const precio = li.querySelector('.precio');
+            if (cant) cant.value = (item.cantidad ?? 1);
+            if (precio) precio.value = (item.costo ?? 0);
         });
+    });
+}
 
-        // Evento para eliminar
-        li.querySelector('.eliminar').addEventListener('click', () => {
-            // Crear un modal de confirmación visual
-            const overlay = document.createElement('div');
-            overlay.className = 'overlay-confirm';
-            overlay.innerHTML = `
-                <div class="confirm-box">
-                    <p>¿Seguro que quieres eliminar "<strong>${nombre}</strong>"?</p>
-                    <div class="confirm-buttons">
-                        <button class="btn-confirm yes">Sí</button>
-                        <button class="btn-confirm no">No</button>
-                    </div>
+/* =================== COMPONENTES DE ÍTEM =================== */
+function addControlsToItem(li, nombreVisible='') {
+    if (li.querySelector('.pc-wrap')) return;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'pc-wrap';
+
+    const cant = document.createElement('input');
+    cant.type = 'number';
+    cant.className = 'cant';
+    cant.min = '0'; cant.step = '1';
+    cant.value = '1'; cant.title = 'Cantidad';
+
+    const precio = document.createElement('input');
+    precio.type = 'number';
+    precio.className = 'precio';
+    precio.min = '0'; precio.step = '0.01';
+    precio.placeholder = 'Costo $';
+    precio.title = 'Costo unitario (MXN)';
+
+    const subtotal = document.createElement('span');
+    subtotal.className = 'subtotal';
+    subtotal.textContent = money(0);
+
+    const btnDel = document.createElement('button');
+    btnDel.className = 'eliminar'; btnDel.type = 'button';
+    btnDel.title = 'Eliminar'; btnDel.textContent = '🗑️';
+
+    wrap.append(cant, precio, subtotal, btnDel);
+    li.appendChild(wrap);
+
+    const chk = li.querySelector('input[type="checkbox"]');
+
+    const recalcItem = () => {
+        const q = Number(cant.value) || 0;
+        const p = Number(precio.value) || 0;
+        subtotal.textContent = money(q * p);
+        if (chk) li.classList.toggle('checked', chk.checked);
+        updateAll();
+        saveState();
+    };
+
+    cant.addEventListener('input', recalcItem);
+    precio.addEventListener('input', recalcItem);
+    if (chk) chk.addEventListener('change', () => { li.classList.toggle('checked', chk.checked); recalcItem(); });
+
+    // Eliminar con confirmación
+    btnDel.addEventListener('click', () => {
+        const overlay = document.createElement('div');
+        overlay.className = 'overlay-confirm';
+        overlay.innerHTML = `
+            <div class="confirm-box">
+                <p>¿Seguro que quieres eliminar "<strong>${nombreVisible || li.innerText.trim()}</strong>"?</p>
+                <div class="confirm-buttons">
+                    <button class="btn-confirm yes">Sí</button>
+                    <button class="btn-confirm no">No</button>
                 </div>
-            `;
-            document.body.appendChild(overlay);
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        overlay.querySelector('.yes').addEventListener('click', () => {
+            li.style.transition = 'all 0.25s ease';
+            li.style.opacity = 0; li.style.transform = 'translateX(-12px)';
+            setTimeout(() => { li.remove(); updateAll(); saveState(); }, 220);
+            overlay.remove();
+        });
+        overlay.querySelector('.no').addEventListener('click', () => overlay.remove());
+    });
+}
 
-            // Acción Sí
-            overlay.querySelector('.yes').addEventListener('click', () => {
-                li.style.transition = 'all 0.3s ease';
-                li.style.opacity = 0;
-                li.style.transform = 'translateX(-20px)';
-                overlay.remove();
-                li.remove();
-                actualizarProgreso();
-                overlay.remove();
-                overlay.remove();
-            });
+function prepareExistingItem(li) {
+    const label = li.querySelector('label');
+    const txt = label ? label.textContent.trim() : '';
+    addControlsToItem(li, txt);
 
-            // Acción No
-            overlay.querySelector('.no').addEventListener('click', () => {
-                overlay.remove();
-            });
+    const chk = li.querySelector('input[type="checkbox"]');
+    if (chk) {
+        li.classList.toggle('checked', chk.checked);
+        chk.addEventListener('change', () => {
+            li.classList.toggle('checked', chk.checked);
+            updateAll();
+            saveState();
+        });
+    }
+}
+
+/* =================== CÁLCULOS =================== */
+function updateAll() {
+    const barra = qS('#barra-progreso');
+    let totalChecks = 0, seleccionados = 0, totalCantidad = 0, totalDinero = 0;
+
+    // Totales por categoría
+    const perCat = { higiene:0, limpieza:0, alimentos:0, conservas:0, otros:0 };
+
+    // Recolectar subtotales para marcar “más caros”
+    const subtotales = [];
+
+    qSA('.card').forEach(card => {
+        const items = qSA('ul li', card);
+        const checks = qSA('ul li input[type="checkbox"]', card);
+        let checkedInCard = 0;
+        let catKey = [...card.classList].find(c => perCat.hasOwnProperty(c));
+
+        checks.forEach(chk => {
+            totalChecks++;
+            const li = chk.closest('li');
+            const q = Number(li.querySelector('.cant')?.value) || 0;
+            const p = Number(li.querySelector('.precio')?.value) || 0;
+            const sub = q * p;
+            if (sub > 0) subtotales.push({ li, sub });
+
+            if (chk.checked) {
+                checkedInCard++;
+                totalCantidad += q;
+                totalDinero += sub;
+                if (catKey) perCat[catKey] += sub;
+            }
         });
 
-        actualizarProgreso();
-        document.getElementById('nuevo-producto').value = '';
+        const cont = card.querySelector('.contador');
+        if (cont) cont.textContent = `(${checkedInCard}/${checks.length})`;
     });
 
+    // Progreso
+    const porcentaje = totalChecks ? Math.round((qSA('li input[type="checkbox"]:checked').length / totalChecks) * 100) : 0;
+    barra.style.width = porcentaje + '%';
+    barra.textContent = porcentaje === 100 ? '🎉 Completado! 🎉' : (porcentaje + '%');
+
+    // Globales
+    qS('#total-seleccionados').textContent = qSA('li input[type="checkbox"]:checked').length;
+    qS('#total-cantidad').textContent = totalCantidad;
+    qS('#total-dinero').textContent = money(totalDinero);
+
+    // Por categoría
+    qSA('.total-cat').forEach(span => {
+        const k = span.getAttribute('data-cat');
+        span.textContent = money(perCat[k] || 0);
+    });
+
+    // Marcar “más caros”: >= 90% del máximo subtotal no-cero
+    const maxSub = Math.max(0, ...subtotales.map(s => s.sub));
+    const umbral = maxSub * 0.9;
+    qSA('li').forEach(li => li.classList.remove('expensive'));
+    if (maxSub > 0) {
+        subtotales.forEach(({li, sub}) => {
+            if (sub >= umbral) li.classList.add('expensive');
+        });
+    }
+}
+
+/* =================== ORDENAMIENTO =================== */
+function sortList(ul, mode) {
+    const lis = qSA(':scope > li', ul);
+    const getName = (li) => (li.querySelector('label')?.textContent || '').trim().toLowerCase();
+    const getCosto = (li) => Number(li.querySelector('.precio')?.value) || 0;
+    const getSub = (li) => (Number(li.querySelector('.cant')?.value)||0) * (Number(li.querySelector('.precio')?.value)||0);
+    const isChecked = (li) => !!li.querySelector('input[type="checkbox"]')?.checked;
+
+    let arr = [...lis];
+    switch (mode) {
+        case 'nombre': arr.sort((a,b)=> getName(a).localeCompare(getName(b))); break;
+        case 'costo' : arr.sort((a,b)=> getCosto(a) - getCosto(b)); break;
+        case 'subtotal': arr.sort((a,b)=> getSub(a) - getSub(b)); break;
+        case 'checked': arr.sort((a,b)=> Number(isChecked(b)) - Number(isChecked(a))); break;
+        default: return;
+    }
+    arr.forEach(li => ul.appendChild(li));
+}
+
+/* =================== INICIO =================== */
+document.addEventListener('DOMContentLoaded', () => {
+    const cards = qSA('.card');
+    const busqueda = qS('#busqueda');
+
+    // Preparar todos los ítems existentes
+    qSA('.card ul li').forEach(prepareExistingItem);
+
+    // Intentar cargar estado guardado
+    const state = loadState();
+    if (state) applyState(state);
+
+    // Filtro por texto
+    busqueda.addEventListener('input', () => {
+        const term = busqueda.value.toLowerCase();
+        cards.forEach(card => {
+            let matchCat = false;
+            qSA('li', card).forEach(li => {
+                const texto = li.innerText.toLowerCase();
+                const visible = texto.includes(term);
+                li.style.display = visible ? 'flex' : 'none';
+                li.classList.toggle('highlight', visible && term !== '');
+                if (visible) matchCat = true;
+            });
+            card.style.display = matchCat ? 'flex' : 'none';
+        });
+    });
+
+    // Orden por categoría
+    qSA('.card .sort-select').forEach(sel => {
+        sel.addEventListener('change', () => {
+            const ul = sel.closest('.card').querySelector('ul');
+            sortList(ul, sel.value);
+            saveState();
+        });
+    });
+
+    updateAll(); // inicial
+    saveState(); // guardar estado inicial tras inyectar controles
+});
+
+/* =================== AGREGAR NUEVO PRODUCTO =================== */
+qS('#agregar-producto').addEventListener('click', () => {
+    const nombre = qS('#nuevo-producto').value.trim();
+    const categoria = qS('#categoria-nueva').value;
+    if (!nombre) return alert('Escribe un nombre de producto.');
+
+    const ul = qS(`.card.${categoria} ul`);
+    const id = nombre.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9]+/g,'-');
+
+    const li = document.createElement('li');
+    li.innerHTML = `<input type="checkbox" id="${id}"><label for="${id}">${nombre}</label>`;
+    ul.appendChild(li);
+
+    prepareExistingItem(li);
+    qS('#nuevo-producto').value = '';
+
+    updateAll();
+    saveState();
+});
+
+/* =================== IMPRESIÓN =================== */
+qS('#btn-imprimir').addEventListener('click', () => {
+    const seleccionados = qSA('li input[type="checkbox"]:checked').map(chk => chk.closest('li'));
+    if (seleccionados.length === 0) {
+        alert('No hay productos seleccionados para imprimir.');
+        return;
+    }
+
+    // Agrupar por categoría
+    const grupos = {};
+    seleccionados.forEach(li => {
+        const card = li.closest('.card');
+        const categoria = [...card.classList].find(c => ['higiene','limpieza','alimentos','conservas','otros'].includes(c)) || 'otros';
+        if (!grupos[categoria]) grupos[categoria] = [];
+        grupos[categoria].push(li);
+    });
+
+    // Total global
+    let totalGlobal = 0;
+
+    const win = window.open('', '_blank');
+    const css = `
+        body{font-family:Segoe UI,Tahoma,Arial,sans-serif;padding:20px;}
+        h1{margin:0 0 10px;}
+        h2{margin:18px 0 8px;}
+        table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+        th,td{border:1px solid #e5e7eb;padding:8px 10px;text-align:left;}
+        th{background:#f3f4f6}
+        tfoot td{font-weight:700}
+    `;
+
+    let html = `<html><head><meta charset="UTF-8"><title>Resumen de compra</title><style>${css}</style></head><body>`;
+    html += `<h1>Resumen de compra</h1><small>${new Date().toLocaleString('es-MX')}</small>`;
+
+    Object.entries(grupos).forEach(([cat, lis]) => {
+        let totCat = 0;
+        html += `<h2>${cat.charAt(0).toUpperCase()+cat.slice(1)}</h2>`;
+        html += `<table><thead><tr><th>Producto</th><th>Cant.</th><th>Costo</th><th>Subtotal</th></tr></thead><tbody>`;
+        lis.forEach(li => {
+            const nombre = li.querySelector('label')?.textContent.trim() || '';
+            const q = Number(li.querySelector('.cant')?.value)||0;
+            const p = Number(li.querySelector('.precio')?.value)||0;
+            const s = q * p;
+            totCat += s;
+            html += `<tr><td>${nombre}</td><td>${q}</td><td>${money(p)}</td><td>${money(s)}</td></tr>`;
+        });
+        html += `</tbody><tfoot><tr><td colspan="3">Total categoría</td><td>${money(totCat)}</td></tr></tfoot></table>`;
+        totalGlobal += totCat;
+    });
+
+    html += `<h2>Total</h2><p style="font-size:1.2rem;font-weight:700">${money(totalGlobal)}</p>`;
+    html += `</body></html>`;
+
+    win.document.write(html);
+    win.document.close();
+    win.focus();
+    win.print();
+});
+
+/* =================== BORRAR ESTADO =================== */
+qS('#btn-borrar').addEventListener('click', () => {
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay-confirm';
+    overlay.innerHTML = `
+        <div class="confirm-box">
+            <p>¿Borrar todo el estado guardado (checks, cantidades, costos, orden)?</p>
+            <div class="confirm-buttons">
+                <button class="btn-confirm yes">Sí</button>
+                <button class="btn-confirm no">No</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.querySelector('.yes').addEventListener('click', () => {
+        localStorage.removeItem(LS_KEY);
+        window.location.reload();
+    });
+    overlay.querySelector('.no').addEventListener('click', () => overlay.remove());
+});
+
+/* =================== BÚSQUEDA EN VIVO =================== */
+qS('#busqueda').addEventListener('input', function(){
+    const term = this.value.toLowerCase();
+    qSA('.card').forEach(card=>{
+        let matchCat = false;
+        qSA('li', card).forEach(li=>{
+            const texto = li.innerText.toLowerCase();
+            const visible = texto.includes(term);
+            li.style.display = visible ? 'flex' : 'none';
+            li.classList.toggle('highlight', visible && term!=='');
+            if(visible) matchCat = true;
+        });
+        card.style.display = matchCat ? 'flex' : 'none';
+    });
+});
 </script>
 
 </body>
