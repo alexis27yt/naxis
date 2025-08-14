@@ -1,62 +1,506 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestra Historia de Amor</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>Lista de Primera Despensa - Mejorada</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .canva-container {
+        max-width: 1000px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s;
+    }
+
+    .card h2 {
+        margin: 0;
+        padding: 12px;
+        border-radius: 12px 12px 0 0;
+        color: white;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+    }
+
+    .card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        flex: 1;
+        max-height: 1000px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .card h2 .contador {
+        font-size: 0.8rem;
+        background: rgba(255,255,255,0.3);
+        padding: 2px 6px;
+        border-radius: 12px;
+        margin-left: 8px;
+    }
+
+    /* Colores por sección */
+    .higiene h2 { background-color: #3498db; }
+    .limpieza h2 { background-color: #27ae60; }
+    .alimentos h2 { background-color: #f1c40f; color: #333; }
+    .conservas h2 { background-color: #e67e22; }
+    .otros h2 { background-color: #9b59b6; }
+
+    li {
+        background: #ecf0f1;
+        margin: 6px 12px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+    li.highlight {
+        background: #ffeaa7 !important;
+    }
+
+    li.checked {
+        background: #81ecec;
+        transform: scale(1.02);
+    }
+
+    li:hover {
+        background: #dcdde1;
+    }
+
+    input[type="checkbox"] {
+        transform: scale(1.2);
+        cursor: pointer;
+    }
+
+    label {
+        flex: 1;
+        cursor: pointer;
+    }
+
+    h1 {
+        grid-column: 1/-1;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    #filtro {
+        grid-column: 1/-1;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    #filtro input {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px 15px;
+        font-size: 1rem;
+        border-radius: 25px;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        transition: box-shadow 0.3s;
+    }
+
+    #filtro input:focus {
+        outline: none;
+        box-shadow: 0 0 8px rgba(52,152,219,0.6);
+        border-color: #3498db;
+    }
+
+    .progress-container {
+        grid-column: 1/-1;
+        margin-bottom: 20px;
+    }
+
+    .progress-bar {
+        width: 100%;
+        background: #ecf0f1;
+        border-radius: 25px;
+        overflow: hidden;
+        height: 25px;
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .progress-bar-inner {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, #74b9ff, #0984e3);
+        text-align: center;
+        color: white;
+        line-height: 25px;
+        font-weight: bold;
+        transition: width 0.3s ease;
+    }
+
+    @media(max-width:600px){
+        .canva-container { grid-template-columns: 1fr; }
+        li { margin: 6px 8px; }
+        #filtro input { max-width: 100%; }
+    }
+
+    .admin-panel {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .admin-panel h3 {
+        text-align: center;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .admin-panel .input-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .admin-panel input[type="text"],
+    .admin-panel select {
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        flex: 1 1 200px;
+        min-width: 150px;
+        font-size: 14px;
+    }
+
+    .admin-panel button {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+    .admin-panel button:hover {
+        background: #218838;
+    }
+
+    .admin-panel .nota {
+        display: block;
+        text-align: center;
+        color: #666;
+        font-size: 12px;
+    }
+
+    /* Overlay semitransparente */
+    .overlay-confirm {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    /* Caja de confirmación */
+    .confirm-box {
+        background: #fff;
+        padding: 20px 25px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+    }
+
+    /* Texto */
+    .confirm-box p {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* Botones */
+    .confirm-buttons {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .btn-confirm {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-confirm.yes {
+        background: #dc3545;
+        color: #fff;
+    }
+
+    .btn-confirm.no {
+        background: #6c757d;
+        color: #fff;
+    }
+
+    .btn-confirm:hover {
+        transform: scale(1.05);
+    }
+
+</style>
 </head>
 <body>
-    <div class="background-stars"></div> <!-- Fondo de estrellas -->
-    <header>
-        <h1>Nuestra Historia de Amor</h1>
-        <p class="date">06 - Jul - 2019</p>
 
-        <button id="wish-btn" class="wish-btn">Haz un Deseo</button>
-        <p id="wish-display" class="wish-display neon-text"></p>
+<div class="canva-container">
 
-    </header>
+    <h1>Lista de Primera Despensa</h1>
 
-    <div id="random-message" class="random-message"></div>
+    <div id="filtro">
+        <input type="text" id="busqueda" placeholder="Buscar producto...">
+    </div>
 
-    <!-- Tiempo de novios -->
-    <section class="time-section">
-        <h2>Tiempo de novios</h2>
-        <p id="relationship-time">Calculando...</p>
-    </section>
-
-    <section class="countdown-section">
-        <h2>Tiempo hasta nuestro próximo aniversario:</h2>
-        <p id="anniversary-countdown">Calculando...</p>
-    </section>
-
-    <main>
-        <!-- Contenedor Modal para la Imagen Expansible -->
-        <div class="modal" id="image-modal">
-            <span class="close" id="close-modal">&times;</span>
-            <img class="modal-content" id="modal-image">
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-bar-inner" id="barra-progreso">0%</div>
         </div>
 
-        <div class="gallery">
-            <img src="img/imagen1.jpeg" alt="Imagen 1" class="photo" data-speed="2">
-            <img src="img/imagen2.jpeg" alt="Imagen 2" class="photo" data-speed="4">
-            <img src="img/imagen3.jpeg" alt="Imagen 3" class="photo" data-speed="3">
-            <img src="img/imagen4.jpeg" alt="Imagen 4" class="photo" data-speed="2">
-            <img src="img/imagen5.jpeg" alt="Imagen 5" class="photo" data-speed="4">
-            <img src="img/imagen6.jpeg" alt="Imagen 6" class="photo" data-speed="3">
-            <img src="img/imagen7.jpeg" alt="Imagen 7" class="photo" data-speed="5">
-            <img src="img/imagen8.jpeg" alt="Imagen 8" class="photo" data-speed="4">
+        <!-- Panel de administración de productos -->
+        <div id="admin-panel" class="admin-panel">
+            <h3>Agregar / Quitar productos</h3>
+            <div class="input-group">
+                <input type="text" id="nuevo-producto" placeholder="Nombre del producto">
+                <select id="categoria-nueva">
+                    <option value="higiene">Higiene Personal</option>
+                    <option value="limpieza">Limpieza del Hogar</option>
+                    <option value="alimentos">Alimentos Básicos</option>
+                    <option value="conservas">Conservas</option>
+                    <option value="otros">Otros</option>
+                </select>
+                <button id="agregar-producto">Agregar</button>
+            </div>
+            <small class="nota">Haz clic en 🗑️ para eliminar un producto. Todas las acciones piden confirmación.</small>
         </div>
-    </main>
+    </div>
 
-    <footer>
-        <p>Con amor para siempre ❤️</p>
-    </footer>
+    <div class="card higiene">
+        <h2>Higiene Personal</h2>
+        <ul>
+            <li><input type="checkbox" id="jabon"><label for="jabon">Jabon de tocador</label></li>
+            <li><input type="checkbox" id="jabonliquido"><label for="jabonliquido">Jabon liquido para manos</label></li>
+            <li><input type="checkbox" id="shampoo"><label for="shampoo">Shampoo</label></li>
+            <li><input type="checkbox" id="pasta"><label for="pasta">Pasta dental</label></li>
+            <li><input type="checkbox" id="cepillo"><label for="cepillo">Cepillo de dientes</label></li>
+            <li><input type="checkbox" id="papel"><label for="papel">Papel higienico</label></li>
+            <li><input type="checkbox" id="toallitas"><label for="toallitas">Toallitas humedas</label></li>
+            <li><input type="checkbox" id="toallas"><label for="toallas">Toallas femeninas / tampones</label></li>
+            <li><input type="checkbox" id="desodorante"><label for="desodorante">Desodorante</label></li>
+            <li><input type="checkbox" id="gel"><label for="gel">Gel antibacterial</label></li>
+        </ul>
+    </div>
 
-    <audio id="background-music" src="backgroundmusic.mp3" autoplay loop muted></audio>
+    <div class="card limpieza">
+        <h2>Limpieza del Hogar</h2>
+        <ul>
+            <li><input type="checkbox" id="detergente"><label for="detergente">Detergente para ropa</label></li>
+            <li><input type="checkbox" id="suavizante"><label for="suavizante">Suavizante de ropa</label></li>
+            <li><input type="checkbox" id="cloro"><label for="cloro">Cloro / lejia</label></li>
+            <li><input type="checkbox" id="limpiador"><label for="limpiador">Limpiador multiusos</label></li>
+            <li><input type="checkbox" id="escoba"><label for="escoba">Escoba</label></li>
+            <li><input type="checkbox" id="trapeador"><label for="trapeador">Trapeador</label></li>
+            <li><input type="checkbox" id="basura"><label for="basura">Bolsas de basura</label></li>
+            <li><input type="checkbox" id="esponja"><label for="esponja">Esponja / estropajo</label></li>
+            <li><input type="checkbox" id="desinfectante"><label for="desinfectante">Desinfectante</label></li>
+            <li><input type="checkbox" id="guantes"><label for="guantes">Guantes de limpieza</label></li>
+            <li><input type="checkbox" id="limpia-vidrios"><label for="limpia-vidrios">Limpiavidrios</label></li>
+        </ul>
+    </div>
 
-    <script src="script.js"></script>
-    
+    <div class="card alimentos">
+        <h2>Alimentos Básicos</h2>
+        <ul>
+            <li><input type="checkbox" id="arroz"><label for="arroz">Arroz</label></li>
+            <li><input type="checkbox" id="frijol"><label for="frijol">Frijol</label></li>
+            <li><input type="checkbox" id="aceite"><label for="aceite">Aceite</label></li>
+            <li><input type="checkbox" id="sal"><label for="sal">Sal</label></li>
+            <li><input type="checkbox" id="azucar"><label for="azucar">Azúcar</label></li>
+            <li><input type="checkbox" id="harina"><label for="harina">Harina</label></li>
+            <li><input type="checkbox" id="cafe"><label for="cafe">Café / té</label></li>
+        </ul>
+    </div>
+
+    <div class="card conservas">
+        <h2>Conservas</h2>
+        <ul>
+            <li><input type="checkbox" id="atún"><label for="atún">Atún en lata</label></li>
+            <li><input type="checkbox" id="sopa"><label for="sopa">Sopa instantánea / sopas en sobre</label></li>
+            <li><input type="checkbox" id="vegetales"><label for="vegetales">Vegetales enlatados</label></li>
+            <li><input type="checkbox" id="fruta"><label for="fruta">Frutas enlatadas</label></li>
+            <li><input type="checkbox" id="miel"><label for="miel">Miel / mantequilla</label></li>
+            <li><input type="checkbox" id="jugo"><label for="jugo">Jugo en caja</label></li>
+        </ul>
+    </div>
+
+    <div class="card otros">
+        <h2>Otros</h2>
+        <ul>
+            <li><input type="checkbox" id="pilas"><label for="pilas">Pilas</label></li>
+            <li><input type="checkbox" id="velas"><label for="velas">Velas</label></li>
+            <li><input type="checkbox" id="cerillos"><label for="cerillos">Cerillos / encendedores</label></li>
+            <li><input type="checkbox" id="pañales"><label for="pañales">Pañales</label></li>
+            <li><input type="checkbox" id="toallitas-bb"><label for="toallitas-bb">Toallitas bebé</label></li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+
+        const cards = document.querySelectorAll('.card');
+        const barra = document.getElementById('barra-progreso');
+        const busqueda = document.getElementById('busqueda');
+
+        // Actualizar contador y progreso
+        function actualizarProgreso(){
+            let total = 0, seleccionados = 0;
+            cards.forEach(card=>{
+                const items = card.querySelectorAll('li input[type="checkbox"]');
+                let count = 0;
+                items.forEach(chk=>{
+                    if(chk.checked) count++;
+                });
+                card.querySelector('.contador').innerText = `(${count}/${items.length})`;
+                total += items.length;
+                seleccionados += count;
+            });
+            let porcentaje = total? Math.round((seleccionados/total)*100):0;
+            barra.style.width = porcentaje+'%';
+            barra.innerText = porcentaje+'%';
+            if(porcentaje===100) barra.innerText = '🎉 Completado! 🎉';
+        }
+
+        // Marcar checkbox
+        const checkboxes = document.querySelectorAll('li input[type="checkbox"]');
+        checkboxes.forEach(chk=>{
+            chk.addEventListener('change', ()=>{
+                chk.parentElement.classList.toggle('checked', chk.checked);
+                actualizarProgreso();
+            });
+        });
+
+        // Filtrar
+        busqueda.addEventListener('input', function(){
+            const term = this.value.toLowerCase();
+            cards.forEach(card=>{
+                let matchCat = false;
+                const items = card.querySelectorAll('li');
+                items.forEach(li=>{
+                    const texto = li.innerText.toLowerCase();
+                    const visible = texto.includes(term);
+                    li.style.display = visible?'flex':'none';
+                    li.classList.toggle('highlight', visible && term!=='');
+                    if(visible) matchCat = true;
+                });
+                card.style.display = matchCat?'flex':'none';
+            });
+        });
+
+        actualizarProgreso();
+    });
+
+    document.getElementById('agregar-producto').addEventListener('click', ()=>{
+        const nombre = document.getElementById('nuevo-producto').value.trim();
+        const categoria = document.getElementById('categoria-nueva').value;
+        if(!nombre) return alert('Escribe un nombre de producto.');
+
+        const card = document.querySelector(`.card.${categoria} ul`);
+        const id = nombre.toLowerCase().replace(/\s+/g,'-'); // id único simple
+        const li = document.createElement('li');
+        li.innerHTML = `<input type="checkbox" id="${id}">
+                        <label for="${id}">${nombre}</label>
+                        <button class="eliminar" style="margin-left:10px;">🗑️</button>`;
+        card.appendChild(li);
+
+        // Evento para el checkbox
+        const chk = li.querySelector('input[type="checkbox"]');
+        chk.addEventListener('change', ()=>{
+            li.classList.toggle('checked', chk.checked);
+            actualizarProgreso();
+        });
+
+        // Evento para eliminar
+        li.querySelector('.eliminar').addEventListener('click', () => {
+            // Crear un modal de confirmación visual
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay-confirm';
+            overlay.innerHTML = `
+                <div class="confirm-box">
+                    <p>¿Seguro que quieres eliminar "<strong>${nombre}</strong>"?</p>
+                    <div class="confirm-buttons">
+                        <button class="btn-confirm yes">Sí</button>
+                        <button class="btn-confirm no">No</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            // Acción Sí
+            overlay.querySelector('.yes').addEventListener('click', () => {
+                li.style.transition = 'all 0.3s ease';
+                li.style.opacity = 0;
+                li.style.transform = 'translateX(-20px)';
+                overlay.remove();
+                li.remove();
+                actualizarProgreso();
+                overlay.remove();
+                overlay.remove();
+            });
+
+            // Acción No
+            overlay.querySelector('.no').addEventListener('click', () => {
+                overlay.remove();
+            });
+        });
+
+        actualizarProgreso();
+        document.getElementById('nuevo-producto').value = '';
+    });
+
+</script>
 
 </body>
 </html>
