@@ -20,9 +20,9 @@
         --muted:#6b7280;
         --brand:#a78bfa;
         --brand-2:#93c5fd;
-        --success:#16a34a;      /* verde accesible (mejor contraste) */
-        --danger:#b91c1c;       /* rojo accesible */
-        --warning:#b45309;      /* ámbar accesible */
+        --success:#16a34a;
+        --danger:#b91c1c;
+        --warning:#b45309;
         --chip:#eef2ff;
         --chip-ring:#dbeafe;
         --item:#f8fafc;
@@ -209,7 +209,12 @@
     .item.checked{ background: var(--item-checked); }
     .item.expensive{ box-shadow: 0 0 0 2px rgba(185,28,28,.85) inset; background: var(--item-exp); }
 
-    .check{ transform:scale(1.1); cursor:pointer; accent-color:#8b5cf6; width:var(--hit); height:var(--hit); display:grid; place-items:center; }
+    /* CHECKBOX más chico (pero ítem mantiene área táctil cómoda) */
+    .check{
+        width:22px; height:22px; min-width:22px; min-height:22px;
+        cursor:pointer; accent-color:#8b5cf6;
+    }
+
     .name{ flex:1 1 150px; min-width:120px; font-weight:700; letter-spacing:.2px; font-size:var(--fs-md); }
 
     .pc{ display:flex; align-items:center; gap:6px; flex:1 1 auto; flex-wrap:wrap; }
@@ -495,7 +500,7 @@
     <ul class="items">
       <li class="item"><input class="check" type="checkbox" id="atun"><div class="name"><label for="atun">Atún en lata</label></div></li>
       <li class="item"><input class="check" type="checkbox" id="sopa"><div class="name"><label for="sopa">Sopa instantánea / sopas en sobre</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="vegetales"><div class="name"><label for="vegetales">Vegetales enlatados</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="vegetales"><div class="name"><label for="vegetales">Vegetales enlatados</div></li>
       <li class="item"><input class="check" type="checkbox" id="fruta"><div class="name"><label for="fruta">Frutas enlatadas</label></div></li>
       <li class="item"><input class="check" type="checkbox" id="miel"><div class="name"><label for="miel">Miel / mantequilla</label></div></li>
       <li class="item"><input class="check" type="checkbox" id="jugo"><div class="name"><label for="jugo">Jugo en caja</label></div></li>
@@ -586,6 +591,28 @@ function readState(){
 }
 function saveState(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(readState())); }catch{} }
 function loadState(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'null'); }catch{ return null; } }
+
+/* >>> FALTABA: aplicar estado guardado (esto rompía la init) <<< */
+function applyState(state){
+  if(!state) return;
+  const map = new Map(state.map(i=>[i.id,i]));
+  qSA('.card').forEach(card=>{
+    qSA('.items > .item', card).forEach(li=>{
+      // aseguro que existan controles antes de aplicar valores
+      ensureControls(li);
+      const chk = qS('.check', li);
+      const label = li.querySelector('label');
+      const id = chk?.id || (label?.textContent.trim().toLowerCase().replace(/\s+/g,'-'));
+      const item = map.get(id);
+      if(!item) return;
+      if(chk) chk.checked = !!item.checked;
+      const cant = qS('input.cant', li); if(cant) cant.value = item.cantidad ?? 1;
+      const precio = qS('input.precio', li); if(precio) precio.value = item.costo ?? 0;
+      li.classList.toggle('checked', chk?.checked);
+    });
+  });
+  updateAll();
+}
 
 function readUI(){
   try{ return JSON.parse(localStorage.getItem(UI_KEY)||'{}'); }catch{ return {}; }
@@ -679,7 +706,7 @@ function addGestures(li){
     updateAll(); saveState(); haptics(15);
   }, {passive:true});
 
-  // Soporte "double tap" en touch (iOS no siempre dispara dblclick)
+  // Soporte "double tap" en touch
   li.addEventListener('touchend', ()=>{
     if(tapTimer){ clearTimeout(tapTimer); tapTimer=null;
       const chk=qS('.check', li); if(!chk) return;
@@ -738,7 +765,7 @@ function updateAll(){
     span.textContent=money(perCat[k]||0);
   });
 
-  // Marcar "más caros" (>=90% del mayor subtotal > 0)
+  // Marcar "más caros"
   const maxSub=Math.max(0, ...subs.map(s=>s.sub));
   const thr=maxSub*0.9;
   qSA('.item').forEach(li=>li.classList.remove('expensive'));
@@ -746,7 +773,7 @@ function updateAll(){
     subs.forEach(({li,sub})=>{ if(sub>=thr) li.classList.add('expensive'); });
   }
 
-  // Asegura subtotales renderizados
+  // Asegura subtotales
   qSA('.item').forEach(li=>{
     const q=Number(qS('input.cant',li)?.value)||0;
     const p=Number(qS('input.precio',li)?.value)||0;
@@ -760,7 +787,7 @@ function sortList(ul, mode){
   const items=qSA(':scope > .item', ul);
   const name=li=> (li.querySelector('label')?.textContent||'').trim().toLowerCase();
   const costo=li=> Number(qS('.precio', li)?.value)||0;
-  const sub= li=> (Number(qS('.cant', li)?.value)||0)*(Number(qS('.precio', li)?.value)||0);
+  const sub= li=> (Number(qS('input.cant', li)?.value)||0)*(Number(qS('.precio', li)?.value)||0);
   const checked=li=> qS('.check', li)?.checked?1:0;
 
   let arr=[...items];
@@ -840,7 +867,6 @@ function showUpdateBanner(waitingSW){
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(reg=>{
-      // si ya hay uno esperando
       if(reg.waiting) showUpdateBanner(reg.waiting);
       reg.addEventListener('updatefound', ()=>{
         const sw = reg.installing;
@@ -851,7 +877,6 @@ if ('serviceWorker' in navigator) {
           }
         });
       });
-      // recargar cuando el nuevo toma control
       navigator.serviceWorker.addEventListener('controllerchange', ()=>{
         window.location.reload();
       });
@@ -865,18 +890,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
   qSA('.items').forEach(prepareList);
 
   // Cargar estado guardado de productos
-  applyState(loadState());
+  applyState(loadState()); // <-- ahora existe
 
   // Restaurar UI (acordeones + orden)
   const ui = readUI();
-  // acordeones
   if(ui.accordions){
     qSA('.card').forEach(card=>{
       const cat=getCat(card);
       if(cat in ui.accordions) setCollapsed(card, !!ui.accordions[cat]);
     });
   }
-  // orden
   if(ui.sort){
     qSA('.card').forEach(card=>{
       const cat=getCat(card);
@@ -969,22 +992,18 @@ function buildResumenTexto(){
 }
 async function shareResumen(){
   const texto = buildResumenTexto();
-  // Web Share API (mejor experiencia móvil)
   if(navigator.share){
     try{
       await navigator.share({ text: texto });
       return;
-    }catch(e){ /* fallback abajo */ }
+    }catch(e){ /* fallback */ }
   }
-  // Fallback: abrir WhatsApp y Telegram
   const enc = encodeURIComponent(texto);
   const wa = `https://wa.me/?text=${enc}`;
   const tg = `https://t.me/share/url?text=${enc}`;
-  // abrir en nueva pestaña WA y una ventana para elegir TG
   window.open(wa, '_blank');
   setTimeout(()=>window.open(tg, '_blank'), 300);
 }
-
 qS('#btn-compartir').addEventListener('click', shareResumen);
 qS('#btn-compartir-bottom').addEventListener('click', shareResumen);
 
@@ -993,7 +1012,6 @@ function printResumen(){
   const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
   if(!selected.length){ alert('No hay productos seleccionados.'); return; }
 
-  // Agrupar por categoría
   const groups={};
   selected.forEach(li=>{
     const card=li.closest('.card');
