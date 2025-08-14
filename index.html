@@ -2,412 +2,388 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Lista de Primera Despensa - Mejorada</title>
+<title>Lista de Primera Despensa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #f4f4f9;
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        justify-content: center;
+    :root{
+        --bg:#0f172a;            /* slate-900 */
+        --card:#0b1224;          /* deep card */
+        --card2:#0d1a33;
+        --muted:#94a3b8;         /* slate-400 */
+        --text:#e5e7eb;          /* gray-200 */
+        --brand:#7c3aed;         /* violet-600 */
+        --brand-2:#06b6d4;       /* cyan-500 */
+        --success:#22c55e;       /* green-500 */
+        --danger:#ef4444;        /* red-500 */
+        --warning:#f59e0b;       /* amber-500 */
+        --ring:#1e293b;          /* slate-800 */
+        --chip:#111b33;
+        --chip-ring:#1b2744;
     }
 
-    .canva-container {
-        max-width: 1100px;
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 20px;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+        margin:0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        color:var(--text);
+        background:
+            radial-gradient(1200px 600px at 100% -10%, rgba(124,58,237,.2), transparent 60%),
+            radial-gradient(900px 500px at 0% 100%, rgba(6,182,212,.18), transparent 60%),
+            linear-gradient(180deg, #0a0f1f 0%, #0f172a 100%);
+        padding:0;
     }
 
-    h1 {
-        grid-column: 1/-1;
-        text-align: center;
-        color: #2c3e50;
-        font-size: 2rem;
-        margin-bottom: 16px;
+    /* Contenedor a UNA sola columna */
+    .container{
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 18px 16px 80px;
+        display:flex;
+        flex-direction:column;
+        gap:16px;
     }
 
-    .top-actions {
-        grid-column: 1/-1;
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: .5rem;
+    /* Header fijo de acciones */
+    .toolbar{
+        position:sticky;
+        top:0;
+        z-index:50;
+        backdrop-filter: saturate(140%) blur(12px);
+        background: linear-gradient(180deg, rgba(10,15,31,.9), rgba(15,23,42,.6));
+        border-bottom:1px solid rgba(148,163,184,.12);
     }
-    .top-actions button,
-    .top-actions input[type="text"] {
-        padding: 10px 14px;
-        border-radius: 8px;
-        border: 1px solid #cbd5e1;
-        background: #fff;
-        font-weight: 600;
-        cursor: pointer;
+    .toolbar-inner{
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 12px 16px;
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        gap:8px;
     }
-    .top-actions button:hover { filter: brightness(0.97); }
-    .btn-print { background: #111827; color: #fff; border-color: #111827; }
-    .btn-clear { background: #ef4444; color: #fff; border-color: #ef4444; }
+    h1{
+        font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+        font-weight: 800;
+        letter-spacing:.2px;
+        margin:0 8px 0 0;
+        color:#f8fafc;
+        white-space:nowrap;
+    }
 
-    .card {
-        background: white;
+    .search{
+        flex:1 1 260px;
+        display:flex;
+        align-items:center;
+        gap:8px;
+        background: #0a1020;
+        border:1px solid var(--ring);
         border-radius: 12px;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-        display: flex;
-        flex-direction: column;
-        transition: transform 0.2s;
-        overflow: hidden;
-    }
-
-    .card header {
-        margin: 0;
         padding: 10px 12px;
-        color: white;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 10px;
-        align-items: center;
     }
-    .card header .left h2 {
-        margin: 0;
-        font-size: 1.06rem;
-        display: flex;
-        align-items: center;
-        gap: .5rem;
+    .search input{
+        flex:1;
+        background:transparent;
+        border:0;
+        outline:0;
+        color:var(--text);
+        font-size:.95rem;
     }
-    .card header .contador {
-        font-size: 0.8rem;
-        background: rgba(255,255,255,0.3);
-        padding: 2px 6px;
-        border-radius: 12px;
+    .btn{
+        border:1px solid var(--ring);
+        color:var(--text);
+        background:linear-gradient(180deg, #111a35, #0b1224);
+        padding:10px 14px;
+        border-radius:12px;
+        cursor:pointer;
+        font-weight:700;
+        transition: .15s transform, .2s box-shadow, .2s filter;
+        white-space:nowrap;
     }
-    .card header .right {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-        justify-content: flex-end;
-        flex-wrap: wrap;
+    .btn:hover{ transform:translateY(-1px); filter:brightness(1.05) }
+    .btn:active{ transform:translateY(0) }
+    .btn-print{ border-color:#3f2a8e; background:linear-gradient(180deg, #3f2a8e, #2a1f5f) }
+    .btn-danger{ border-color:#6a1d1d; background:linear-gradient(180deg, #7a2323, #551616) }
+
+    /* Barra de progreso y totales globales */
+    .panel{
+        background: linear-gradient(180deg, var(--card), var(--card2));
+        border:1px solid var(--ring);
+        border-radius:16px;
+        padding:14px;
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+        box-shadow: 0 10px 30px rgba(17,24,39,.25);
     }
-    .right select {
-        padding: 6px 8px;
-        border-radius: 6px;
-        border: 1px solid rgba(255,255,255,0.7);
-        background: rgba(255,255,255,0.9);
-        font-size: .85rem;
-        min-width: 150px;
-        cursor: pointer;
-    }
-    .right .total-cat {
-        background: rgba(255,255,255,0.15);
-        color: #fff;
-        padding: 6px 10px;
+    .progress{
+        height: 18px;
         border-radius: 999px;
-        font-weight: 700;
-        font-size: .9rem;
-        white-space: nowrap;
+        background:#0a1020;
+        border:1px solid var(--ring);
+        overflow:hidden;
+    }
+    .progress .bar{
+        height:100%;
+        width:0%;
+        color:#0a1020;
+        background: linear-gradient(90deg, var(--brand), var(--brand-2));
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:.78rem;
+        font-weight:900;
+        letter-spacing:.3px;
+        transition: width .25s ease;
+        white-space:nowrap;
     }
 
-    .card ul {
-        list-style: none;
-        padding: 10px 0 6px 0;
-        margin: 0;
-        flex: 1;
-        max-height: 1000px;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
+    .totales{
+        display:grid;
+        grid-template-columns: repeat(3, minmax(0,1fr));
+        gap:10px;
+    }
+    .tcard{
+        background:#0a1020;
+        border:1px solid var(--ring);
+        border-radius:14px;
+        text-align:center;
+        padding:10px 8px;
+    }
+    .tcard h4{
+        margin:0 0 5px 0;
+        color:var(--muted);
+        font-size:.8rem;
+        font-weight:700;
+        letter-spacing:.3px;
+        text-transform:uppercase;
+    }
+    .tcard .val{
+        font-size:1.05rem;
+        font-weight:900;
+        color:#f3f4f6;
     }
 
-    /* Colores por sección */
-    .higiene header { background-color: #3498db; }
-    .limpieza header { background-color: #27ae60; }
-    .alimentos header { background-color: #f1c40f; color: #333; }
-    .conservas header { background-color: #e67e22; }
-    .otros header { background-color: #9b59b6; }
-
-    li {
-        background: #ecf0f1;
-        margin: 6px 12px;
-        padding: 10px 12px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        transition: background 0.25s, transform 0.2s, border 0.2s;
-        flex-wrap: wrap;
-        border: 1px solid transparent;
+    /* Card de categoría (UNA sola columna) */
+    .card{
+        background: linear-gradient(180deg, #0c1327, #0b1224);
+        border:1px solid var(--ring);
+        border-radius:16px;
+        overflow:hidden;
+        box-shadow: 0 12px 34px rgba(0,0,0,.35);
+    }
+    .card header{
+        padding:12px 14px;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        border-bottom:1px solid rgba(148,163,184,.12);
+    }
+    .title{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        min-width:0;
+    }
+    .title h2{
+        margin:0;
+        font-size:1rem;
+        letter-spacing:.2px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        display:flex;
+        align-items:center;
+        gap:8px;
+    }
+    .contador{
+        font-size:.75rem;
+        background: #1b2744;
+        border:1px solid var(--chip-ring);
+        color:#dbeafe;
+        padding:2px 8px;
+        border-radius:999px;
+        font-weight:900;
+    }
+    .meta{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        flex-wrap:wrap;
+        justify-content:flex-end;
+    }
+    .sort{
+        appearance:none;
+        padding:8px 12px;
+        border-radius:10px;
+        border:1px solid var(--ring);
+        background:#0a1020;
+        color:var(--text);
+        font-weight:700;
+        cursor:pointer;
+        min-width:170px;
+    }
+    .total-cat{
+        background: #0a162e;
+        border:1px solid var(--chip-ring);
+        color:#e0e7ff;
+        font-weight:900;
+        padding:8px 12px;
+        border-radius:999px;
+        white-space:nowrap;
     }
 
-    li.highlight { background: #ffeaa7 !important; }
-    li.checked { background: #d7f5f5; transform: scale(1.01); }
-    li.expensive { border-color: #ef4444; background: #fee2e2; } /* más caro */
+    /* Lista de ítems */
+    .items{ list-style:none; margin:0; padding:10px 10px 12px 10px; display:flex; flex-direction:column; gap:10px; }
+    .item{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        background: #0a1020;
+        border:1px solid var(--ring);
+        border-radius:12px;
+        padding:10px;
+        transition: .2s ease;
+        flex-wrap:wrap;
+    }
+    .item:hover{ box-shadow: 0 0 0 2px rgba(124,58,237,.25) inset }
+    .item.checked{ background: #0e1833; }
+    .item.expensive{ box-shadow: 0 0 0 2px rgba(239,68,68,.45) inset; background: #1a0d0d; }
 
-    li:hover { background: #dcdde1; }
+    .check{ transform:scale(1.2); cursor:pointer; accent-color:var(--brand); }
+    .name{ flex:1 1 180px; min-width:150px; font-weight:700; letter-spacing:.2px; }
+    .pc{
+        display:flex; align-items:center; gap:8px; flex:1 1 auto; flex-wrap:wrap;
+    }
+    .pc input[type="number"]{
+        width: 92px;
+        background:#0a0f1f;
+        border:1px solid var(--ring);
+        border-radius:10px;
+        padding:8px 10px;
+        color:var(--text);
+        font-weight:800;
+    }
+    .subtotal{
+        min-width:110px; text-align:right; font-weight:900;
+        background:#0a0f1f; border:1px solid var(--ring); border-radius:10px;
+        padding:8px 10px;
+    }
+    .del{
+        background:#1b0f0f; border:1px solid #3a1a1a; color:#fecaca;
+        border-radius:10px; padding:8px 10px; cursor:pointer; font-weight:900;
+    }
+    .del:hover{ filter:brightness(1.08) }
 
-    input[type="checkbox"] {
-        transform: scale(1.2);
-        cursor: pointer;
+    /* Admin panel */
+    .admin{
+        background: linear-gradient(180deg, #0b1224, #0a1020);
+        border:1px solid var(--ring);
+        border-radius:16px;
+        padding:14px;
+        display:flex;
+        flex-direction:column;
+        gap:10px;
     }
-
-    label {
-        flex: 1 1 160px;
-        cursor: pointer;
-        min-width: 140px;
+    .admin h3{ margin:0; font-size:.95rem; color:#dbeafe; letter-spacing:.3px }
+    .admin .group{ display:flex; flex-wrap:wrap; gap:8px }
+    .admin input[type="text"], .admin select{
+        background:#0a0f1f; border:1px solid var(--ring); color:var(--text);
+        padding:10px 12px; border-radius:12px; font-weight:700;
     }
-
-    .pc-wrap {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex: 1 1 auto;
-        flex-wrap: wrap;
-    }
-
-    .pc-wrap input[type="number"] {
-        width: 90px;
-        padding: 6px 8px;
-        border-radius: 6px;
-        border: 1px solid #cbd5e1;
-        font-size: 0.9rem;
-        background: #fff;
-    }
-
-    .pc-wrap .subtotal {
-        min-width: 98px;
-        font-weight: 700;
-    }
-
-    .pc-wrap .eliminar {
-        background: transparent;
-        border: none;
-        font-size: 1.1rem;
-        cursor: pointer;
-    }
-
-    #filtro {
-        grid-column: 1/-1;
-        display: flex;
-        justify-content: center;
-    }
-    #filtro input {
-        width: 100%;
-        max-width: 460px;
-        padding: 10px 15px;
-        font-size: 1rem;
-        border-radius: 25px;
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        transition: box-shadow 0.3s;
-    }
-    #filtro input:focus {
-        outline: none;
-        box-shadow: 0 0 8px rgba(52,152,219,0.6);
-        border-color: #3498db;
-    }
-
-    .progress-container {
-        grid-column: 1/-1;
-        margin: 10px 0 10px 0;
-    }
-
-    .progress-bar {
-        width: 100%;
-        background: #ecf0f1;
-        border-radius: 25px;
-        overflow: hidden;
-        height: 25px;
-        box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-    }
-    .progress-bar-inner {
-        height: 100%;
-        width: 0;
-        background: linear-gradient(90deg, #74b9ff, #0984e3);
-        text-align: center;
-        color: white;
-        line-height: 25px;
-        font-weight: bold;
-        transition: width 0.3s ease;
-    }
-
-    .totales {
-        grid-column: 1/-1;
-        display: grid;
-        grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-        gap: 10px;
-        margin-top: 10px;
-    }
-    .total-card {
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-        padding: 12px 14px;
-        text-align: center;
-    }
-    .total-card h4 {
-        margin: 0 0 6px;
-        color: #334155;
-        font-size: .95rem;
-        font-weight: 600;
-    }
-    .total-card .val {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #111827;
-    }
-
-    .admin-panel {
-        background: #f8f9fa;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        margin: 12px 0 30px 0;
-        max-width: 900px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .admin-panel h3 {
-        text-align: center;
-        margin-bottom: 15px;
-        color: #333;
-    }
-    .admin-panel .input-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: center;
-        margin-bottom: 10px;
-    }
-    .admin-panel input[type="text"],
-    .admin-panel select {
-        padding: 10px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        flex: 1 1 200px;
-        min-width: 150px;
-        font-size: 14px;
-        background: #fff;
-    }
-    .admin-panel button {
-        background: #28a745;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: background 0.3s;
-    }
-    .admin-panel button:hover { background: #218838; }
-    .admin-panel .nota {
-        display: block;
-        text-align: center;
-        color: #666;
-        font-size: 12px;
-    }
+    .admin .note{ font-size:.8rem; color:var(--muted) }
 
     /* Overlay confirmación */
-    .overlay-confirm {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.4);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
+    .overlay{
+        position:fixed; inset:0; z-index:90;
+        background: rgba(2,6,23,.6);
+        display:flex; align-items:center; justify-content:center;
+        backdrop-filter: blur(6px);
     }
-    .confirm-box {
-        background: #fff;
-        padding: 20px 25px;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        text-align: center;
-        max-width: 420px;
-        width: 90%;
+    .confirm{
+        background:#0a1020; border:1px solid var(--ring); color:var(--text);
+        padding:18px 16px; border-radius:16px; width:min(92vw,420px);
+        box-shadow: 0 24px 64px rgba(0,0,0,.4);
+        text-align:center;
     }
-    .confirm-box p { font-size: 16px; color: #333; margin-bottom: 20px; }
-    .confirm-buttons { display: flex; justify-content: space-around; }
-    .btn-confirm {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    .btn-confirm.yes { background: #dc3545; color: #fff; }
-    .btn-confirm.no { background: #6c757d; color: #fff; }
-    .btn-confirm:hover { transform: scale(1.05); }
+    .confirm p{ margin:0 0 12px 0 }
+    .confirm .row{ display:flex; gap:10px; justify-content:center }
+    .cbtn{ padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:900; border:1px solid var(--ring) }
+    .cbtn.y{ background:#581c1c; color:#fecaca; border-color:#7f1d1d }
+    .cbtn.n{ background:#0b1731; color:#c7d2fe; border-color:#1e3a8a }
 
-    @media(max-width:600px){
-        .canva-container { grid-template-columns: 1fr; }
-        li { margin: 6px 8px; }
-        #filtro input { max-width: 100%; }
-        .right { justify-content: flex-start; }
+    @media (max-width:640px){
+        .totales{ grid-template-columns:1fr; }
+        .title h2{ font-size:.95rem }
+        .sort{ min-width:140px }
+        .name{ min-width:120px }
     }
 </style>
 </head>
 <body>
 
-<div class="canva-container">
-    <h1>Lista de Primera Despensa</h1>
-
-    <div class="top-actions">
-        <button class="btn-print" id="btn-imprimir">Resumen imprimible</button>
-        <button class="btn-clear" id="btn-borrar">Borrar todo (estado)</button>
-    </div>
-
-    <div id="filtro">
-        <input type="text" id="busqueda" placeholder="Buscar producto...">
-    </div>
-
-    <div class="progress-container">
-        <div class="progress-bar">
-            <div class="progress-bar-inner" id="barra-progreso">0%</div>
+<!-- TOOLBAR FIJA -->
+<div class="toolbar">
+    <div class="toolbar-inner">
+        <h1>Primera Despensa</h1>
+        <div class="search">
+            <svg width="18" height="18" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg>
+            <input id="busqueda" placeholder="Buscar producto…">
         </div>
+        <button class="btn btn-print" id="btn-imprimir">Resumen imprimible</button>
+        <button class="btn btn-danger" id="btn-borrar">Borrar estado</button>
+    </div>
+</div>
 
-        <!-- Totales globales -->
+<div class="container">
+
+    <!-- PANEL DE PROGRESO + TOTALES -->
+    <section class="panel">
+        <div class="progress"><div class="bar" id="barra-progreso">0%</div></div>
         <div class="totales">
-            <div class="total-card">
+            <div class="tcard">
                 <h4>Productos seleccionados</h4>
                 <div class="val" id="total-seleccionados">0</div>
             </div>
-            <div class="total-card">
+            <div class="tcard">
                 <h4>Cantidad total</h4>
                 <div class="val" id="total-cantidad">0</div>
             </div>
-            <div class="total-card">
-                <h4>Total $</h4>
+            <div class="tcard">
+                <h4>Total</h4>
                 <div class="val" id="total-dinero">$0.00</div>
             </div>
         </div>
+    </section>
 
-        <!-- Panel de administración -->
-        <div id="admin-panel" class="admin-panel">
-            <h3>Agregar / Quitar productos</h3>
-            <div class="input-group">
-                <input type="text" id="nuevo-producto" placeholder="Nombre del producto">
-                <select id="categoria-nueva">
-                    <option value="higiene">Higiene Personal</option>
-                    <option value="limpieza">Limpieza del Hogar</option>
-                    <option value="alimentos">Alimentos Básicos</option>
-                    <option value="conservas">Conservas</option>
-                    <option value="otros">Otros</option>
-                </select>
-                <button id="agregar-producto">Agregar</button>
-            </div>
-            <small class="nota">Marca ✓ para incluirlo en el cálculo. Captura Cantidad y Costo unitario. El subtotal se calcula solo. 🗑️ elimina (pide confirmación). Se guarda automáticamente en tu navegador.</small>
+    <!-- ADMIN -->
+    <section class="admin">
+        <h3>Agregar / Quitar productos</h3>
+        <div class="group">
+            <input type="text" id="nuevo-producto" placeholder="Nombre del producto">
+            <select id="categoria-nueva">
+                <option value="higiene">Higiene Personal</option>
+                <option value="limpieza">Limpieza del Hogar</option>
+                <option value="alimentos">Alimentos Básicos</option>
+                <option value="conservas">Conservas</option>
+                <option value="otros">Otros</option>
+            </select>
+            <button class="btn" id="agregar-producto">Agregar</button>
         </div>
-    </div>
+        <small class="note">Marca ✓ para incluirlo. Captura Cantidad y Costo unitario. Se guarda automáticamente en tu navegador.</small>
+    </section>
 
-    <!-- TARJETAS -->
-    <div class="card higiene">
+    <!-- CATEGORÍAS (UNA sola columna) -->
+    <section class="card higiene">
         <header>
-            <div class="left"><h2>Higiene Personal <span class="contador"></span></h2></div>
-            <div class="right">
-                <select class="sort-select">
+            <div class="title">
+                <h2>Higiene Personal <span class="contador"></span></h2>
+            </div>
+            <div class="meta">
+                <select class="sort">
                     <option value="none">Ordenar…</option>
-                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="nombre">Nombre (A–Z)</option>
                     <option value="costo">Costo unitario (↑)</option>
                     <option value="subtotal">Subtotal (↑)</option>
                     <option value="checked">Marcados primero</option>
@@ -415,27 +391,29 @@
                 <span class="total-cat" data-cat="higiene">$0.00</span>
             </div>
         </header>
-        <ul>
-            <li><input type="checkbox" id="jabon"><label for="jabon">Jabon de tocador</label></li>
-            <li><input type="checkbox" id="jabonliquido"><label for="jabonliquido">Jabon liquido para manos</label></li>
-            <li><input type="checkbox" id="shampoo"><label for="shampoo">Shampoo</label></li>
-            <li><input type="checkbox" id="pasta"><label for="pasta">Pasta dental</label></li>
-            <li><input type="checkbox" id="cepillo"><label for="cepillo">Cepillo de dientes</label></li>
-            <li><input type="checkbox" id="papel"><label for="papel">Papel higienico</label></li>
-            <li><input type="checkbox" id="toallitas"><label for="toallitas">Toallitas humedas</label></li>
-            <li><input type="checkbox" id="toallas"><label for="toallas">Toallas femeninas / tampones</label></li>
-            <li><input type="checkbox" id="desodorante"><label for="desodorante">Desodorante</label></li>
-            <li><input type="checkbox" id="gel"><label for="gel">Gel antibacterial</label></li>
+        <ul class="items">
+            <li class="item"><input class="check" type="checkbox" id="jabon"><div class="name"><label for="jabon">Jabón de tocador</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="jabonliquido"><div class="name"><label for="jabonliquido">Jabón líquido para manos</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="shampoo"><div class="name"><label for="shampoo">Shampoo</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="pasta"><div class="name"><label for="pasta">Pasta dental</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="cepillo"><div class="name"><label for="cepillo">Cepillo de dientes</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="papel"><div class="name"><label for="papel">Papel higiénico</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="toallitas"><div class="name"><label for="toallitas">Toallitas húmedas</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="toallas"><div class="name"><label for="toallas">Toallas femeninas / tampones</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="desodorante"><div class="name"><label for="desodorante">Desodorante</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="gel"><div class="name"><label for="gel">Gel antibacterial</label></div></li>
         </ul>
-    </div>
+    </section>
 
-    <div class="card limpieza">
+    <section class="card limpieza">
         <header>
-            <div class="left"><h2>Limpieza del Hogar <span class="contador"></span></h2></div>
-            <div class="right">
-                <select class="sort-select">
+            <div class="title">
+                <h2>Limpieza del Hogar <span class="contador"></span></h2>
+            </div>
+            <div class="meta">
+                <select class="sort">
                     <option value="none">Ordenar…</option>
-                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="nombre">Nombre (A–Z)</option>
                     <option value="costo">Costo unitario (↑)</option>
                     <option value="subtotal">Subtotal (↑)</option>
                     <option value="checked">Marcados primero</option>
@@ -443,28 +421,30 @@
                 <span class="total-cat" data-cat="limpieza">$0.00</span>
             </div>
         </header>
-        <ul>
-            <li><input type="checkbox" id="detergente"><label for="detergente">Detergente para ropa</label></li>
-            <li><input type="checkbox" id="suavizante"><label for="suavizante">Suavizante de ropa</label></li>
-            <li><input type="checkbox" id="cloro"><label for="cloro">Cloro / lejia</label></li>
-            <li><input type="checkbox" id="limpiador"><label for="limpiador">Limpiador multiusos</label></li>
-            <li><input type="checkbox" id="escoba"><label for="escoba">Escoba</label></li>
-            <li><input type="checkbox" id="trapeador"><label for="trapeador">Trapeador</label></li>
-            <li><input type="checkbox" id="basura"><label for="basura">Bolsas de basura</label></li>
-            <li><input type="checkbox" id="esponja"><label for="esponja">Esponja / estropajo</label></li>
-            <li><input type="checkbox" id="desinfectante"><label for="desinfectante">Desinfectante</label></li>
-            <li><input type="checkbox" id="guantes"><label for="guantes">Guantes de limpieza</label></li>
-            <li><input type="checkbox" id="limpia-vidrios"><label for="limpia-vidrios">Limpiavidrios</label></li>
+        <ul class="items">
+            <li class="item"><input class="check" type="checkbox" id="detergente"><div class="name"><label for="detergente">Detergente para ropa</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="suavizante"><div class="name"><label for="suavizante">Suavizante de ropa</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="cloro"><div class="name"><label for="cloro">Cloro / lejía</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="limpiador"><div class="name"><label for="limpiador">Limpiador multiusos</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="escoba"><div class="name"><label for="escoba">Escoba</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="trapeador"><div class="name"><label for="trapeador">Trapeador</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="basura"><div class="name"><label for="basura">Bolsas de basura</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="esponja"><div class="name"><label for="esponja">Esponja / estropajo</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="desinfectante"><div class="name"><label for="desinfectante">Desinfectante</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="guantes"><div class="name"><label for="guantes">Guantes de limpieza</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="limpia-vidrios"><div class="name"><label for="limpia-vidrios">Limpiavidrios</label></div></li>
         </ul>
-    </div>
+    </section>
 
-    <div class="card alimentos">
+    <section class="card alimentos">
         <header>
-            <div class="left"><h2>Alimentos Básicos <span class="contador"></span></h2></div>
-            <div class="right">
-                <select class="sort-select">
+            <div class="title">
+                <h2>Alimentos Básicos <span class="contador"></span></h2>
+            </div>
+            <div class="meta">
+                <select class="sort">
                     <option value="none">Ordenar…</option>
-                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="nombre">Nombre (A–Z)</option>
                     <option value="costo">Costo unitario (↑)</option>
                     <option value="subtotal">Subtotal (↑)</option>
                     <option value="checked">Marcados primero</option>
@@ -472,24 +452,26 @@
                 <span class="total-cat" data-cat="alimentos">$0.00</span>
             </div>
         </header>
-        <ul>
-            <li><input type="checkbox" id="arroz"><label for="arroz">Arroz</label></li>
-            <li><input type="checkbox" id="frijol"><label for="frijol">Frijol</label></li>
-            <li><input type="checkbox" id="aceite"><label for="aceite">Aceite</label></li>
-            <li><input type="checkbox" id="sal"><label for="sal">Sal</label></li>
-            <li><input type="checkbox" id="azucar"><label for="azucar">Azúcar</label></li>
-            <li><input type="checkbox" id="harina"><label for="harina">Harina</label></li>
-            <li><input type="checkbox" id="cafe"><label for="cafe">Café / té</label></li>
+        <ul class="items">
+            <li class="item"><input class="check" type="checkbox" id="arroz"><div class="name"><label for="arroz">Arroz</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="frijol"><div class="name"><label for="frijol">Frijol</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="aceite"><div class="name"><label for="aceite">Aceite</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="sal"><div class="name"><label for="sal">Sal</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="azucar"><div class="name"><label for="azucar">Azúcar</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="harina"><div class="name"><label for="harina">Harina</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="cafe"><div class="name"><label for="cafe">Café / té</label></div></li>
         </ul>
-    </div>
+    </section>
 
-    <div class="card conservas">
+    <section class="card conservas">
         <header>
-            <div class="left"><h2>Conservas <span class="contador"></span></h2></div>
-            <div class="right">
-                <select class="sort-select">
+            <div class="title">
+                <h2>Conservas <span class="contador"></span></h2>
+            </div>
+            <div class="meta">
+                <select class="sort">
                     <option value="none">Ordenar…</option>
-                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="nombre">Nombre (A–Z)</option>
                     <option value="costo">Costo unitario (↑)</option>
                     <option value="subtotal">Subtotal (↑)</option>
                     <option value="checked">Marcados primero</option>
@@ -497,23 +479,25 @@
                 <span class="total-cat" data-cat="conservas">$0.00</span>
             </div>
         </header>
-        <ul>
-            <li><input type="checkbox" id="atun"><label for="atun">Atún en lata</label></li>
-            <li><input type="checkbox" id="sopa"><label for="sopa">Sopa instantánea / sopas en sobre</label></li>
-            <li><input type="checkbox" id="vegetales"><label for="vegetales">Vegetales enlatados</label></li>
-            <li><input type="checkbox" id="fruta"><label for="fruta">Frutas enlatadas</label></li>
-            <li><input type="checkbox" id="miel"><label for="miel">Miel / mantequilla</label></li>
-            <li><input type="checkbox" id="jugo"><label for="jugo">Jugo en caja</label></li>
+        <ul class="items">
+            <li class="item"><input class="check" type="checkbox" id="atun"><div class="name"><label for="atun">Atún en lata</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="sopa"><div class="name"><label for="sopa">Sopa instantánea / sopas en sobre</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="vegetales"><div class="name"><label for="vegetales">Vegetales enlatados</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="fruta"><div class="name"><label for="fruta">Frutas enlatadas</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="miel"><div class="name"><label for="miel">Miel / mantequilla</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="jugo"><div class="name"><label for="jugo">Jugo en caja</label></div></li>
         </ul>
-    </div>
+    </section>
 
-    <div class="card otros">
+    <section class="card otros">
         <header>
-            <div class="left"><h2>Otros <span class="contador"></span></h2></div>
-            <div class="right">
-                <select class="sort-select">
+            <div class="title">
+                <h2>Otros <span class="contador"></span></h2>
+            </div>
+            <div class="meta">
+                <select class="sort">
                     <option value="none">Ordenar…</option>
-                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="nombre">Nombre (A–Z)</option>
                     <option value="costo">Costo unitario (↑)</option>
                     <option value="subtotal">Subtotal (↑)</option>
                     <option value="checked">Marcados primero</option>
@@ -521,405 +505,287 @@
                 <span class="total-cat" data-cat="otros">$0.00</span>
             </div>
         </header>
-        <ul>
-            <li><input type="checkbox" id="pilas"><label for="pilas">Pilas</label></li>
-            <li><input type="checkbox" id="velas"><label for="velas">Velas</label></li>
-            <li><input type="checkbox" id="cerillos"><label for="cerillos">Cerillos / encendedores</label></li>
-            <li><input type="checkbox" id="pañales"><label for="pañales">Pañales</label></li>
-            <li><input type="checkbox" id="toallitas-bb"><label for="toallitas-bb">Toallitas bebé</label></li>
+        <ul class="items">
+            <li class="item"><input class="check" type="checkbox" id="pilas"><div class="name"><label for="pilas">Pilas</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="velas"><div class="name"><label for="velas">Velas</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="cerillos"><div class="name"><label for="cerillos">Cerillos / encendedores</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="pañales"><div class="name"><label for="pañales">Pañales</label></div></li>
+            <li class="item"><input class="check" type="checkbox" id="toallitas-bb"><div class="name"><label for="toallitas-bb">Toallitas bebé</label></div></li>
         </ul>
-    </div>
+    </section>
 
 </div>
 
 <script>
-/* =================== UTILIDADES =================== */
-const money = (v) => {
-    const n = isFinite(v) ? Number(v) : 0;
-    return n.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 2 });
-};
-const qS  = (sel, ctx=document) => ctx.querySelector(sel);
-const qSA = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+/* ====== Helpers ====== */
+const money = v => (isFinite(v)?Number(v):0).toLocaleString('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:2});
+const qS=(s,c=document)=>c.querySelector(s);
+const qSA=(s,c=document)=>Array.from(c.querySelectorAll(s));
+const LS_KEY='despensa_v3_state';
 
-/* =================== LOCAL STORAGE =================== */
-const LS_KEY = 'despensa_v2_items';
-
-function readStateFromDOM() {
-    const data = [];
-    qSA('.card').forEach(card => {
-        const categoria = [...card.classList].find(c => ['higiene','limpieza','alimentos','conservas','otros'].includes(c));
-        qSA('ul > li', card).forEach(li => {
-            const chk = li.querySelector('input[type="checkbox"]');
+/* ====== Estado (localStorage) ====== */
+function readState(){
+    const data=[];
+    qSA('.card').forEach(card=>{
+        const cat=[...card.classList].find(c=>['higiene','limpieza','alimentos','conservas','otros'].includes(c));
+        qSA('.items > .item', card).forEach(li=>{
+            const chk = qS('.check', li);
             const label = li.querySelector('label');
-            const id = chk?.id || label?.textContent.trim().toLowerCase().replace(/\s+/g,'-');
-            const cant = Number(li.querySelector('.cant')?.value) || 0;
-            const precio = Number(li.querySelector('.precio')?.value) || 0;
-            data.push({
-                id,
-                nombre: label ? label.textContent.trim() : (id || ''),
-                categoria,
-                checked: !!chk?.checked,
-                cantidad: cant,
-                costo: precio
-            });
+            const id = chk?.id || (label?.textContent.trim().toLowerCase().replace(/\s+/g,'-'));
+            const cant = Number(qS('input.cant', li)?.value)||0;
+            const cost = Number(qS('input.precio', li)?.value)||0;
+            data.push({ id, nombre: label?.textContent.trim()||'', categoria:cat, checked:!!chk?.checked, cantidad:cant, costo:cost });
         });
     });
     return data;
 }
-function saveState() {
-    localStorage.setItem(LS_KEY, JSON.stringify(readStateFromDOM()));
-}
-function loadState() {
-    const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return null;
-    try { return JSON.parse(raw); } catch { return null; }
-}
-function applyState(state) {
-    if (!state) return;
-    // Index por id
-    const map = new Map(state.map(i => [i.id, i]));
-    qSA('.card').forEach(card => {
-        qSA('ul > li', card).forEach(li => {
-            const chk = li.querySelector('input[type="checkbox"]');
-            const label = li.querySelector('label');
-            const id = chk?.id || label?.textContent.trim().toLowerCase().replace(/\s+/g,'-');
-            if (!id) return;
-            const item = map.get(id);
-            if (!item) return;
-            if (chk) chk.checked = !!item.checked;
-            const cant = li.querySelector('.cant');
-            const precio = li.querySelector('.precio');
-            if (cant) cant.value = (item.cantidad ?? 1);
-            if (precio) precio.value = (item.costo ?? 0);
+function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(readState())); }
+function loadState(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'null'); }catch{ return null; } }
+function applyState(state){
+    if(!state) return;
+    const map=new Map(state.map(i=>[i.id,i]));
+    qSA('.card').forEach(card=>{
+        qSA('.items > .item', card).forEach(li=>{
+            const chk= qS('.check', li);
+            const label= li.querySelector('label');
+            const id = chk?.id || (label?.textContent.trim().toLowerCase().replace(/\s+/g,'-'));
+            const item= map.get(id);
+            if(!item) return;
+            if(chk) chk.checked = !!item.checked;
+            const cant=qS('input.cant', li); if(cant) cant.value = item.cantidad ?? 1;
+            const precio=qS('input.precio', li); if(precio) precio.value = item.costo ?? 0;
+            li.classList.toggle('checked', chk?.checked);
         });
     });
 }
 
-/* =================== COMPONENTES DE ÍTEM =================== */
-function addControlsToItem(li, nombreVisible='') {
-    if (li.querySelector('.pc-wrap')) return;
+/* ====== UI de Item ====== */
+function ensureControls(li){
+    if(qS('.pc', li)) return;
+    const pc = document.createElement('div'); pc.className='pc';
 
-    const wrap = document.createElement('div');
-    wrap.className = 'pc-wrap';
+    const inQ=document.createElement('input'); inQ.type='number'; inQ.className='cant'; inQ.min='0'; inQ.step='1'; inQ.value='1'; inQ.title='Cantidad';
+    const inP=document.createElement('input'); inP.type='number'; inP.className='precio'; inP.min='0'; inP.step='0.01'; inP.placeholder='Costo $'; inP.title='Costo unitario (MXN)';
+    const sub=document.createElement('div'); sub.className='subtotal'; sub.textContent=money(0);
+    const del=document.createElement('button'); del.className='del'; del.type='button'; del.textContent='Eliminar';
 
-    const cant = document.createElement('input');
-    cant.type = 'number';
-    cant.className = 'cant';
-    cant.min = '0'; cant.step = '1';
-    cant.value = '1'; cant.title = 'Cantidad';
+    pc.append(inQ,inP,sub,del); li.appendChild(pc);
 
-    const precio = document.createElement('input');
-    precio.type = 'number';
-    precio.className = 'precio';
-    precio.min = '0'; precio.step = '0.01';
-    precio.placeholder = 'Costo $';
-    precio.title = 'Costo unitario (MXN)';
+    const recalc=()=>{ sub.textContent=money((Number(inQ.value)||0)*(Number(inP.value)||0)); updateAll(); saveState(); };
+    inQ.addEventListener('input', recalc);
+    inP.addEventListener('input', recalc);
 
-    const subtotal = document.createElement('span');
-    subtotal.className = 'subtotal';
-    subtotal.textContent = money(0);
-
-    const btnDel = document.createElement('button');
-    btnDel.className = 'eliminar'; btnDel.type = 'button';
-    btnDel.title = 'Eliminar'; btnDel.textContent = '🗑️';
-
-    wrap.append(cant, precio, subtotal, btnDel);
-    li.appendChild(wrap);
-
-    const chk = li.querySelector('input[type="checkbox"]');
-
-    const recalcItem = () => {
-        const q = Number(cant.value) || 0;
-        const p = Number(precio.value) || 0;
-        subtotal.textContent = money(q * p);
-        if (chk) li.classList.toggle('checked', chk.checked);
-        updateAll();
-        saveState();
-    };
-
-    cant.addEventListener('input', recalcItem);
-    precio.addEventListener('input', recalcItem);
-    if (chk) chk.addEventListener('change', () => { li.classList.toggle('checked', chk.checked); recalcItem(); });
-
-    // Eliminar con confirmación
-    btnDel.addEventListener('click', () => {
-        const overlay = document.createElement('div');
-        overlay.className = 'overlay-confirm';
-        overlay.innerHTML = `
-            <div class="confirm-box">
-                <p>¿Seguro que quieres eliminar "<strong>${nombreVisible || li.innerText.trim()}</strong>"?</p>
-                <div class="confirm-buttons">
-                    <button class="btn-confirm yes">Sí</button>
-                    <button class="btn-confirm no">No</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-        overlay.querySelector('.yes').addEventListener('click', () => {
-            li.style.transition = 'all 0.25s ease';
-            li.style.opacity = 0; li.style.transform = 'translateX(-12px)';
-            setTimeout(() => { li.remove(); updateAll(); saveState(); }, 220);
-            overlay.remove();
-        });
-        overlay.querySelector('.no').addEventListener('click', () => overlay.remove());
-    });
-}
-
-function prepareExistingItem(li) {
-    const label = li.querySelector('label');
-    const txt = label ? label.textContent.trim() : '';
-    addControlsToItem(li, txt);
-
-    const chk = li.querySelector('input[type="checkbox"]');
-    if (chk) {
-        li.classList.toggle('checked', chk.checked);
-        chk.addEventListener('change', () => {
-            li.classList.toggle('checked', chk.checked);
-            updateAll();
-            saveState();
-        });
+    const chk=qS('.check', li);
+    if(chk){
+        chk.addEventListener('change',()=>{ li.classList.toggle('checked', chk.checked); updateAll(); saveState(); });
     }
+
+    // eliminar
+    del.addEventListener('click',()=>{
+        const name=li.querySelector('label')?.textContent.trim()||'el producto';
+        confirmUI(`¿Eliminar “${name}”?`, ()=>{ li.remove(); updateAll(); saveState(); });
+    });
+}
+function prepareList(container){
+    qSA('.item', container).forEach(li=>{
+        ensureControls(li);
+        const chk = qS('.check', li);
+        if(chk) li.classList.toggle('checked', chk.checked);
+    });
 }
 
-/* =================== CÁLCULOS =================== */
-function updateAll() {
-    const barra = qS('#barra-progreso');
-    let totalChecks = 0, seleccionados = 0, totalCantidad = 0, totalDinero = 0;
+/* ====== Cálculos ====== */
+function updateAll(){
+    const bar = qS('#barra-progreso');
+    let totalChecks=0, checked=0, totalQty=0, totalMoney=0;
+    const perCat={higiene:0,limpieza:0,alimentos:0,conservas:0,otros:0};
+    const subs=[];
 
-    // Totales por categoría
-    const perCat = { higiene:0, limpieza:0, alimentos:0, conservas:0, otros:0 };
-
-    // Recolectar subtotales para marcar “más caros”
-    const subtotales = [];
-
-    qSA('.card').forEach(card => {
-        const items = qSA('ul li', card);
-        const checks = qSA('ul li input[type="checkbox"]', card);
-        let checkedInCard = 0;
-        let catKey = [...card.classList].find(c => perCat.hasOwnProperty(c));
-
-        checks.forEach(chk => {
+    qSA('.card').forEach(card=>{
+        const cat=[...card.classList].find(c=>perCat.hasOwnProperty(c));
+        const checks=qSA('.item .check', card);
+        let cInCard=0;
+        checks.forEach(chk=>{
             totalChecks++;
-            const li = chk.closest('li');
-            const q = Number(li.querySelector('.cant')?.value) || 0;
-            const p = Number(li.querySelector('.precio')?.value) || 0;
-            const sub = q * p;
-            if (sub > 0) subtotales.push({ li, sub });
-
-            if (chk.checked) {
-                checkedInCard++;
-                totalCantidad += q;
-                totalDinero += sub;
-                if (catKey) perCat[catKey] += sub;
-            }
+            const li=chk.closest('.item');
+            const q=Number(qS('input.cant', li)?.value)||0;
+            const p=Number(qS('input.precio', li)?.value)||0;
+            const s=q*p;
+            if(s>0) subs.push({li, sub:s});
+            if(chk.checked){ cInCard++; totalQty+=q; totalMoney+=s; perCat[cat]+=s; }
         });
-
-        const cont = card.querySelector('.contador');
-        if (cont) cont.textContent = `(${checkedInCard}/${checks.length})`;
+        const cont=qS('.contador', card); if(cont) cont.textContent=`(${cInCard}/${checks.length})`;
     });
 
-    // Progreso
-    const porcentaje = totalChecks ? Math.round((qSA('li input[type="checkbox"]:checked').length / totalChecks) * 100) : 0;
-    barra.style.width = porcentaje + '%';
-    barra.textContent = porcentaje === 100 ? '🎉 Completado! 🎉' : (porcentaje + '%');
+    checked=qSA('.item .check:checked').length;
+    const pct= totalChecks? Math.round((checked/totalChecks)*100):0;
+    bar.style.width=pct+'%';
+    bar.textContent= pct===100? '🎉 Completado!' : (pct+'%');
 
-    // Globales
-    qS('#total-seleccionados').textContent = qSA('li input[type="checkbox"]:checked').length;
-    qS('#total-cantidad').textContent = totalCantidad;
-    qS('#total-dinero').textContent = money(totalDinero);
+    qS('#total-seleccionados').textContent=checked;
+    qS('#total-cantidad').textContent=totalQty;
+    qS('#total-dinero').textContent=money(totalMoney);
 
-    // Por categoría
-    qSA('.total-cat').forEach(span => {
-        const k = span.getAttribute('data-cat');
-        span.textContent = money(perCat[k] || 0);
+    qSA('.total-cat').forEach(span=>{
+        const k=span.getAttribute('data-cat');
+        span.textContent=money(perCat[k]||0);
     });
 
-    // Marcar “más caros”: >= 90% del máximo subtotal no-cero
-    const maxSub = Math.max(0, ...subtotales.map(s => s.sub));
-    const umbral = maxSub * 0.9;
-    qSA('li').forEach(li => li.classList.remove('expensive'));
-    if (maxSub > 0) {
-        subtotales.forEach(({li, sub}) => {
-            if (sub >= umbral) li.classList.add('expensive');
-        });
+    // Marcar "más caros" (>=90% del mayor subtotal > 0)
+    const maxSub=Math.max(0, ...subs.map(s=>s.sub));
+    const thr=maxSub*0.9;
+    qSA('.item').forEach(li=>li.classList.remove('expensive'));
+    if(maxSub>0){
+        subs.forEach(({li,sub})=>{ if(sub>=thr) li.classList.add('expensive'); });
     }
+
+    // Actualizar subtotales visibles (por si faltaba)
+    qSA('.item').forEach(li=>{
+        const q=Number(qS('input.cant',li)?.value)||0;
+        const p=Number(qS('input.precio',li)?.value)||0;
+        const s=q*p;
+        const sub=qS('.subtotal', li); if(sub) sub.textContent=money(s);
+    });
 }
 
-/* =================== ORDENAMIENTO =================== */
-function sortList(ul, mode) {
-    const lis = qSA(':scope > li', ul);
-    const getName = (li) => (li.querySelector('label')?.textContent || '').trim().toLowerCase();
-    const getCosto = (li) => Number(li.querySelector('.precio')?.value) || 0;
-    const getSub = (li) => (Number(li.querySelector('.cant')?.value)||0) * (Number(li.querySelector('.precio')?.value)||0);
-    const isChecked = (li) => !!li.querySelector('input[type="checkbox"]')?.checked;
+/* ====== Orden ====== */
+function sortList(ul, mode){
+    const items=qSA(':scope > .item', ul);
+    const name=li=> (li.querySelector('label')?.textContent||'').trim().toLowerCase();
+    const costo=li=> Number(qS('.precio', li)?.value)||0;
+    const sub= li=> (Number(qS('.cant', li)?.value)||0)*(Number(qS('.precio', li)?.value)||0);
+    const checked=li=> qS('.check', li)?.checked?1:0;
 
-    let arr = [...lis];
-    switch (mode) {
-        case 'nombre': arr.sort((a,b)=> getName(a).localeCompare(getName(b))); break;
-        case 'costo' : arr.sort((a,b)=> getCosto(a) - getCosto(b)); break;
-        case 'subtotal': arr.sort((a,b)=> getSub(a) - getSub(b)); break;
-        case 'checked': arr.sort((a,b)=> Number(isChecked(b)) - Number(isChecked(a))); break;
+    let arr=[...items];
+    switch(mode){
+        case 'nombre': arr.sort((a,b)=>name(a).localeCompare(name(b))); break;
+        case 'costo' : arr.sort((a,b)=>costo(a)-costo(b)); break;
+        case 'subtotal': arr.sort((a,b)=>sub(a)-sub(b)); break;
+        case 'checked': arr.sort((a,b)=>checked(b)-checked(a)); break;
         default: return;
     }
-    arr.forEach(li => ul.appendChild(li));
+    arr.forEach(li=>ul.appendChild(li));
 }
 
-/* =================== INICIO =================== */
-document.addEventListener('DOMContentLoaded', () => {
-    const cards = qSA('.card');
-    const busqueda = qS('#busqueda');
+/* ====== Confirm UI ====== */
+function confirmUI(text, onYes){
+    const ov=document.createElement('div'); ov.className='overlay';
+    ov.innerHTML=`
+        <div class="confirm">
+            <p>${text}</p>
+            <div class="row">
+                <button class="cbtn y">Sí</button>
+                <button class="cbtn n">No</button>
+            </div>
+        </div>`;
+    document.body.appendChild(ov);
+    qS('.cbtn.y', ov).addEventListener('click', ()=>{ onYes?.(); ov.remove(); });
+    qS('.cbtn.n', ov).addEventListener('click', ()=>ov.remove());
+}
 
-    // Preparar todos los ítems existentes
-    qSA('.card ul li').forEach(prepareExistingItem);
+/* ====== Inicialización ====== */
+document.addEventListener('DOMContentLoaded', ()=>{
+    // Preparar listas (inyectar controles)
+    qSA('.items').forEach(prepareList);
 
-    // Intentar cargar estado guardado
-    const state = loadState();
-    if (state) applyState(state);
+    // Cargar estado guardado
+    applyState(loadState());
 
-    // Filtro por texto
-    busqueda.addEventListener('input', () => {
-        const term = busqueda.value.toLowerCase();
-        cards.forEach(card => {
-            let matchCat = false;
-            qSA('li', card).forEach(li => {
-                const texto = li.innerText.toLowerCase();
-                const visible = texto.includes(term);
-                li.style.display = visible ? 'flex' : 'none';
-                li.classList.toggle('highlight', visible && term !== '');
-                if (visible) matchCat = true;
+    // Buscar
+    const search=qS('#busqueda');
+    search.addEventListener('input', ()=>{
+        const term=search.value.toLowerCase();
+        qSA('.card').forEach(card=>{
+            let showCard=false;
+            qSA('.item', card).forEach(li=>{
+                const txt=li.innerText.toLowerCase();
+                const vis=txt.includes(term);
+                li.style.display = vis? 'flex':'none';
+                if(vis) showCard=true;
             });
-            card.style.display = matchCat ? 'flex' : 'none';
+            card.style.display = showCard? 'block':'none';
         });
     });
 
     // Orden por categoría
-    qSA('.card .sort-select').forEach(sel => {
-        sel.addEventListener('change', () => {
-            const ul = sel.closest('.card').querySelector('ul');
+    qSA('.card .sort').forEach(sel=>{
+        sel.addEventListener('change', ()=>{
+            const ul= sel.closest('.card').querySelector('.items');
             sortList(ul, sel.value);
             saveState();
         });
     });
 
-    updateAll(); // inicial
-    saveState(); // guardar estado inicial tras inyectar controles
-});
-
-/* =================== AGREGAR NUEVO PRODUCTO =================== */
-qS('#agregar-producto').addEventListener('click', () => {
-    const nombre = qS('#nuevo-producto').value.trim();
-    const categoria = qS('#categoria-nueva').value;
-    if (!nombre) return alert('Escribe un nombre de producto.');
-
-    const ul = qS(`.card.${categoria} ul`);
-    const id = nombre.toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-        .replace(/[^a-z0-9]+/g,'-');
-
-    const li = document.createElement('li');
-    li.innerHTML = `<input type="checkbox" id="${id}"><label for="${id}">${nombre}</label>`;
-    ul.appendChild(li);
-
-    prepareExistingItem(li);
-    qS('#nuevo-producto').value = '';
-
     updateAll();
     saveState();
 });
 
-/* =================== IMPRESIÓN =================== */
-qS('#btn-imprimir').addEventListener('click', () => {
-    const seleccionados = qSA('li input[type="checkbox"]:checked').map(chk => chk.closest('li'));
-    if (seleccionados.length === 0) {
-        alert('No hay productos seleccionados para imprimir.');
-        return;
-    }
+/* ====== Agregar producto ====== */
+qS('#agregar-producto').addEventListener('click', ()=>{
+    const nombre=qS('#nuevo-producto').value.trim();
+    const categoria=qS('#categoria-nueva').value;
+    if(!nombre) return alert('Escribe un nombre de producto.');
+    const ul=qS(`.card.${categoria} .items`);
+    const id= nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-');
+
+    const li=document.createElement('li'); li.className='item';
+    li.innerHTML=`<input class="check" type="checkbox" id="${id}">
+                  <div class="name"><label for="${id}">${nombre}</label></div>`;
+    ul.appendChild(li);
+
+    ensureControls(li);
+    qS('#nuevo-producto').value='';
+    updateAll(); saveState();
+});
+
+/* ====== Imprimir ====== */
+qS('#btn-imprimir').addEventListener('click', ()=>{
+    const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
+    if(!selected.length){ alert('No hay productos seleccionados.'); return; }
 
     // Agrupar por categoría
-    const grupos = {};
-    seleccionados.forEach(li => {
-        const card = li.closest('.card');
-        const categoria = [...card.classList].find(c => ['higiene','limpieza','alimentos','conservas','otros'].includes(c)) || 'otros';
-        if (!grupos[categoria]) grupos[categoria] = [];
-        grupos[categoria].push(li);
+    const groups={};
+    selected.forEach(li=>{
+        const card=li.closest('.card');
+        const cat=[...card.classList].find(c=>['higiene','limpieza','alimentos','conservas','otros'].includes(c))||'otros';
+        (groups[cat]??=[]).push(li);
     });
 
-    // Total global
-    let totalGlobal = 0;
+    let grand=0;
+    const w=window.open('','_blank');
+    const css=`body{font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#111}
+    h1{margin:0 0 6px} h2{margin:18px 0 8px}
+    table{width:100%;border-collapse:collapse;margin-bottom:14px}
+    th,td{border:1px solid #e5e7eb;padding:8px 10px;text-align:left}
+    th{background:#f3f4f6} tfoot td{font-weight:700}`;
+    let html=`<html><head><meta charset="UTF-8"><title>Resumen</title><style>${css}</style></head><body>`;
+    html+=`<h1>Resumen de compra</h1><small>${new Date().toLocaleString('es-MX')}</small>`;
 
-    const win = window.open('', '_blank');
-    const css = `
-        body{font-family:Segoe UI,Tahoma,Arial,sans-serif;padding:20px;}
-        h1{margin:0 0 10px;}
-        h2{margin:18px 0 8px;}
-        table{width:100%;border-collapse:collapse;margin-bottom:16px;}
-        th,td{border:1px solid #e5e7eb;padding:8px 10px;text-align:left;}
-        th{background:#f3f4f6}
-        tfoot td{font-weight:700}
-    `;
-
-    let html = `<html><head><meta charset="UTF-8"><title>Resumen de compra</title><style>${css}</style></head><body>`;
-    html += `<h1>Resumen de compra</h1><small>${new Date().toLocaleString('es-MX')}</small>`;
-
-    Object.entries(grupos).forEach(([cat, lis]) => {
-        let totCat = 0;
-        html += `<h2>${cat.charAt(0).toUpperCase()+cat.slice(1)}</h2>`;
-        html += `<table><thead><tr><th>Producto</th><th>Cant.</th><th>Costo</th><th>Subtotal</th></tr></thead><tbody>`;
-        lis.forEach(li => {
-            const nombre = li.querySelector('label')?.textContent.trim() || '';
-            const q = Number(li.querySelector('.cant')?.value)||0;
-            const p = Number(li.querySelector('.precio')?.value)||0;
-            const s = q * p;
-            totCat += s;
-            html += `<tr><td>${nombre}</td><td>${q}</td><td>${money(p)}</td><td>${money(s)}</td></tr>`;
+    Object.entries(groups).forEach(([cat, lis])=>{
+        let tot=0;
+        html+=`<h2>${cat.charAt(0).toUpperCase()+cat.slice(1)}</h2>`;
+        html+=`<table><thead><tr><th>Producto</th><th>Cant.</th><th>Costo</th><th>Subtotal</th></tr></thead><tbody>`;
+        lis.forEach(li=>{
+            const name=li.querySelector('label')?.textContent.trim()||'';
+            const q=Number(qS('.cant',li)?.value)||0;
+            const p=Number(qS('.precio',li)?.value)||0;
+            const s=q*p; tot+=s;
+            html+=`<tr><td>${name}</td><td>${q}</td><td>${money(p)}</td><td>${money(s)}</td></tr>`;
         });
-        html += `</tbody><tfoot><tr><td colspan="3">Total categoría</td><td>${money(totCat)}</td></tr></tfoot></table>`;
-        totalGlobal += totCat;
+        html+=`</tbody><tfoot><tr><td colspan="3">Total categoría</td><td>${money(tot)}</td></tr></tfoot></table>`;
+        grand+=tot;
     });
 
-    html += `<h2>Total</h2><p style="font-size:1.2rem;font-weight:700">${money(totalGlobal)}</p>`;
-    html += `</body></html>`;
-
-    win.document.write(html);
-    win.document.close();
-    win.focus();
-    win.print();
+    html+=`<h2>Total</h2><p style="font-size:1.2rem;font-weight:900">${money(grand)}</p>`;
+    html+=`</body></html>`;
+    w.document.write(html); w.document.close(); w.focus(); w.print();
 });
 
-/* =================== BORRAR ESTADO =================== */
-qS('#btn-borrar').addEventListener('click', () => {
-    const overlay = document.createElement('div');
-    overlay.className = 'overlay-confirm';
-    overlay.innerHTML = `
-        <div class="confirm-box">
-            <p>¿Borrar todo el estado guardado (checks, cantidades, costos, orden)?</p>
-            <div class="confirm-buttons">
-                <button class="btn-confirm yes">Sí</button>
-                <button class="btn-confirm no">No</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(overlay);
-    overlay.querySelector('.yes').addEventListener('click', () => {
+/* ====== Borrar estado ====== */
+qS('#btn-borrar').addEventListener('click', ()=>{
+    confirmUI('¿Borrar todo el estado guardado (checks, cantidades, costos)?', ()=>{
         localStorage.removeItem(LS_KEY);
         window.location.reload();
-    });
-    overlay.querySelector('.no').addEventListener('click', () => overlay.remove());
-});
-
-/* =================== BÚSQUEDA EN VIVO =================== */
-qS('#busqueda').addEventListener('input', function(){
-    const term = this.value.toLowerCase();
-    qSA('.card').forEach(card=>{
-        let matchCat = false;
-        qSA('li', card).forEach(li=>{
-            const texto = li.innerText.toLowerCase();
-            const visible = texto.includes(term);
-            li.style.display = visible ? 'flex' : 'none';
-            li.classList.toggle('highlight', visible && term!=='');
-            if(visible) matchCat = true;
-        });
-        card.style.display = matchCat ? 'flex' : 'none';
     });
 });
 </script>
