@@ -1,17 +1,17 @@
-/* Service Worker para PWA de "Primera Despensa" */
-const CACHE_NAME = 'despensa-cache-v1';
+/* Service Worker para PWA de "Primera Despensa" con actualización activa */
+const CACHE_NAME = 'despensa-cache-v2'; // <-- incrementa para forzar update
 const ASSETS = [
   './',
   './index.html',
   './manifest.json'
-  // Si agregas más archivos (icons, etc.), inclúyelos aquí.
+  // Agrega aquí más archivos (icons, etc.) si los sirves como archivos reales.
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).catch(()=>{})
   );
-  self.skipWaiting();
+  self.skipWaiting(); // instala inmediatamente
 });
 
 self.addEventListener('activate', (event) => {
@@ -20,21 +20,26 @@ self.addEventListener('activate', (event) => {
       Promise.all(keys.map(k => (k !== CACHE_NAME ? caches.delete(k) : null)))
     )
   );
-  self.clients.claim();
+  self.clients.claim(); // toma control sin recarga
 });
 
-// Estrategia: Cache-first con actualización en segundo plano para navegación y estáticos.
+// Permitir que la página pida activar la nueva versión sin esperar
+self.addEventListener('message', (event)=>{
+  if(event.data && event.data.type === 'SKIP_WAITING'){
+    self.skipWaiting();
+  }
+});
+
+// Estrategia: Cache-first con actualización en segundo plano
 self.addEventListener('fetch', (event) => {
   const req = event.request;
-  // Solo manejar GET
   if (req.method !== 'GET') return;
 
-  // Para navegaciones, intenta cache y luego red
+  // Navegaciones
   if (req.mode === 'navigate') {
     event.respondWith(
       caches.match('./index.html').then(cached => {
         const net = fetch(req).then(resp => {
-          // actualizar caché con la última index
           const copy = resp.clone();
           caches.open(CACHE_NAME).then(c => c.put('./index.html', copy));
           return resp;
