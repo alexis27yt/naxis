@@ -4,37 +4,49 @@
 <meta charset="UTF-8">
 <title>Lista de Primera Despensa</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Manifest PWA -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#f8fafc">
+
 <style>
     :root{
-        --bg:#0f172a;            /* slate-900 */
-        --card:#0b1224;          /* deep card */
-        --card2:#0d1a33;
-        --muted:#94a3b8;         /* slate-400 */
-        --text:#e5e7eb;          /* gray-200 */
-        --brand:#7c3aed;         /* violet-600 */
-        --brand-2:#06b6d4;       /* cyan-500 */
-        --success:#22c55e;       /* green-500 */
-        --danger:#ef4444;        /* red-500 */
-        --warning:#f59e0b;       /* amber-500 */
-        --ring:#1e293b;          /* slate-800 */
-        --chip:#111b33;
-        --chip-ring:#1b2744;
+        /* Paleta PASTEL */
+        --bg:#f7f7fb;
+        --bg2:#fefefe;
+        --card:#ffffff;
+        --card2:#fffdf9;
+        --ring:#e7eaf3;
+        --text:#334155;       /* slate-700 */
+        --muted:#6b7280;      /* neutral muted */
+        --brand:#a78bfa;      /* violet-400 */
+        --brand-2:#93c5fd;    /* blue-300 */
+        --success:#86efac;    /* green-300 */
+        --danger:#fca5a5;     /* red-300 */
+        --warning:#fde68a;    /* amber-200 */
+        --chip:#eef2ff;
+        --chip-ring:#dbeafe;
+        --item:#f8fafc;
+        --item-checked:#e0f2fe;
+        --item-exp:#fee2e2;
+        --shadow: 0 10px 30px rgba(148,163,184,.18);
+        --shadow-card: 0 12px 34px rgba(148,163,184,.22);
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
         margin:0;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
         color:var(--text);
         background:
-            radial-gradient(1200px 600px at 100% -10%, rgba(124,58,237,.2), transparent 60%),
-            radial-gradient(900px 500px at 0% 100%, rgba(6,182,212,.18), transparent 60%),
-            linear-gradient(180deg, #0a0f1f 0%, #0f172a 100%);
+            radial-gradient(800px 400px at 100% -10%, rgba(167,139,250,.23), transparent 60%),
+            radial-gradient(600px 320px at 0% 100%, rgba(147,197,253,.23), transparent 60%),
+            linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
         padding:0;
     }
 
-    /* Contenedor a UNA sola columna */
+    /* UNA sola columna */
     .container{
         max-width: 860px;
         margin: 0 auto;
@@ -44,274 +56,160 @@
         gap:16px;
     }
 
-    /* Header fijo de acciones */
+    /* Toolbar fija */
     .toolbar{
-        position:sticky;
-        top:0;
-        z-index:50;
-        backdrop-filter: saturate(140%) blur(12px);
-        background: linear-gradient(180deg, rgba(10,15,31,.9), rgba(15,23,42,.6));
-        border-bottom:1px solid rgba(148,163,184,.12);
+        position:sticky; top:0; z-index:50;
+        backdrop-filter: saturate(140%) blur(10px);
+        background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.7));
+        border-bottom:1px solid var(--ring);
     }
     .toolbar-inner{
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 12px 16px;
-        display:flex;
-        flex-wrap:wrap;
-        align-items:center;
-        gap:8px;
+        max-width: 860px; margin: 0 auto; padding: 10px 12px;
+        display:flex; flex-wrap:wrap; align-items:center; gap:8px;
     }
     h1{
-        font-size: clamp(1.1rem, 1.8vw, 1.4rem);
-        font-weight: 800;
-        letter-spacing:.2px;
-        margin:0 8px 0 0;
-        color:#f8fafc;
-        white-space:nowrap;
+        font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+        font-weight: 800; letter-spacing:.2px; margin:0 8px 0 0; color:#1f2937; white-space:nowrap;
     }
 
     .search{
-        flex:1 1 260px;
-        display:flex;
-        align-items:center;
-        gap:8px;
-        background: #0a1020;
-        border:1px solid var(--ring);
-        border-radius: 12px;
-        padding: 10px 12px;
+        flex:1 1 260px; display:flex; align-items:center; gap:8px;
+        background:#ffffff; border:1px solid var(--ring); border-radius: 12px; padding: 10px 12px;
+        box-shadow: var(--shadow);
     }
     .search input{
-        flex:1;
-        background:transparent;
-        border:0;
-        outline:0;
-        color:var(--text);
-        font-size:.95rem;
+        flex:1; background:transparent; border:0; outline:0; color:var(--text); font-size:.95rem;
     }
-    .btn{
-        border:1px solid var(--ring);
-        color:var(--text);
-        background:linear-gradient(180deg, #111a35, #0b1224);
-        padding:10px 14px;
-        border-radius:12px;
-        cursor:pointer;
-        font-weight:700;
-        transition: .15s transform, .2s box-shadow, .2s filter;
-        white-space:nowrap;
-    }
-    .btn:hover{ transform:translateY(-1px); filter:brightness(1.05) }
-    .btn:active{ transform:translateY(0) }
-    .btn-print{ border-color:#3f2a8e; background:linear-gradient(180deg, #3f2a8e, #2a1f5f) }
-    .btn-danger{ border-color:#6a1d1d; background:linear-gradient(180deg, #7a2323, #551616) }
 
-    /* Barra de progreso y totales globales */
+    .btn{
+        border:1px solid var(--ring); color:#1f2937;
+        background:linear-gradient(180deg, #ffffff, #f4f6ff);
+        padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700;
+        transition:.15s transform, .2s filter, .2s box-shadow; white-space:nowrap;
+        box-shadow: var(--shadow);
+    }
+    .btn:hover{ transform:translateY(-1px); filter:brightness(1.03) }
+    .btn:active{ transform:translateY(0) }
+    .btn-print{ background:linear-gradient(180deg, #f5f3ff, #eef2ff); border-color:#ddd6fe }
+    .btn-danger{ background:linear-gradient(180deg, #fff1f2, #ffe4e6); border-color:#fecaca }
+    .btn-outline{ background:#fff; border-style:dashed }
+
+    /* Panel progreso + totales */
     .panel{
         background: linear-gradient(180deg, var(--card), var(--card2));
-        border:1px solid var(--ring);
-        border-radius:16px;
-        padding:14px;
-        display:flex;
-        flex-direction:column;
-        gap:12px;
-        box-shadow: 0 10px 30px rgba(17,24,39,.25);
+        border:1px solid var(--ring); border-radius:16px; padding:14px;
+        display:flex; flex-direction:column; gap:12px; box-shadow: var(--shadow);
     }
     .progress{
-        height: 18px;
-        border-radius: 999px;
-        background:#0a1020;
-        border:1px solid var(--ring);
-        overflow:hidden;
+        height: 18px; border-radius: 999px; background:#f1f5f9; border:1px solid var(--ring); overflow:hidden;
     }
     .progress .bar{
-        height:100%;
-        width:0%;
-        color:#0a1020;
+        height:100%; width:0%; color:#0a0f1f;
         background: linear-gradient(90deg, var(--brand), var(--brand-2));
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:.78rem;
-        font-weight:900;
-        letter-spacing:.3px;
-        transition: width .25s ease;
-        white-space:nowrap;
+        display:flex; align-items:center; justify-content:center;
+        font-size:.78rem; font-weight:900; letter-spacing:.3px; transition: width .25s ease; white-space:nowrap;
     }
 
     .totales{
-        display:grid;
-        grid-template-columns: repeat(3, minmax(0,1fr));
-        gap:10px;
+        display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px;
     }
     .tcard{
-        background:#0a1020;
-        border:1px solid var(--ring);
-        border-radius:14px;
-        text-align:center;
-        padding:10px 8px;
+        background:#fff; border:1px solid var(--ring); border-radius:14px; text-align:center; padding:10px 8px;
     }
-    .tcard h4{
-        margin:0 0 5px 0;
-        color:var(--muted);
-        font-size:.8rem;
-        font-weight:700;
-        letter-spacing:.3px;
-        text-transform:uppercase;
-    }
-    .tcard .val{
-        font-size:1.05rem;
-        font-weight:900;
-        color:#f3f4f6;
-    }
+    .tcard h4{ margin:0 0 5px 0; color:var(--muted); font-size:.8rem; font-weight:700; letter-spacing:.3px; text-transform:uppercase; }
+    .tcard .val{ font-size:1.05rem; font-weight:900; color:#111827; }
 
-    /* Card de categoría (UNA sola columna) */
+    /* Card categoría */
     .card{
-        background: linear-gradient(180deg, #0c1327, #0b1224);
-        border:1px solid var(--ring);
-        border-radius:16px;
-        overflow:hidden;
-        box-shadow: 0 12px 34px rgba(0,0,0,.35);
+        background: linear-gradient(180deg, #ffffff, #fafafa);
+        border:1px solid var(--ring); border-radius:16px; overflow:hidden; box-shadow: var(--shadow-card);
     }
     .card header{
-        padding:12px 14px;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:10px;
-        border-bottom:1px solid rgba(148,163,184,.12);
+        padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+        border-bottom:1px solid var(--ring);
     }
-    .title{
-        display:flex;
-        align-items:center;
-        gap:10px;
-        min-width:0;
-    }
+    .title{ display:flex; align-items:center; gap:10px; min-width:0; }
     .title h2{
-        margin:0;
-        font-size:1rem;
-        letter-spacing:.2px;
-        white-space:nowrap;
-        overflow:hidden;
-        text-overflow:ellipsis;
-        display:flex;
-        align-items:center;
-        gap:8px;
+        margin:0; font-size:1rem; letter-spacing:.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+        display:flex; align-items:center; gap:8px;
     }
     .contador{
-        font-size:.75rem;
-        background: #1b2744;
-        border:1px solid var(--chip-ring);
-        color:#dbeafe;
-        padding:2px 8px;
-        border-radius:999px;
-        font-weight:900;
+        font-size:.75rem; background: var(--chip); border:1px solid var(--chip-ring); color:#3730a3;
+        padding:2px 8px; border-radius:999px; font-weight:900;
     }
-    .meta{
-        display:flex;
-        align-items:center;
-        gap:8px;
-        flex-wrap:wrap;
-        justify-content:flex-end;
-    }
+
+    .meta{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+
     .sort{
-        appearance:none;
-        padding:8px 12px;
-        border-radius:10px;
-        border:1px solid var(--ring);
-        background:#0a1020;
-        color:var(--text);
-        font-weight:700;
-        cursor:pointer;
-        min-width:170px;
+        appearance:none; padding:8px 12px; border-radius:10px; border:1px solid var(--ring);
+        background:#fff; color:var(--text); font-weight:700; cursor:pointer; min-width:170px; box-shadow: var(--shadow);
     }
     .total-cat{
-        background: #0a162e;
-        border:1px solid var(--chip-ring);
-        color:#e0e7ff;
-        font-weight:900;
-        padding:8px 12px;
-        border-radius:999px;
-        white-space:nowrap;
+        background: #ecfeff; border:1px solid #bae6fd; color:#075985; font-weight:900; padding:8px 12px; border-radius:999px; white-space:nowrap;
+        box-shadow: var(--shadow);
     }
+
+    /* Botón acordeón */
+    .toggle{
+        border:none; background:#fff; border:1px solid var(--ring); border-radius:10px; width:36px; height:36px;
+        display:grid; place-items:center; cursor:pointer; box-shadow: var(--shadow);
+    }
+    .chev{ transition: transform .2s ease; }
+    .collapsed .chev{ transform: rotate(-90deg); }
 
     /* Lista de ítems */
     .items{ list-style:none; margin:0; padding:10px 10px 12px 10px; display:flex; flex-direction:column; gap:10px; }
-    .item{
-        display:flex;
-        align-items:center;
-        gap:10px;
-        background: #0a1020;
-        border:1px solid var(--ring);
-        border-radius:12px;
-        padding:10px;
-        transition: .2s ease;
-        flex-wrap:wrap;
-    }
-    .item:hover{ box-shadow: 0 0 0 2px rgba(124,58,237,.25) inset }
-    .item.checked{ background: #0e1833; }
-    .item.expensive{ box-shadow: 0 0 0 2px rgba(239,68,68,.45) inset; background: #1a0d0d; }
+    .items.collapsed{ display:none; }
 
-    .check{ transform:scale(1.2); cursor:pointer; accent-color:var(--brand); }
-    .name{ flex:1 1 180px; min-width:150px; font-weight:700; letter-spacing:.2px; }
-    .pc{
-        display:flex; align-items:center; gap:8px; flex:1 1 auto; flex-wrap:wrap;
+    .item{
+        display:flex; align-items:center; gap:10px; background: var(--item);
+        border:1px solid var(--ring); border-radius:12px; padding:10px; transition:.2s ease; flex-wrap:wrap;
     }
+    .item:hover{ box-shadow: 0 0 0 2px rgba(147,197,253,.35) inset }
+    .item.checked{ background: var(--item-checked); }
+    .item.expensive{ box-shadow: 0 0 0 2px rgba(252,165,165,.9) inset; background: var(--item-exp); }
+
+    .check{ transform:scale(1.2); cursor:pointer; accent-color:#8b5cf6; }
+    .name{ flex:1 1 180px; min-width:150px; font-weight:700; letter-spacing:.2px; }
+
+    .pc{ display:flex; align-items:center; gap:8px; flex:1 1 auto; flex-wrap:wrap; }
     .pc input[type="number"]{
-        width: 92px;
-        background:#0a0f1f;
-        border:1px solid var(--ring);
-        border-radius:10px;
-        padding:8px 10px;
-        color:var(--text);
-        font-weight:800;
+        width: 92px; background:#fff; border:1px solid var(--ring); border-radius:10px; padding:8px 10px; color:#111827; font-weight:700;
     }
     .subtotal{
-        min-width:110px; text-align:right; font-weight:900;
-        background:#0a0f1f; border:1px solid var(--ring); border-radius:10px;
-        padding:8px 10px;
+        min-width:110px; text-align:right; font-weight:900; background:#fff; border:1px solid var(--ring); border-radius:10px; padding:8px 10px;
     }
     .del{
-        background:#1b0f0f; border:1px solid #3a1a1a; color:#fecaca;
-        border-radius:10px; padding:8px 10px; cursor:pointer; font-weight:900;
+        background:#fff1f2; border:1px solid #fecaca; color:#991b1b; border-radius:10px; padding:8px 10px; cursor:pointer; font-weight:900;
     }
-    .del:hover{ filter:brightness(1.08) }
+    .del:hover{ filter:brightness(1.03) }
 
     /* Admin panel */
     .admin{
-        background: linear-gradient(180deg, #0b1224, #0a1020);
-        border:1px solid var(--ring);
-        border-radius:16px;
-        padding:14px;
-        display:flex;
-        flex-direction:column;
-        gap:10px;
+        background: linear-gradient(180deg, var(--card), #fdfcff);
+        border:1px solid var(--ring); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:10px; box-shadow: var(--shadow);
     }
-    .admin h3{ margin:0; font-size:.95rem; color:#dbeafe; letter-spacing:.3px }
+    .admin h3{ margin:0; font-size:.95rem; color:#1f2937; letter-spacing:.3px }
     .admin .group{ display:flex; flex-wrap:wrap; gap:8px }
     .admin input[type="text"], .admin select{
-        background:#0a0f1f; border:1px solid var(--ring); color:var(--text);
-        padding:10px 12px; border-radius:12px; font-weight:700;
+        background:#fff; border:1px solid var(--ring); color:var(--text); padding:10px 12px; border-radius:12px; font-weight:700; box-shadow: var(--shadow);
     }
     .admin .note{ font-size:.8rem; color:var(--muted) }
 
     /* Overlay confirmación */
     .overlay{
-        position:fixed; inset:0; z-index:90;
-        background: rgba(2,6,23,.6);
-        display:flex; align-items:center; justify-content:center;
-        backdrop-filter: blur(6px);
+        position:fixed; inset:0; z-index:90; background: rgba(2,6,23,.25);
+        display:flex; align-items:center; justify-content:center; backdrop-filter: blur(2px);
     }
     .confirm{
-        background:#0a1020; border:1px solid var(--ring); color:var(--text);
-        padding:18px 16px; border-radius:16px; width:min(92vw,420px);
-        box-shadow: 0 24px 64px rgba(0,0,0,.4);
-        text-align:center;
+        background:#fff; border:1px solid var(--ring); color:var(--text); padding:18px 16px; border-radius:16px; width:min(92vw,420px);
+        box-shadow: var(--shadow-card); text-align:center;
     }
     .confirm p{ margin:0 0 12px 0 }
     .confirm .row{ display:flex; gap:10px; justify-content:center }
-    .cbtn{ padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:900; border:1px solid var(--ring) }
-    .cbtn.y{ background:#581c1c; color:#fecaca; border-color:#7f1d1d }
-    .cbtn.n{ background:#0b1731; color:#c7d2fe; border-color:#1e3a8a }
+    .cbtn{ padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:900; border:1px solid var(--ring); box-shadow: var(--shadow) }
+    .cbtn.y{ background:#fee2e2; color:#7f1d1d; border-color:#fecaca }
+    .cbtn.n{ background:#eef2ff; color:#1e3a8a; border-color:#c7d2fe }
 
     @media (max-width:640px){
         .totales{ grid-template-columns:1fr; }
@@ -327,12 +225,18 @@
 <div class="toolbar">
     <div class="toolbar-inner">
         <h1>Primera Despensa</h1>
+
         <div class="search">
-            <svg width="18" height="18" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg>
+            <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg>
             <input id="busqueda" placeholder="Buscar producto…">
         </div>
+
+        <button class="btn" id="btn-expandir">Expandir todo</button>
+        <button class="btn btn-outline" id="btn-colapsar">Colapsar todo</button>
+
         <button class="btn btn-print" id="btn-imprimir">Resumen imprimible</button>
         <button class="btn btn-danger" id="btn-borrar">Borrar estado</button>
+        <button class="btn" id="btn-instalar" style="display:none;">Instalar app</button>
     </div>
 </div>
 
@@ -374,10 +278,11 @@
         <small class="note">Marca ✓ para incluirlo. Captura Cantidad y Costo unitario. Se guarda automáticamente en tu navegador.</small>
     </section>
 
-    <!-- CATEGORÍAS (UNA sola columna) -->
+    <!-- CATEGORÍAS (UNA sola columna con ACORDEÓN) -->
     <section class="card higiene">
         <header>
             <div class="title">
+                <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
                 <h2>Higiene Personal <span class="contador"></span></h2>
             </div>
             <div class="meta">
@@ -408,6 +313,7 @@
     <section class="card limpieza">
         <header>
             <div class="title">
+                <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
                 <h2>Limpieza del Hogar <span class="contador"></span></h2>
             </div>
             <div class="meta">
@@ -439,6 +345,7 @@
     <section class="card alimentos">
         <header>
             <div class="title">
+                <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
                 <h2>Alimentos Básicos <span class="contador"></span></h2>
             </div>
             <div class="meta">
@@ -466,6 +373,7 @@
     <section class="card conservas">
         <header>
             <div class="title">
+                <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
                 <h2>Conservas <span class="contador"></span></h2>
             </div>
             <div class="meta">
@@ -492,6 +400,7 @@
     <section class="card otros">
         <header>
             <div class="title">
+                <button class="toggle" aria-label="Colapsar/Expandir"><svg class="chev" width="18" height="18" viewBox="0 0 24 24" stroke="#64748b" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
                 <h2>Otros <span class="contador"></span></h2>
             </div>
             <div class="meta">
@@ -639,7 +548,7 @@ function updateAll(){
         subs.forEach(({li,sub})=>{ if(sub>=thr) li.classList.add('expensive'); });
     }
 
-    // Actualizar subtotales visibles (por si faltaba)
+    // Asegura subtotales renderizados
     qSA('.item').forEach(li=>{
         const q=Number(qS('input.cant',li)?.value)||0;
         const p=Number(qS('input.precio',li)?.value)||0;
@@ -683,9 +592,48 @@ function confirmUI(text, onYes){
     qS('.cbtn.n', ov).addEventListener('click', ()=>ov.remove());
 }
 
+/* ====== Acordeones ====== */
+function setCollapsed(card, collapsed){
+    const items = qS('.items', card);
+    const btn = qS('.toggle', card);
+    if(!items || !btn) return;
+    items.classList.toggle('collapsed', collapsed);
+    card.classList.toggle('collapsed', collapsed);
+    btn.setAttribute('aria-expanded', String(!collapsed));
+}
+function collapseAll(v){
+    qSA('.card').forEach(card=> setCollapsed(card, v));
+}
+
+/* ====== PWA: Install prompt ====== */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const btn = qS('#btn-instalar');
+    btn.style.display = 'inline-block';
+    btn.onclick = async () => {
+        btn.disabled = true;
+        try{
+            deferredPrompt.prompt();
+            await deferredPrompt.userChoice;
+        }finally{
+            deferredPrompt = null;
+            btn.style.display = 'none';
+        }
+    };
+});
+
+/* Registrar Service Worker */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(()=>{});
+    });
+}
+
 /* ====== Inicialización ====== */
 document.addEventListener('DOMContentLoaded', ()=>{
-    // Preparar listas (inyectar controles)
+    // Inyectar controles en todos los ítems
     qSA('.items').forEach(prepareList);
 
     // Cargar estado guardado
@@ -715,6 +663,21 @@ document.addEventListener('DOMContentLoaded', ()=>{
             saveState();
         });
     });
+
+    // Acordeón por tarjeta
+    qSA('.card').forEach(card=>{
+        const btn = qS('.toggle', card);
+        if(btn){
+            btn.addEventListener('click', ()=>{
+                const collapsed = !btn.getAttribute('aria-expanded') || btn.getAttribute('aria-expanded')==='true' ? true : false;
+                setCollapsed(card, collapsed);
+            });
+        }
+    });
+
+    // Expandir/Colapsar todo
+    qS('#btn-expandir').addEventListener('click', ()=> collapseAll(false));
+    qS('#btn-colapsar').addEventListener('click', ()=> collapseAll(true));
 
     updateAll();
     saveState();
