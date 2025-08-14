@@ -1,0 +1,23 @@
+{
+  "name": "Primera Despensa",
+  "short_name": "Despensa",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "description": "Lista de despensa con costos, totales y acordes, lista para usar offline.",
+  "background_color": "#f7f7fb",
+  "theme_color": "#f8fafc",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192'><rect width='100%25' height='100%25' fill='%23f5f3ff'/><circle cx='96' cy='96' r='68' fill='%23a78bfa'/><text x='50%25' y='54%25' text-anchor='middle' font-size='64' font-family='Arial' fill='white'>🛒</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512'><rect width='100%25' height='100%25' fill='%23eef2ff'/><circle cx='256' cy='256' r='184' fill='%2393c5fd'/><text x='50%25' y='54%25' text-anchor='middle' font-size='160' font-family='Arial' fill='white'>🛒</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
