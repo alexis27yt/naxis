@@ -132,7 +132,7 @@
   .meta{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
   .sort{
     appearance:none; padding:6px 8px; border-radius:10px; border:1px solid var(--ring);
-    background:#fff; color:var(--text); font-weight:700; cursor:pointer; min-width:140px; box-shadow: var(--shadow);
+    background:#fff; color:#text; font-weight:700; cursor:pointer; min-width:140px; box-shadow: var(--shadow);
     font-size:var(--fs-sm); min-height:var(--hit);
   }
   .total-cat{
@@ -265,6 +265,11 @@
   /* Scanner */
   .scan-video{ width:100%; border-radius:12px; background:#000; aspect-ratio: 3/4; object-fit:cover; }
 
+  /* QR Export */
+  .qr-wrap{ display:flex; flex-direction:column; align-items:center; gap:10px }
+  #qr-canvas{ width:min(82vw, 380px); height:auto; image-rendering: pixelated; border:10px solid #fff; box-shadow: var(--shadow-card); border-radius:12px; background:#fff }
+  .qr-meta{ font-size: var(--fs-sm); color:#6b7280; text-align:center }
+
   /* Onboarding tips */
   .tip{
     position:fixed; z-index:85; background:#111827; color:#fff; padding:10px 12px; border-radius:12px; box-shadow: var(--shadow-card); max-width:280px; font-size:var(--fs-sm);
@@ -303,7 +308,9 @@
       <button class="btn" id="btn-expandir" title="Expandir todo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Expandir</button>
       <button class="btn btn-outline" id="btn-colapsar" title="Colapsar todo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M5 12h14"/></svg>Colapsar</button>
       <button class="btn" id="btn-compartir" title="Compartir resumen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v14"/></svg>Compartir</button>
-      <button class="btn btn-print" id="btn-imprimir" title="Imprimir / guardar PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 9V2h12v7M6 18h12v4H6zM6 14h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2v1a2 2 0 002 2z"/></svg>Imprimir</button>
+      <button class="btn btn-print" id="btn-imprimir" title="Imprimir / guardar PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 9V2h12v7M6 18h12v4H6zM6 14h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2z"/></svg>Imprimir</button>
+      <button class="btn" id="btn-exportar" title="Exportar lista como QR">⬆️ Exportar</button>
+      <button class="btn" id="btn-importar" title="Importar desde QR">⬇️ Importar</button>
       <button class="btn btn-danger" id="btn-borrar" title="Borrar estado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>Borrar</button>
       <button class="btn" id="btn-instalar" style="display:none;" title="Instalar app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>Instalar</button>
     </div>
@@ -520,7 +527,9 @@
   </div>
   <div class="share-row">
     <button class="btn" id="btn-compartir-bottom" title="Compartir resumen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v14"/></svg>Compartir</button>
-    <button class="btn btn-print" id="btn-imprimir-bottom" title="Imprimir / guardar PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 9V2h12v7M6 18h12v4H6zM6 14h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2v1a2 2 0 002 2z"/></svg>Imprimir</button>
+    <button class="btn btn-print" id="btn-imprimir-bottom" title="Imprimir / guardar PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 9V2h12v7M6 18h12v4H6zM6 14h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2z"/></svg>Imprimir</button>
+    <button class="btn" id="btn-exportar-bottom" title="Exportar lista como QR">⬆️ Exportar</button>
+    <button class="btn" id="btn-importar-bottom" title="Importar desde QR">⬇️ Importar</button>
   </div>
 </div>
 
@@ -538,7 +547,9 @@
       <button class="fab-mini" id="fab-expand" title="Expandir todo" aria-label="Expandir todo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
       <button class="fab-mini" id="fab-collapse" title="Colapsar todo" aria-label="Colapsar todo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M5 12h14"/></svg></button>
       <button class="fab-mini" id="fab-share" title="Compartir" aria-label="Compartir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v14"/></svg></button>
-      <button class="fab-mini" id="fab-print" title="Imprimir" aria-label="Imprimir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M6 9V2h12v7M6 18h12v4H6zM6 14h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2v1a2 2 0 002 2z"/></svg></button>
+      <button class="fab-mini" id="fab-print" title="Imprimir" aria-label="Imprimir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M6 9V2h12v7M6 18h12v4H6zM6 14h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2z"/></svg></button>
+      <button class="fab-mini" id="fab-export" title="Exportar QR" aria-label="Exportar QR">⬆️</button>
+      <button class="fab-mini" id="fab-import" title="Importar QR" aria-label="Importar QR">⬇️</button>
       <button class="fab-mini" id="fab-scan" title="Escanear código" aria-label="Escanear código">📷</button>
       <button class="fab-mini" id="fab-favs" title="Ver favoritos" aria-label="Ver favoritos">⭐</button>
     </div>
@@ -583,13 +594,38 @@
   </div>
 </div>
 
-<!-- Modal scanner -->
+<!-- Modal scanner (alta de producto con códigos) -->
 <div class="modal-overlay" id="scan-overlay">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="scan-title">
     <h3 id="scan-title">Escanear código</h3>
     <video class="scan-video" id="scan-video" autoplay playsinline muted></video>
     <div class="row">
       <button class="btn btn-outline" id="scan-cancel">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal EXPORT QR -->
+<div class="modal-overlay" id="qr-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="qr-title">
+    <h3 id="qr-title">Exportar lista (QR)</h3>
+    <div class="qr-wrap">
+      <canvas id="qr-canvas" width="820" height="820" aria-label="Código QR de exportación"></canvas>
+      <div class="qr-meta">Escanéalo con <b>Importar</b> desde otro dispositivo.<br>Incluye artículos + interfaz. ECC <b>H</b>, alto contraste, quiet zone amplia.</div>
+    </div>
+    <div class="row">
+      <button class="btn btn-outline" id="qr-close">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal IMPORT (escaneo QR de exportación) -->
+<div class="modal-overlay" id="import-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="import-title">
+    <h3 id="import-title">Importar desde QR</h3>
+    <video class="scan-video" id="import-video" autoplay playsinline muted></video>
+    <div class="row">
+      <button class="btn btn-outline" id="import-cancel">Cerrar</button>
     </div>
   </div>
 </div>
@@ -638,7 +674,6 @@ function loadState(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'null
 /* ====== Migración ====== */
 function migrateState(state){
   if(!Array.isArray(state)) return [];
-  let changed=false;
   const migrated=state.map(it=>{
     let {id, nombre, categoria, fav=false} = it;
     categoria = categoria || 'otros';
@@ -646,7 +681,6 @@ function migrateState(state){
     if(id.split('__')[1] !== slug(nombre)) id = idKey(categoria, nombre);
     return {...it, id, categoria, fav: !!fav};
   });
-  if(changed){ try{ localStorage.setItem(LS_KEY, JSON.stringify(migrated)); }catch{} }
   return migrated;
 }
 
@@ -790,7 +824,7 @@ function updateAll(){
 
   qSA('.item').forEach(li=>{ const q=Number(qS('input.cant',li)?.value)||0; const p=Number(qS('input.precio',li)?.value)||0; const s=q*p; const sub=qS('.subtotal', li); if(sub) sub.textContent=money(s); });
 
-  applyViewFilter(currentView, currentSearch); // mantener filtro aplicado tras cada recálculo
+  applyViewFilter(currentView, currentSearch);
 }
 
 /* ====== Orden ====== */
@@ -841,7 +875,7 @@ function applyViewFilter(view='todos', term=''){
     if(view==='pendientes') return !isMarked;
     if(view==='marcados') return !!isMarked;
     if(view==='favoritos') return !!isFav;
-    return true; // todos
+    return true;
   };
   qSA('.card').forEach(card=>{
     let showCard=false;
@@ -854,10 +888,7 @@ function applyViewFilter(view='todos', term=''){
     });
     card.style.display = showCard? 'block':'none';
   });
-  // UI persist
   const ui = readUI(); ui.view = view; writeUI(ui);
-
-  // estado visual en segmentado
   qSA('.seg-btn').forEach(b=> b.classList.toggle('active', b.dataset.view===view));
 }
 
@@ -882,6 +913,108 @@ if ('serviceWorker' in navigator) {
     }).catch(()=>{});
   });
 }
+
+/* ====== Export / Import (QR) ====== */
+/* --- LZ-String (MIT) minificado: compresión Base64 para payload QR --- */
+!function(r){function t(r){switch(o){case 0:return r<<1;case 1:return r<<1|1;case 2:return r<<1|2}}function e(e){for(var n="",i=0;i<e.length;i+=2){var a=parseInt(e.substring(i,i+2),16);n+=String.fromCharCode(a)}return n}var n=String.fromCharCode,i="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",o=0,a={compressToBase64:function(r){if(null==r)return"";var t=a._compress(r,6,function(r){return i.charAt(r)});switch(t.length%4){default:case 0:return t;case 1:return t+"===";case 2:return t+"==";case 3:return t+"="}},decompressFromBase64:function(r){return null==r?"":""==r?null:a._decompress(r.length,32,function(t){return function(r){return i.indexOf(r.charAt(t++))}(t)})},_compress:function(r,i,o){if(null==r)return"";var a,s,u,c={},f={},l="",h="",v="",d=2,g=3,p=2,m=[],b=0,y=0;for(s=0;s<r.length;s+=1)if(l=r.charAt(s),Object.prototype.hasOwnProperty.call(c,l)||(c[l]=g++,f[l]=!0),h=v+l,Object.prototype.hasOwnProperty.call(c,h))v=h;else{if(Object.prototype.hasOwnProperty.call(f,v)){if(v.charCodeAt(0)<256){for(a=0;a<p;a++)b<<=1,y==i-1?(y=0,m.push(o(b)),b=0):y++;for(u=v.charCodeAt(0),a=0;a<8;a++)b=b<<1|1&u,y==i-1?(y=0,m.push(o(b)),b=0):y++,u>>=1}else{for(u=1,a=0;a<p;a++)b=b<<1|u,y==i-1?(y=0,m.push(o(b)),b=0):y++,u=0;for(u=v.charCodeAt(0),a=0;a<16;a++)b=b<<1|1&u,y==i-1?(y=0,m.push(o(b)),b=0):y++,u>>=1}d--,0==d&&(d=Math.pow(2,p),p++),c[v]=g++,v=String(v.charAt(0)),d--,0==d&&(d=Math.pow(2,p),p++)}else for(u=c[v],a=0;a<p;a++)b=b<<1|1&u,y==i-1?(y=0,m.push(o(b)),b=0):y++,u>>=1;d--,0==d&&(d=Math.pow(2,p),p++),c[h]=g++,v=String(l)}if(""!==v){if(Object.prototype.hasOwnProperty.call(f,v)){if(v.charCodeAt(0)<256){for(a=0;a<p;a++)b<<=1,y==i-1?(y=0,m.push(o(b)),b=0):y++;for(u=v.charCodeAt(0),a=0;a<8;a++)b=b<<1|1&u,y==i-1?(y=0,m.push(o(b)),b=0):y++,u>>=1}else{for(u=1,a=0;a<p;a++)b=b<<1|u,y==i-1?(y=0,m.push(o(b)),b=0):y++,u=0;for(u=v.charCodeAt(0),a=0;a<16;a++)b=b<<1|1&u,y==i-1?(y=0,m.push(o(b)),b=0):y++,u>>=1}d--,0==d&&(d=Math.pow(2,p),p++)}else for(u=c[v],a=0;a<p;a++)b=b<<1|1&u,y==i-1?(y=0,m.push(o(b)),b=0):y++,u>>=1;d--,0==d&&(d=Math.pow(2,p),p++)}for(u=2,a=0;a<p;a++)b=b<<1|u,y==i-1?(y=0,m.push(o(b)),b=0):y++,u=0;for(;;){if(b<<=1,y==i-1){m.push(o(b));break}y++}return m.join("")},_decompress:function(r,t,e){var i,o,a,s,u,c,f,l=[],h=4,v=4,d=3,g="",p=[],m={val:e(0),position:t,index:1};for(i=0;i<3;i+=1)l[i]=i;for(o=0,c=Math.pow(2,2),a=1;a!=c;)s=m.val&m.position,m.position>>=1,0==m.position&&(m.position=t,m.val=e(m.index++)),o|=(s>0?1:0)*a,a<<=1;switch(i=o){case 0:for(o=0,c=Math.pow(2,8),a=1;a!=c;)s=m.val&m.position,m.position>>=1,0==m.position&&(m.position=t,m.val=e(m.index++)),o|=(s>0?1:0)*a,a<<=1;f=n(o);break;case 1:for(o=0,c=Math.pow(2,16),a=1;a!=c;)s=m.val&m.position,m.position>>=1,0==m.position&&(m.position=t,m.val=e(m.index++)),o|=(s>0?1:0)*a,a<<=1;f=n(o);break;case 2:return""}for(l[3]=f,u=f,p.push(f);;){if(m.index>r)return"";for(o=0,c=Math.pow(2,d),a=1;a!=c;)s=m.val&m.position,m.position>>=1,0==m.position&&(m.position=t,m.val=e(m.index++)),o|=(s>0?1:0)*a,a<<=1;switch(f=o){case 0:for(o=0,c=Math.pow(2,8),a=1;a!=c;)s=m.val&m.position,m.position>>=1,0==m.position&&(m.position=t,m.val=e(m.index++)),o|=(s>0?1:0)*a,a<<=1;l[v++]=n(o),f=v-1,h--;break;case 1:for(o=0,c=Math.pow(2,16),a=1;a!=c;)s=m.val&m.position,m.position>>=1,0==m.position&&(m.position=t,m.val=e(m.index++)),o|=(s>0?1:0)*a,a<<=1;l[v++]=n(o),f=v-1,h--;break;case 2:return p.join("")}if(0==h&&(h=Math.pow(2,d),d++),l[f])g=l[f];else{if(f!==v)return null;g=u+u.charAt(0)}p.push(g),l[v++]=u+g.charAt(0),h--,u=g,0==h&&(h=Math.pow(2,d),d++)}}};"function"==typeof define&&define.amd?define(function(){return a}):"object"==typeof module&&module.exports?module.exports=a:r.LZString=a}("undefined"!=typeof window?window:this);
+
+/* --- QRCode minimal (MIT) de Kazuhiko Arase – versión reducida para canvas --- */
+/* Nota: Solo usamos generación (no versión MicroQR). */
+(function(){function l(a,b){this._el=a;this._htOption=b}function u(a){this.mode=n.MODE_8BIT_BYTE;this.data=a}function q(a,b){this.typeNumber=a;this.errorCorrectLevel=b;this.modules=null;this.moduleCount=0;this.dataList=[]}var n={PAD0:236,PAD1:17,MODE_8BIT_BYTE:4,ErrorCorrectLevel:{L:1,M:0,Q:3,H:2}},t=function(){var a=[[]];return{getRSFactor:function(b){return a[b]},init:function(){function b(b,e){for(var c=Array(b),d=0;d<b;d++)c[d]=Array(b);return{addPoly:function(b){for(var d=0;d<b.length;d++)c[0][d]=b[d]},getAt:function(b,d){return c[b][d]}}}a[7]=b(7);a[10]=b(10);a[13]=b(13);a[15]=b(15)}}}();t.init();u.prototype={getLength:function(){return this.data.length},write:function(a){for(var b=0;b<this.data.length;b++){var e=this.data.charCodeAt(b);a.put(e,8)}}};q.prototype={addData:function(a){this.dataList.push(new u(a))},isDark:function(a,b){if(null==this.modules[a]||null==this.modules[a][b])throw Error(a+","+b);return this.modules[a][b]},getModuleCount:function(){return this.moduleCount},make:function(){var a=this.typeNumber;for(a=1;40>=a;a++){this.typeNumber=a;if(this._tryMake()){return}}},_tryMake:function(){this.moduleCount=4*this.typeNumber+17;this.modules=Array(this.moduleCount);for(var a=0;a<this.moduleCount;a++){this.modules[a]=Array(this.moduleCount);for(var b=0;b<this.moduleCount;b++)this.modules[a][b]=null}this._setupPosPattern(0,0);this._setupPosPattern(this.moduleCount-7,0);this._setupPosPattern(0,this.moduleCount-7);for(var a=8,b=this.moduleCount-8; a<=b; a++)null==this.modules[a][6]&&(this.modules[a][6]=0==a%2);for(a=8,b=this.moduleCount-8; a<=b; a++)null==this.modules[6][a]&&(this.modules[6][a]=0==a%2);this._mapData(this._createData());return!0},_setupPosPattern:function(a,b){for(var e= -1;7>=e;e++)if(!(0>a+e||this.moduleCount<=a+e))for(var c=-1;7>=c;c++)0>b+c||this.moduleCount<=b+c||(this.modules[a+e][b+c]=0<=e&&6>=e&&0<=c&&6>=c&&(0==e||6==e||0==c||6==c||2<=e&&4>=e&&2<=c&&4>=c)?!0:!1)},_createData:function(){for(var a=[],b=0;b<this.dataList.length;b++){var e=this.dataList[b];a.push(4);a.push(e.getLength());for(var c=0;c<e.data.length;c++)a.push(e.data.charCodeAt(c))}a.push(0);return a},_mapData:function(a){for(var b=0,e=this.moduleCount-1,c=this.moduleCount-1,d=0,g=!0;0<c;c-=2){6==c&&c--;for(;;){for(var f=0;2>f;f++)null==this.modules[e][c-f]&&(0<d?a[d--]&1?this.modules[e][c-f]=!0:this.modules[e][c-f]=!1:this.modules[e][c-f]=!1);e+=g?-1:1;if(e<0||this.moduleCount<=e){e+=g?1:-1;g=!g;break}}}},createCanvas:function(a){var b=this.getModuleCount(),e=a.size||320,c=a.marginModules||4,d=a.dark||"#000",g=a.light||"#fff",f=a.scale||Math.floor((e-2*c)/b);e=f*b+2*c;var h=a.canvas||document.createElement("canvas");h.width=e;h.height=e;var k=h.getContext("2d");k.fillStyle=g;k.fillRect(0,0,e,e);k.fillStyle=d;for(var m=0;m<b;m++)for(var p=0;p<b;p++)this.isDark(m,p)&&k.fillRect(c+f*m,c+f*p,f,f);return h}};l.prototype={makeCode:function(a){this._oQRCode=new q(1,n.ErrorCorrectLevel.H);this._oQRCode.addData(a);this._oQRCode.make()},createCanvas:function(a){return this._oQRCode.createCanvas(a)}};window._SimpleQR=l;})();
+
+/* Payload helpers */
+function buildExportObject(){
+  const ls = readState();
+  const ui = readUI();
+  return { v:7, ts: Date.now(), ls, ui };
+}
+function encodeExportPayload(obj){
+  const json = JSON.stringify(obj);
+  const packed = LZString.compressToBase64(json);
+  return `PDV7:${packed}`;
+}
+function decodeImportPayload(text){
+  try{
+    if(!/^PDV\d+:/.test(text)) throw new Error('Formato desconocido');
+    const [,ver,base]=text.match(/^PDV(\d+):(.*)$/) || [];
+    if(!base) throw new Error('Sin datos');
+    const json = LZString.decompressFromBase64(base);
+    if(!json) throw new Error('No se pudo descomprimir');
+    const obj = JSON.parse(json);
+    if(!obj || typeof obj!=='object') throw new Error('JSON inválido');
+    if(!Array.isArray(obj.ls)) throw new Error('Lista inválida');
+    return { ver: Number(ver), data: obj };
+  }catch(e){ throw e; }
+}
+
+/* Generar QR en modal */
+function openExportQR(){
+  try{ saveState(); }catch{}
+  const payload = encodeExportPayload(buildExportObject());
+  const ov = qS('#qr-overlay'); ov.style.display='flex';
+  const qr = new _SimpleQR(null,{});
+  qr.makeCode(payload);
+  const canvas = qr.createCanvas({
+    size: 800,           // Grande
+    marginModules: 4,    // Quiet zone amplia
+    scale: 8,            // módulos pequeños pero legibles
+    dark: '#000',
+    light: '#fff',
+    canvas: qS('#qr-canvas')
+  });
+  // Accesibilidad: texto alterno con parte del payload (no completo por largo)
+  canvas.setAttribute('aria-label', 'QR de exportación de lista');
+  qS('#qr-close').onclick = ()=>{ ov.style.display='none'; };
+  ov.addEventListener('click', (e)=>{ if(e.target===ov) ov.style.display='none'; });
+}
+
+/* Importar: escaneo QR y sobrescribir LS/UI */
+let importStream=null, importRAF=null, importDetector=null;
+async function openImportScanner(){
+  const overlay = qS('#import-overlay'); const video = qS('#import-video');
+  if(!('BarcodeDetector' in window)){ alert('Escáner no soportado en este navegador. Usa Chrome/Android o copia los datos manualmente.'); return; }
+  overlay.style.display='flex';
+  try{
+    importDetector = new BarcodeDetector({formats:['qr_code']});
+    importStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    video.srcObject = importStream; await video.play();
+    const tick = async ()=>{
+      try{
+        const codes = await importDetector.detect(video);
+        if(codes && codes.length){
+          const code = codes[0].rawValue || '';
+          if(/^PDV\d+:/.test(code)){
+            stopImportScanner();
+            try{
+              const { data } = decodeImportPayload(code);
+              const total = Array.isArray(data.ls)? data.ls.length : 0;
+              confirmUI(`Se importará una lista con ${total} elemento(s) y se sobrescribirá tu estado actual. ¿Continuar?`, ()=>{
+                try{
+                  localStorage.setItem(LS_KEY, JSON.stringify(migrateState(data.ls)));
+                  localStorage.setItem(UI_KEY, JSON.stringify(data.ui||{}));
+                }catch{}
+                window.location.reload();
+              });
+            }catch(err){
+              alert('QR leído, pero no es un paquete válido de exportación: '+ err.message);
+            }
+            return;
+          }
+        }
+      }catch{}
+      importRAF = requestAnimationFrame(tick);
+    };
+    importRAF = requestAnimationFrame(tick);
+  }catch(e){ alert('No fue posible abrir la cámara.'); closeImportScanner(); }
+  qS('#import-cancel').onclick = closeImportScanner;
+  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeImportScanner(); });
+}
+function stopImportScanner(){
+  if(importRAF) cancelAnimationFrame(importRAF); importRAF=null;
+  if(importStream){ importStream.getTracks().forEach(t=>t.stop()); importStream=null; }
+  qS('#import-overlay').style.display='none';
+}
+function closeImportScanner(){ stopImportScanner(); }
 
 /* ====== Inicialización ====== */
 document.addEventListener('DOMContentLoaded', ()=>{
@@ -931,6 +1064,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   qS('#fab-share').addEventListener('click', shareResumen); qS('#fab-print').addEventListener('click', printResumen);
   qS('#fab-favs').addEventListener('click', ()=> applyViewFilter('favoritos'));
   qS('#fab-scan').addEventListener('click', openScanner);
+  qS('#fab-export').addEventListener('click', openExportQR);
+  qS('#fab-import').addEventListener('click', openImportScanner);
 
   // Segmentado vista
   qS('#view-todos').addEventListener('click', ()=> applyViewFilter('todos', currentSearch));
@@ -938,11 +1073,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
   qS('#view-mark').addEventListener('click', ()=> applyViewFilter('marcados', currentSearch));
   qS('#view-fav').addEventListener('click', ()=> applyViewFilter('favoritos', currentSearch));
 
-  // Compartir / Imprimir
+  // Compartir / Imprimir / Export / Import
   qS('#btn-compartir').addEventListener('click', shareResumen);
   qS('#btn-compartir-bottom').addEventListener('click', shareResumen);
   qS('#btn-imprimir').addEventListener('click', printResumen);
   qS('#btn-imprimir-bottom').addEventListener('click', printResumen);
+  qS('#btn-exportar').addEventListener('click', openExportQR);
+  qS('#btn-exportar-bottom').addEventListener('click', openExportQR);
+  qS('#btn-importar').addEventListener('click', openImportScanner);
+  qS('#btn-importar-bottom').addEventListener('click', openImportScanner);
+  qS('#qr-close').addEventListener('click', ()=> qS('#qr-overlay').style.display='none');
 
   // Agregar (admin y FAB)
   qS('#agregar-producto').addEventListener('click', ()=> openModalNuevo());
@@ -958,155 +1098,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   updateAll(); saveState();
 });
 
-/* ====== Modal Nuevo ====== */
-function openModalNuevo(prefill={}){
-  const ov = qS('#modal-overlay');
-  const mNombre = qS('#m-nombre'); const mCat = qS('#m-categoria'); const mCant = qS('#m-cant'); const mPrec = qS('#m-precio');
-
-  mNombre.value = prefill.nombre || qS('#nuevo-producto').value || '';
-  mCat.value = prefill.categoria || qS('#categoria-nueva').value || guessCategory(mNombre.value) || 'otros';
-  mCant.value = prefill.cantidad || 1;
-  mPrec.value = (prefill.precio ?? '').toString();
-
-  ov.style.display='flex'; setTimeout(()=>mNombre.focus(), 50);
-  const close = ()=>{ ov.style.display='none'; };
-  qS('#modal-cancelar').onclick = close;
-  ov.addEventListener('click', (e)=>{ if(e.target===ov) close(); });
-  document.addEventListener('keydown', function esc(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown', esc); }});
-
-  qS('#modal-guardar').onclick = ()=>{
-    const nombre = mNombre.value.trim(); const categoria = mCat.value;
-    const cantidad = Number(mCant.value)||0; const precio = Number(mPrec.value)||0;
-    if(!nombre){ mNombre.focus(); return; }
-
-    let baseId = idKey(categoria, nombre); let id = baseId; let n=2;
-    while(document.getElementById(id)){ id = `${baseId}-${n++}`; }
-
-    const ul = qS(`.card.${categoria} .items`); if(!ul){ close(); return; }
-    let li = document.getElementById(id); li = li ? li.closest('.item') : null;
-    if(!li){
-      li = document.createElement('li'); li.className='item';
-      li.innerHTML = `<input class="check" type="checkbox" id="${id}">
-                      <div class="name"><label for="${id}">${nombre}</label></div>`;
-      ul.appendChild(li); ensureControls(li);
-    }
-    const card = ul.closest('.card'); setCollapsed(card, false);
-
-    const chk = qS('.check', li); if(chk) chk.checked = true;
-    const inQ = qS('input.cant', li); if(inQ) inQ.value = cantidad || 1;
-    const inP = qS('input.precio', li); if(inP) inP.value = precio || 0;
-    li.classList.add('checked');
-
-    updateAll(); saveState(); haptics(20);
-    li.scrollIntoView({behavior:'smooth', block:'center'});
-    close();
-  };
-}
-
-/* ====== Guess de categoría por nombre ====== */
-function guessCategory(name=''){
-  const t = name.toLowerCase();
-  const inAny = arr => arr.some(w=>t.includes(w));
-  if(inAny(['jabón','shampoo','pasta dental','cepillo','desodorante','toalla'])) return 'higiene';
-  if(inAny(['detergente','suavizante','cloro','lejía','limpiador','trapeador','escoba','basura','esponja','desinfectante','guantes','vidrios'])) return 'limpieza';
-  if(inAny(['arroz','frijol','aceite','sal','azúcar','harina','café','te','té'])) return 'alimentos';
-  if(inAny(['atún','sopa','vegetales','fruta','miel','jugo','enlat'])) return 'conservas';
-  return 'otros';
-}
-
-/* ====== Compartir (WhatsApp/Telegram) ====== */
-const CAT_ICON = {higiene:'🧼', limpieza:'🧽', alimentos:'🍚', conservas:'🥫', otros:'🧰'};
-function pad(str, len){ str=String(str||''); if(str.length>len) return str.slice(0, len-1)+'…'; while(str.length<len) str+=' '; return str; }
-function buildResumenTexto(){
-  const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
-  const order=['higiene','limpieza','alimentos','conservas','otros'];
-  const groups={higiene:[], limpieza:[], alimentos:[], conservas:[], otros:[]};
-  let grand=0;
-
-  selected.forEach(li=>{ const card=li.closest('.card'); const cat=getCat(card)||'otros'; groups[cat].push(li); });
-
-  let out = `*Primera Despensa* · ${new Date().toLocaleString('es-MX')}\n`;
-  out += '```' + '\n'; // bloque monoespaciado
-  order.forEach(cat=>{
-    const lis = groups[cat]; if(!lis || !lis.length) return;
-    let tot=0; out += `${(CAT_ICON[cat]||'•')} ${cat.toUpperCase()}\n`;
-    out += `  ${pad('Producto',24)} ${pad('Cant',4)} ${pad('Precio',10)} ${pad('Subtotal',12)}\n`;
-    out += `  ${'-'.repeat(24)} ${'-'.repeat(4)} ${'-'.repeat(10)} ${'-'.repeat(12)}\n`;
-    lis.forEach(li=>{
-      const name=li.querySelector('label')?.textContent.trim()||''; const q=Number(qS('input.cant',li)?.value)||0; const p=Number(qS('.precio',li)?.value)||0; const s=q*p; tot+=s;
-      out += `  ${pad(name,24)} ${pad(q,4)} ${pad(p.toFixed(2),10)} ${pad(s.toFixed(2),12)}\n`;
-    });
-    out += `  ${' '.repeat(24+4+10-6)}TOTAL: ${pad(tot.toFixed(2),12)}\n\n`;
-    grand+=tot;
-  });
-  out += `TOTAL GENERAL: ${grand.toFixed(2)}\n`;
-  out += '```' + '\n';
-  out += '_Compartido desde “Primera Despensa”_';
-  return out;
-}
-async function shareResumen(){
-  const texto = buildResumenTexto();
-  if(navigator.share){ try{ await navigator.share({ text: texto }); return; }catch(e){} }
-  const enc = encodeURIComponent(texto);
-  const wa = `https://wa.me/?text=${enc}`;
-  const tg = `https://t.me/share/url?text=${enc}`;
-  window.open(wa, '_blank'); setTimeout(()=>window.open(tg, '_blank'), 300);
-}
-
-/* ====== PDF Pro ====== */
-function printResumen(){
-  const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
-  if(!selected.length){ alert('No hay productos seleccionados.'); return; }
-  const size = (prompt('Formato de papel: escribe A4 o A5', 'A4')||'A4').toUpperCase()==='A5'?'A5':'A4';
-
-  const order=['higiene','limpieza','alimentos','conservas','otros']; const groups={}; let grand=0, totalSel=selected.length;
-  selected.forEach(li=>{ const card=li.closest('.card'); const cat=getCat(card)||'otros'; (groups[cat]??=[]).push(li); });
-
-  const w=window.open('','_blank');
-  const css=`@page { size:${size}; margin:14mm }
-  body{font-family:Segoe UI,Arial,sans-serif;color:#111;font-size:12px}
-  .head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e5e7eb;padding-bottom:6px;margin-bottom:10px}
-  .brand{font-weight:800;font-size:16px}
-  .meta{color:#374151}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px}
-  .chip{border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;display:inline-block;background:#fff}
-  h2{margin:12px 0 6px;font-size:13px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
-  table{width:100%;border-collapse:collapse;margin-bottom:8px}
-  th,td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left}
-  th{background:#f8fafc}
-  tfoot td{font-weight:700}
-  .tot{font-size:14px;font-weight:800;margin-top:12px}
-  .footer{margin-top:14px;color:#6b7280;font-size:11px}`;
-  let html=`<html><head><meta charset="UTF-8"><title>Resumen de compra</title><style>${css}</style></head><body>`;
-  const shareText = buildResumenTexto();
-  const qrImg = navigator.onLine ? `<img alt="QR" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(shareText)}" width="90" height="90">` : '';
-
-  html+=`<div class="head"><div class="brand">🛍️ Primera Despensa</div><div class="meta">${new Date().toLocaleString('es-MX')}</div>${qrImg}</div>`;
-  html+=`<div class="grid"><div class="chip">Marcados: <b>${totalSel}</b></div><div class="chip">Formato: ${size}</div></div>`;
-
-  order.forEach(cat=>{
-    const lis = groups[cat]; if(!lis || !lis.length) return; let tot=0;
-    html+=`<h2>${cat.charAt(0).toUpperCase()+cat.slice(1)}</h2><table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Subtotal</th></tr></thead><tbody>`;
-    lis.forEach(li=>{
-      const name=li.querySelector('label')?.textContent.trim()||''; const q=Number(qS('input.cant',li)?.value)||0; const p=Number(qS('.precio',li)?.value)||0; const s=q*p; tot+=s;
-      html+=`<tr><td>${name}</td><td>${q}</td><td>${money(p)}</td><td>${money(s)}</td></tr>`;
-    });
-    html+=`</tbody><tfoot><tr><td colspan="3">Total ${cat}</td><td>${money(tot)}</td></tr></tfoot></table>`; grand+=tot;
-  });
-
-  html+=`<div class="tot">TOTAL: ${money(grand)}</div><div class="footer">Documento optimizado para impresión. Precios en MXN. ${navigator.onLine?'Incluye QR para compartir.':''}</div>`;
-  html+=`</body></html>`;
-  w.document.write(html); w.document.close(); w.focus(); w.print();
-}
-
-/* ====== Borrar estado ====== */
-qS('#btn-borrar').addEventListener('click', ()=>{
-  confirmUI('¿Borrar todo el estado guardado (checks, cantidades, costos, favoritos y UI)?', ()=>{
-    localStorage.removeItem(LS_KEY); localStorage.removeItem(UI_KEY); window.location.reload();
-  });
-});
-
-/* ====== Scanner (BarcodeDetector) ====== */
+/* ====== Scanner (BarcodeDetector) existente para agregar productos ====== */
 let scanStream=null, scanRAF=null, detector=null;
 async function openScanner(){
   const overlay = qS('#scan-overlay'); const video = qS('#scan-video');
@@ -1154,11 +1146,9 @@ function wordsToNumber(w){
   return NaN;
 }
 function parseVoiceCommand(txt){
-  // Patrón ESTRICTO: "agrega {cantidad} {producto} a {precio}"
   const t = txt.toLowerCase().trim();
   const m = t.match(/^agrega\s+(.+)\s+a\s+([0-9]+(?:[.,][0-9]+)?)(?:\s*(?:mxn|pesos?))?$/i);
   if(!m) return null;
-  // separar primera palabra como cantidad; el resto es producto
   const parts = m[1].trim().split(/\s+/);
   if(!parts.length) return null;
   const cantWord = parts.shift();
@@ -1200,7 +1190,6 @@ function runOnboardingOnce(){
       const rect = qS(s.el).getBoundingClientRect();
       const tip = document.createElement('div'); tip.className='tip'; tip.innerHTML = `<div>${s.text}</div><div class="actions"><button class="btn">${s.btn}</button><button class="btn btn-outline">Omitir</button></div>`;
       document.body.appendChild(tip);
-      // Colocar cerca del elemento
       const top = Math.max(12, rect.top - tip.offsetHeight - 10);
       const left = Math.min(window.innerWidth - tip.offsetWidth - 12, rect.left);
       tip.style.top = `${top}px`; tip.style.left = `${left}px`;
@@ -1214,6 +1203,102 @@ function runOnboardingOnce(){
 /* ====== Búsqueda flotante: abrir/cerrar desde teclado ESC ====== */
 document.addEventListener('keydown', (e)=>{ if(e.key==='/' && !e.metaKey && !e.ctrlKey){ e.preventDefault(); qS('#busqueda').focus(); } });
 
+/* ====== Resto: compartir e imprimir ====== */
+const CAT_ICON = {higiene:'🧼', limpieza:'🧽', alimentos:'🍚', conservas:'🥫', otros:'🧰'};
+function pad(str, len){ str=String(str||''); if(str.length>len) return str.slice(0, len-1)+'…'; while(str.length<len) str+=' '; return str; }
+function buildResumenTexto(){
+  const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
+  const order=['higiene','limpieza','alimentos','conservas','otros'];
+  const groups={higiene:[], limpieza:[], alimentos:[], conservas:[], otros:[]};
+  let grand=0;
+
+  selected.forEach(li=>{ const card=li.closest('.card'); const cat=getCat(card)||'otros'; groups[cat].push(li); });
+
+  let out = `*Primera Despensa* · ${new Date().toLocaleString('es-MX')}\n`;
+  out += '```' + '\n';
+  order.forEach(cat=>{
+    const lis = groups[cat]; if(!lis || !lis.length) return;
+    let tot=0; out += `${(CAT_ICON[cat]||'•')} ${cat.toUpperCase()}\n`;
+    out += `  ${pad('Producto',24)} ${pad('Cant',4)} ${pad('Precio',10)} ${pad('Subtotal',12)}\n`;
+    out += `  ${'-'.repeat(24)} ${'-'.repeat(4)} ${'-'.repeat(10)} ${'-'.repeat(12)}\n`;
+    lis.forEach(li=>{
+      const name=li.querySelector('label')?.textContent.trim()||''; const q=Number(qS('input.cant',li)?.value)||0; const p=Number(qS('.precio',li)?.value)||0; const s=q*p; tot+=s;
+      out += `  ${pad(name,24)} ${pad(q,4)} ${pad(p.toFixed(2),10)} ${pad(s.toFixed(2),12)}\n`;
+    });
+    out += `  ${' '.repeat(24+4+10-6)}TOTAL: ${pad(tot.toFixed(2),12)}\n\n`;
+    grand+=tot;
+  });
+  out += `TOTAL GENERAL: ${grand.toFixed(2)}\n`;
+  out += '```' + '\n';
+  out += '_Compartido desde “Primera Despensa”_';
+  return out;
+}
+async function shareResumen(){
+  const texto = buildResumenTexto();
+  if(navigator.share){ try{ await navigator.share({ text: texto }); return; }catch(e){} }
+  const enc = encodeURIComponent(texto);
+  const wa = `https://wa.me/?text=${enc}`;
+  const tg = `https://t.me/share/url?text=${enc}`;
+  window.open(wa, '_blank'); setTimeout(()=>window.open(tg, '_blank'), 300);
+}
+function printResumen(){
+  const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
+  if(!selected.length){ alert('No hay productos seleccionados.'); return; }
+  const size = (prompt('Formato de papel: escribe A4 o A5', 'A4')||'A4').toUpperCase()==='A5'?'A5':'A4';
+
+  const order=['higiene','limpieza','alimentos','conservas','otros']; const groups={}; let grand=0, totalSel=selected.length;
+  selected.forEach(li=>{ const card=li.closest('.card'); const cat=getCat(card)||'otros'; (groups[cat]??=[]).push(li); });
+
+  const w=window.open('','_blank');
+  const css=`@page { size:${size}; margin:14mm }
+  body{font-family:Segoe UI,Arial,sans-serif;color:#111;font-size:12px}
+  .head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e5e7eb;padding-bottom:6px;margin-bottom:10px}
+  .brand{font-weight:800;font-size:16px}
+  .meta{color:#374151}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px}
+  .chip{border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;display:inline-block;background:#fff}
+  h2{margin:12px 0 6px;font-size:13px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
+  table{width:100%;border-collapse:collapse;margin-bottom:8px}
+  th,td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left}
+  th{background:#f8fafc}
+  tfoot td{font-weight:700}
+  .tot{font-size:14px;font-weight:800;margin-top:12px}
+  .footer{margin-top:14px;color:#6b7280;font-size:11px}`;
+  let html=`<html><head><meta charset="UTF-8"><title>Resumen de compra</title><style>${css}</style></head><body>`;
+  const shareText = buildResumenTexto();
+  const qr = encodeExportPayload(buildExportObject()); // QR con payload para imprimir
+  html+=`<div class="head"><div class="brand">🛍️ Primera Despensa</div><div class="meta">${new Date().toLocaleString('es-MX')}</div><div><img alt="QR" src="${makeQRDataURL(qr,120)}" width="90" height="90"></div></div>`;
+  html+=`<div class="grid"><div class="chip">Marcados: <b>${totalSel}</b></div><div class="chip">Formato: ${size}</div></div>`;
+
+  order.forEach(cat=>{
+    const lis = groups[cat]; if(!lis || !lis.length) return; let tot=0;
+    html+=`<h2>${cat.charAt(0).toUpperCase()+cat.slice(1)}</h2><table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Subtotal</th></tr></thead><tbody>`;
+    lis.forEach(li=>{
+      const name=li.querySelector('label')?.textContent.trim()||''; const q=Number(qS('input.cant',li)?.value)||0; const p=Number(qS('.precio',li)?.value)||0; const s=q*p; tot+=s;
+      html+=`<tr><td>${name}</td><td>${q}</td><td>${money(p)}</td><td>${money(s)}</td></tr>`;
+    });
+    html+=`</tbody><tfoot><tr><td colspan="3">Total ${cat}</td><td>${money(tot)}</td></tr></tfoot></table>`; grand+=tot;
+  });
+
+  html+=`<div class="tot">TOTAL: ${money(grand)}</div><div class="footer">Documento optimizado para impresión. Precios en MXN. Incluye QR para importar en otro dispositivo.</div>`;
+  html+=`</body></html>`;
+  w.document.write(html); w.document.close(); w.focus(); w.print();
+}
+
+/* Utilidad para crear un DataURL PNG del QR (para impresión) */
+function makeQRDataURL(text, size=120){
+  const gen = new _SimpleQR(null,{});
+  gen.makeCode(text);
+  const cnv = gen.createCanvas({ size: size, marginModules: 2, scale: 4, dark:'#000', light:'#fff' });
+  return cnv.toDataURL('image/png');
+}
+
+/* ====== Borrar estado ====== */
+qS('#btn-borrar').addEventListener('click', ()=>{
+  confirmUI('¿Borrar todo el estado guardado (checks, cantidades, costos, favoritos y UI)?', ()=>{
+    localStorage.removeItem(LS_KEY); localStorage.removeItem(UI_KEY); window.location.reload();
+  });
+});
 </script>
 </body>
 </html>
