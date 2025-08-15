@@ -209,9 +209,9 @@
     .item.checked{ background: var(--item-checked); }
     .item.expensive{ box-shadow: 0 0 0 2px rgba(185,28,28,.85) inset; background: var(--item-exp); }
 
-    /* CHECKBOX más chico (pero ítem mantiene área táctil cómoda) */
+    /* CHECKBOX más chico */
     .check{
-        width:22px; height:22px; min-width:22px; min-height:22px;
+        width:20px; height:20px; min-width:20px; min-height:20px;
         cursor:pointer; accent-color:#8b5cf6;
     }
 
@@ -244,7 +244,7 @@
     }
     .admin .note{ font-size:var(--fs-xs); color:var(--muted) }
 
-    /* Overlay confirmación */
+    /* Overlay confirmación genérico */
     .overlay{
         position:fixed; inset:0; z-index:90; background: rgba(2,6,23,.20);
         display:flex; align-items:center; justify-content:center; backdrop-filter: blur(2px);
@@ -259,7 +259,7 @@
     .cbtn.y{ background:#fee2e2; color:#7f1d1d; border-color:#fecaca }
     .cbtn.n{ background:#eef2ff; color:#1e3a8a; border-color:#c7d2fe }
 
-    /* Barra inferior fija (resumen rápido móvil) */
+    /* Bottom bar fija */
     .bottom-bar{
         position:fixed; left:0; right:0; bottom:0; z-index:60;
         background:rgba(255,255,255,.98); border-top:1px solid var(--ring); backdrop-filter: blur(6px);
@@ -274,7 +274,7 @@
     .bb-chip strong{ font-weight:900; }
     .share-row{ display:flex; gap:8px }
 
-    /* Banner de actualización SW */
+    /* Banner actualización SW */
     .update-banner{
         position: fixed; left:50%; transform: translateX(-50%);
         bottom: calc(56px + env(safe-area-inset-bottom)); z-index:70;
@@ -287,6 +287,44 @@
     .update-banner .btn-cancel{
         background:#e5e7eb; border-color:#cbd5e1; color:#111827;
     }
+
+    /* === FAB de búsqueda + hoja inferior (sheet) === */
+    .fab{
+        position:fixed; right:16px; bottom:88px; z-index:65;
+        width:56px; height:56px; border-radius:50%; border:1px solid var(--ring);
+        background:#fff; box-shadow: var(--shadow-card); display:grid; place-items:center; cursor:pointer;
+    }
+    .fab:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+
+    .sheet{
+        position:fixed; left:0; right:0; bottom:-100%; z-index:80;
+        background:#fff; border-top:1px solid var(--ring);
+        box-shadow: 0 -10px 26px rgba(0,0,0,.12);
+        transition: transform .25s ease; transform: translateY(100%);
+        padding:12px; padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+    .sheet.open{ transform: translateY(0); bottom:0; }
+    .sheet-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .sheet h3{ margin:0; font-size:var(--fs-md); }
+    .sheet .input{
+        display:flex; align-items:center; gap:8px; border:1px solid var(--ring); background:#fff; border-radius:var(--radius);
+        padding:10px; box-shadow: var(--shadow);
+    }
+    .sheet input{ flex:1; border:0; outline:0; font-size:var(--fs-md); }
+    .sheet .btn{ min-height:var(--hit); }
+
+    /* === Modal de nuevo producto === */
+    .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.25); backdrop-filter: blur(2px); z-index:95; display:none; align-items:center; justify-content:center; }
+    .modal{ background:#fff; border:1px solid var(--ring); border-radius:var(--radius-lg); width:min(92vw, 440px); box-shadow: var(--shadow-card); padding:12px; }
+    .modal h3{ margin:0 0 8px 0; font-size:var(--fs-lg); }
+    .modal .grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .modal .grid .full{ grid-column:1 / -1; }
+    .modal label{ display:block; font-size:var(--fs-xs); color:var(--muted); margin-bottom:4px; }
+    .modal input, .modal select{
+        width:100%; border:1px solid var(--ring); border-radius:var(--radius); padding:10px; font-size:var(--fs-md);
+    }
+    .modal .row{ display:flex; gap:8px; justify-content:flex-end; margin-top:10px; }
+    .modal .btn{ min-height:var(--hit); }
 
     /* Ajustes para pantallas más grandes */
     @media (min-width:640px){
@@ -335,7 +373,7 @@
 
 <div class="container">
 
-  <!-- PANEL DE PROGRESO + TOTALES (con aria-live) -->
+  <!-- PANEL DE PROGRESO + TOTALES -->
   <section class="panel" aria-labelledby="resumen">
     <h2 id="resumen" class="sr-only" style="position:absolute;left:-9999px">Resumen</h2>
     <div class="progress" aria-live="polite" aria-label="Progreso de selección">
@@ -369,11 +407,12 @@
         <option value="conservas">Conservas</option>
         <option value="otros">Otros</option>
       </select>
+      <!-- ahora abre el modal -->
       <button class="btn" id="agregar-producto">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Agregar
       </button>
     </div>
-    <small class="note">Marca ✓ para incluirlo. Captura Cantidad y Costo unitario. Se guarda automáticamente en tu navegador.</small>
+    <small class="note">Usa el botón “Agregar” para abrir el formulario. Se guarda automáticamente.</small>
   </section>
 
   <!-- CATEGORÍAS (acordeón con estado persistente) -->
@@ -500,7 +539,7 @@
     <ul class="items">
       <li class="item"><input class="check" type="checkbox" id="atun"><div class="name"><label for="atun">Atún en lata</label></div></li>
       <li class="item"><input class="check" type="checkbox" id="sopa"><div class="name"><label for="sopa">Sopa instantánea / sopas en sobre</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="vegetales"><div class="name"><label for="vegetales">Vegetales enlatados</div></li>
+      <li class="item"><input class="check" type="checkbox" id="vegetales"><div class="name"><label for="vegetales">Vegetales enlatados</label></div></li>
       <li class="item"><input class="check" type="checkbox" id="fruta"><div class="name"><label for="fruta">Frutas enlatadas</label></div></li>
       <li class="item"><input class="check" type="checkbox" id="miel"><div class="name"><label for="miel">Miel / mantequilla</label></div></li>
       <li class="item"><input class="check" type="checkbox" id="jugo"><div class="name"><label for="jugo">Jugo en caja</label></div></li>
@@ -554,6 +593,58 @@
   </div>
 </div>
 
+<!-- FAB de búsqueda -->
+<button class="fab" id="fab-search" aria-label="Buscar">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg>
+</button>
+
+<!-- Sheet de búsqueda -->
+<div class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="sheet-header">
+    <h3 id="sheet-title">Buscar</h3>
+    <button class="btn btn-outline" id="sheet-close">Cerrar</button>
+  </div>
+  <div class="input">
+    <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg>
+    <input id="busqueda-sheet" placeholder="Escribe para filtrar…" enterkeyhint="search" aria-label="Buscar en la lista">
+  </div>
+</div>
+
+<!-- Modal nuevo producto -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h3 id="modal-title">Nuevo producto</h3>
+    <div class="grid">
+      <div class="full">
+        <label for="m-nombre">Nombre</label>
+        <input id="m-nombre" type="text" placeholder="Ej. Leche entera">
+      </div>
+      <div>
+        <label for="m-categoria">Categoría</label>
+        <select id="m-categoria">
+          <option value="higiene">Higiene Personal</option>
+          <option value="limpieza">Limpieza del Hogar</option>
+          <option value="alimentos">Alimentos Básicos</option>
+          <option value="conservas">Conservas</option>
+          <option value="otros">Otros</option>
+        </select>
+      </div>
+      <div>
+        <label for="m-cant">Cantidad</label>
+        <input id="m-cant" type="number" min="0" step="1" inputmode="numeric" placeholder="1" enterkeyhint="done">
+      </div>
+      <div>
+        <label for="m-precio">Precio</label>
+        <input id="m-precio" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" enterkeyhint="done">
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-outline" id="modal-cancelar">Cancelar</button>
+      <button class="btn" id="modal-guardar">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <!-- Banner actualización SW -->
 <div id="update-banner" class="update-banner" role="status" aria-live="polite">
   <span>Hay una nueva versión</span>
@@ -566,12 +657,13 @@
 const money = v => (isFinite(v)?Number(v):0).toLocaleString('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:2});
 const qS=(s,c=document)=>c.querySelector(s);
 const qSA=(s,c=document)=>Array.from(c.querySelectorAll(s));
-const LS_KEY='despensa_v4_state';
-const UI_KEY='despensa_v4_ui';
+const LS_KEY='despensa_v5_state';
+const UI_KEY='despensa_v5_ui';
 
 const haptics = ms => { try{ if(navigator.vibrate) navigator.vibrate(ms); }catch{} };
-
 const getCat = (card)=> card?.getAttribute('data-cat') || [...card.classList].find(c=>['higiene','limpieza','alimentos','conservas','otros'].includes(c));
+const CSS_ESCAPE = (window.CSS && CSS.escape) ? CSS.escape : (s)=> String(s).replace(/[^a-zA-Z0-9_\-]/g, '\\$&');
+const slug = (t)=> t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 
 /* ====== Estado (localStorage) ====== */
 function readState(){
@@ -592,13 +684,41 @@ function readState(){
 function saveState(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(readState())); }catch{} }
 function loadState(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'null'); }catch{ return null; } }
 
-/* >>> FALTABA: aplicar estado guardado (esto rompía la init) <<< */
+/* Reconstrucción de ítems que no están en el HTML base */
+function ensureItemFromState(it){
+  if(!it || !it.id || !it.nombre) return;
+  const cat = it.categoria || 'otros';
+  const ul = qS(`.card.${cat} .items`) || qS(`.card[data-cat="${cat}"] .items`);
+  if(!ul) return;
+
+  let li = qS('#'+CSS_ESCAPE(it.id));
+  li = li ? li.closest('.item') : null;
+
+  if(!li){
+    li = document.createElement('li');
+    li.className='item';
+    li.innerHTML = `<input class="check" type="checkbox" id="${it.id}">
+                    <div class="name"><label for="${it.id}">${it.nombre}</label></div>`;
+    ul.appendChild(li);
+    ensureControls(li);
+  }
+  // aplicar valores
+  const chk = qS('.check', li); if(chk) chk.checked = !!it.checked;
+  const inQ = qS('input.cant', li); if(inQ) inQ.value = it.cantidad ?? 1;
+  const inP = qS('input.precio', li); if(inP) inP.value = it.costo ?? 0;
+  li.classList.toggle('checked', !!it.checked);
+}
+function rebuildFromState(state){
+  if(!state) return;
+  state.forEach(ensureItemFromState);
+}
+
+/* Aplica estado (sobre ítems ya existentes o recién reconstruidos) */
 function applyState(state){
   if(!state) return;
   const map = new Map(state.map(i=>[i.id,i]));
   qSA('.card').forEach(card=>{
     qSA('.items > .item', card).forEach(li=>{
-      // aseguro que existan controles antes de aplicar valores
       ensureControls(li);
       const chk = qS('.check', li);
       const label = li.querySelector('label');
@@ -614,12 +734,8 @@ function applyState(state){
   updateAll();
 }
 
-function readUI(){
-  try{ return JSON.parse(localStorage.getItem(UI_KEY)||'{}'); }catch{ return {}; }
-}
-function writeUI(ui){
-  try{ localStorage.setItem(UI_KEY, JSON.stringify(ui)); }catch{}
-}
+function readUI(){ try{ return JSON.parse(localStorage.getItem(UI_KEY)||'{}'); }catch{ return {}; } }
+function writeUI(ui){ try{ localStorage.setItem(UI_KEY, JSON.stringify(ui)); }catch{} }
 
 /* ====== UI de Item ====== */
 function ensureControls(li){
@@ -681,7 +797,7 @@ function addGestures(li){
     dx = t.clientX-startX;
     if(dy<10 && Math.abs(dx)>8){ swiping=true; e.preventDefault(); }
     if(swiping){
-      const tx = Math.min(0, dx); // solo hacia la izquierda
+      const tx = Math.min(0, dx); // solo izquierda
       li.style.transform=`translateX(${tx}px)`;
       li.style.opacity = 1 - Math.min(0.5, Math.abs(tx)/200);
     }
@@ -698,7 +814,6 @@ function addGestures(li){
     active=false; swiping=false; dx=0;
   };
 
-  // doble tap -> toggle check
   li.addEventListener('dblclick', ()=>{
     const chk=qS('.check', li); if(!chk) return;
     chk.checked = !chk.checked;
@@ -706,7 +821,6 @@ function addGestures(li){
     updateAll(); saveState(); haptics(15);
   }, {passive:true});
 
-  // Soporte "double tap" en touch
   li.addEventListener('touchend', ()=>{
     if(tapTimer){ clearTimeout(tapTimer); tapTimer=null;
       const chk=qS('.check', li); if(!chk) return;
@@ -756,7 +870,7 @@ function updateAll(){
   qS('#total-cantidad').textContent=totalQty;
   qS('#total-dinero').textContent=money(totalMoney);
 
-  // Barra inferior (móvil)
+  // Bottom bar
   qS('#bb-sel').textContent = String(checked);
   qS('#bb-total').textContent = (Number(totalMoney).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}));
 
@@ -773,7 +887,7 @@ function updateAll(){
     subs.forEach(({li,sub})=>{ if(sub>=thr) li.classList.add('expensive'); });
   }
 
-  // Asegura subtotales
+  // Asegura subtotales visibles
   qSA('.item').forEach(li=>{
     const q=Number(qS('input.cant',li)?.value)||0;
     const p=Number(qS('input.precio',li)?.value)||0;
@@ -836,6 +950,21 @@ function collapseAll(v){
   qSA('.card').forEach(card=> setCollapsed(card, v));
 }
 
+/* ====== Filtros / búsqueda ====== */
+function filterTerm(term){
+  const t = (term||'').toLowerCase();
+  qSA('.card').forEach(card=>{
+    let showCard=false;
+    qSA('.item', card).forEach(li=>{
+      const txt=li.innerText.toLowerCase();
+      const vis=txt.includes(t);
+      li.style.display = vis? 'flex':'none';
+      if(vis) showCard=true;
+    });
+    card.style.display = showCard? 'block':'none';
+  });
+}
+
 /* ====== PWA: Install prompt ====== */
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -886,11 +1015,13 @@ if ('serviceWorker' in navigator) {
 
 /* ====== Inicialización ====== */
 document.addEventListener('DOMContentLoaded', ()=>{
-  // Inyectar controles en todos los ítems
+  // Inyectar controles en todos los ítems base
   qSA('.items').forEach(prepareList);
 
-  // Cargar estado guardado de productos
-  applyState(loadState()); // <-- ahora existe
+  // Cargar estado guardado y reconstruir ítems faltantes
+  const state = loadState();
+  rebuildFromState(state);
+  applyState(state);
 
   // Restaurar UI (acordeones + orden)
   const ui = readUI();
@@ -912,21 +1043,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
   }
 
-  // Buscar
-  const search=qS('#busqueda');
-  search.addEventListener('input', ()=>{
-    const term=search.value.toLowerCase();
-    qSA('.card').forEach(card=>{
-      let showCard=false;
-      qSA('.item', card).forEach(li=>{
-        const txt=li.innerText.toLowerCase();
-        const vis=txt.includes(term);
-        li.style.display = vis? 'flex':'none';
-        if(vis) showCard=true;
-      });
-      card.style.display = showCard? 'block':'none';
-    });
-  });
+  // Buscar (barra superior)
+  const searchTop=qS('#busqueda');
+  searchTop.addEventListener('input', ()=> filterTerm(searchTop.value));
 
   // Orden por categoría (+ persistencia)
   qSA('.card .sort').forEach(sel=>{
@@ -948,7 +1067,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const btn = qS('.toggle', card);
     if(btn){
       btn.addEventListener('click', ()=>{
-        const collapsed = btn.getAttribute('aria-expanded')!=='false'; // si estaba true -> colapsar
+        const collapsed = btn.getAttribute('aria-expanded')!=='false';
         setCollapsed(card, collapsed);
       });
     }
@@ -958,11 +1077,94 @@ document.addEventListener('DOMContentLoaded', ()=>{
   qS('#btn-expandir').addEventListener('click', ()=> collapseAll(false));
   qS('#btn-colapsar').addEventListener('click', ()=> collapseAll(true));
 
+  // FAB / Sheet búsqueda
+  const sheet = qS('#search-sheet');
+  const sheetInput = qS('#busqueda-sheet');
+  const openSheet = ()=>{ sheet.classList.add('open'); setTimeout(()=>sheetInput.focus(), 50); };
+  const closeSheet = ()=>{ sheet.classList.remove('open'); sheetInput.value=''; filterTerm(''); };
+  qS('#fab-search').addEventListener('click', openSheet);
+  qS('#sheet-close').addEventListener('click', closeSheet);
+  sheetInput.addEventListener('input', ()=> filterTerm(sheetInput.value));
+
+  // Botones compartir/imprimir
+  qS('#btn-compartir').addEventListener('click', shareResumen);
+  qS('#btn-compartir-bottom').addEventListener('click', shareResumen);
+  qS('#btn-imprimir').addEventListener('click', printResumen);
+  qS('#btn-imprimir-bottom').addEventListener('click', printResumen);
+
+  // Abrir modal de nuevo producto
+  qS('#agregar-producto').addEventListener('click', ()=>{
+    openModalNuevo();
+  });
+
   updateAll();
   saveState();
 });
 
-/* ====== Compartir resumen (Web Share / WhatsApp / Telegram) ====== */
+/* ====== Modal: nuevo producto ====== */
+function openModalNuevo(prefill={}){
+  const ov = qS('#modal-overlay');
+  const mNombre = qS('#m-nombre');
+  const mCat = qS('#m-categoria');
+  const mCant = qS('#m-cant');
+  const mPrec = qS('#m-precio');
+
+  mNombre.value = prefill.nombre || qS('#nuevo-producto').value || '';
+  mCat.value = prefill.categoria || qS('#categoria-nueva').value || 'otros';
+  mCant.value = prefill.cantidad || 1;
+  mPrec.value = prefill.precio || '';
+
+  ov.style.display='flex';
+  setTimeout(()=>mNombre.focus(), 50);
+
+  const close = ()=>{ ov.style.display='none'; };
+
+  qS('#modal-cancelar').onclick = close;
+  ov.addEventListener('click', (e)=>{ if(e.target===ov) close(); });
+  document.addEventListener('keydown', function esc(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown', esc); }});
+
+  qS('#modal-guardar').onclick = ()=>{
+    const nombre = mNombre.value.trim();
+    const categoria = mCat.value;
+    const cantidad = Number(mCant.value)||0;
+    const precio = Number(mPrec.value)||0;
+    if(!nombre){ mNombre.focus(); return; }
+
+    const id = slug(nombre);
+    const ul = qS(`.card.${categoria} .items`);
+    if(!ul){ close(); return; }
+
+    // Si ya existe, solo actualizar
+    let li = qS('#'+CSS_ESCAPE(id));
+    li = li ? li.closest('.item') : null;
+
+    if(!li){
+      li = document.createElement('li'); li.className='item';
+      li.innerHTML = `<input class="check" type="checkbox" id="${id}">
+                      <div class="name"><label for="${id}">${nombre}</label></div>`;
+      ul.appendChild(li);
+      ensureControls(li);
+    }
+
+    // Asegurar categoría visible
+    const card = ul.closest('.card');
+    setCollapsed(card, false);
+
+    // Aplicar valores y marcar
+    const chk = qS('.check', li); if(chk) chk.checked = true;
+    const inQ = qS('input.cant', li); if(inQ) inQ.value = cantidad || 1;
+    const inP = qS('input.precio', li); if(inP) inP.value = precio || 0;
+    li.classList.add('checked');
+
+    // Guardar + UI
+    updateAll(); saveState(); haptics(20);
+    li.scrollIntoView({behavior:'smooth', block:'center'});
+
+    close();
+  };
+}
+
+/* ====== Compartir ====== */
 function buildResumenTexto(){
   const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
   const groups={};
@@ -979,7 +1181,7 @@ function buildResumenTexto(){
     out += `\n— ${cat.toUpperCase()} —\n`;
     lis.forEach(li=>{
       const name=li.querySelector('label')?.textContent.trim()||'';
-      const q=Number(qS('.cant',li)?.value)||0;
+      const q=Number(qS('input.cant',li)?.value)||0;
       const p=Number(qS('.precio',li)?.value)||0;
       const s=q*p; tot+=s;
       out += `• ${name} × ${q} @ ${p.toLocaleString('es-MX', {minimumFractionDigits:2})} = ${s.toLocaleString('es-MX', {minimumFractionDigits:2})}\n`;
@@ -1004,8 +1206,6 @@ async function shareResumen(){
   window.open(wa, '_blank');
   setTimeout(()=>window.open(tg, '_blank'), 300);
 }
-qS('#btn-compartir').addEventListener('click', shareResumen);
-qS('#btn-compartir-bottom').addEventListener('click', shareResumen);
 
 /* ====== Imprimir ====== */
 function printResumen(){
@@ -1035,7 +1235,7 @@ function printResumen(){
     html+=`<table><thead><tr><th>Producto</th><th>Cant.</th><th>Costo</th><th>Subtotal</th></tr></thead><tbody>`;
     lis.forEach(li=>{
       const name=li.querySelector('label')?.textContent.trim()||'';
-      const q=Number(qS('.cant',li)?.value)||0;
+      const q=Number(qS('input.cant',li)?.value)||0;
       const p=Number(qS('.precio',li)?.value)||0;
       const s=q*p; tot+=s;
       html+=`<tr><td>${name}</td><td>${q}</td><td>${money(p)}</td><td>${money(s)}</td></tr>`;
@@ -1048,30 +1248,10 @@ function printResumen(){
   html+=`</body></html>`;
   w.document.write(html); w.document.close(); w.focus(); w.print();
 }
-qS('#btn-imprimir').addEventListener('click', printResumen);
-qS('#btn-imprimir-bottom').addEventListener('click', printResumen);
-
-/* ====== Agregar producto ====== */
-qS('#agregar-producto').addEventListener('click', ()=>{
-  const nombre=qS('#nuevo-producto').value.trim();
-  const categoria=qS('#categoria-nueva').value;
-  if(!nombre) return alert('Escribe un nombre de producto.');
-  const ul=qS(`.card.${categoria} .items`);
-  const id= nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-');
-
-  const li=document.createElement('li'); li.className='item';
-  li.innerHTML=`<input class="check" type="checkbox" id="${id}">
-                <div class="name"><label for="${id}">${nombre}</label></div>`;
-  ul.appendChild(li);
-
-  ensureControls(li);
-  qS('#nuevo-producto').value='';
-  updateAll(); saveState();
-});
 
 /* ====== Borrar estado ====== */
 qS('#btn-borrar').addEventListener('click', ()=>{
-  confirmUI('¿Borrar todo el estado guardado (checks, cantidades, costos)?', ()=>{
+  confirmUI('¿Borrar todo el estado guardado (checks, cantidades, costos y UI)?', ()=>{
     localStorage.removeItem(LS_KEY);
     localStorage.removeItem(UI_KEY);
     window.location.reload();
