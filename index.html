@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Lista de Primera Despensa</title>
+<title>Lista de Despensa</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="manifest" href="./manifest.json">
@@ -45,7 +45,7 @@
         --gap:10px;
 
         /* Color de foco visible AA */
-        --focus:#4f46e5; /* indigo-600 */
+        --focus:#4f46e5;
     }
 
     *{box-sizing:border-box}
@@ -66,13 +66,13 @@
     .container{
         max-width: 860px;
         margin: 0 auto;
-        padding: 12px 12px 100px; /* espacio para bottom bar */
+        padding: 12px 12px 110px; /* espacio para bottom bar y FABs */
         display:flex;
         flex-direction:column;
         gap:12px;
     }
 
-    /* Toolbar fija y compacta */
+    /* Toolbar */
     .toolbar{
         position:sticky; top:0; z-index:50;
         backdrop-filter: saturate(140%) blur(10px);
@@ -84,25 +84,16 @@
         display:grid; grid-template-columns: 1fr; gap:8px;
     }
     .brand-row{ display:flex; align-items:center; gap:8px; }
-    h1{
-        font-size: var(--fs-lg);
-        font-weight: 800; letter-spacing:.2px; margin:0; color:#1f2937;
-    }
+    h1{ font-size: var(--fs-lg); font-weight:800; letter-spacing:.2px; margin:0; color:#1f2937; }
 
     .search{
         display:flex; align-items:center; gap:8px;
         background:#ffffff; border:1px solid var(--ring); border-radius: var(--radius); padding: 8px 10px;
         box-shadow: var(--shadow);
     }
-    .search input{
-        flex:1; background:transparent; border:0; outline:0; color:var(--text); font-size:var(--fs-md);
-    }
+    .search input{ flex:1; background:transparent; border:0; outline:0; color:var(--text); font-size:var(--fs-md); }
 
-    /* Acciones: carrusel horizontal móvil */
-    .actions{
-        display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px;
-        scroll-snap-type:x mandatory;
-    }
+    .actions{ display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px; scroll-snap-type:x mandatory; }
     .actions .btn{ scroll-snap-align:start; flex:0 0 auto; }
 
     .btn{
@@ -119,7 +110,6 @@
     .btn-print{ background:linear-gradient(180deg, #f5f3ff, #eef2ff); border-color:#ddd6fe }
     .btn-danger{ background:linear-gradient(180deg, #fff1f2, #ffe4e6); border-color:#fecaca }
     .btn-outline{ background:#fff; border-style:dashed }
-
     .btn:focus-visible,
     .toggle:focus-visible,
     .sort:focus-visible,
@@ -131,15 +121,13 @@
         outline-offset: 2px;
     }
 
-    /* Panel progreso + totales (con aria-live) */
+    /* Panel progreso + totales */
     .panel{
         background: linear-gradient(180deg, var(--card), var(--card2));
         border:1px solid var(--ring); border-radius:var(--radius-lg); padding:10px;
         display:flex; flex-direction:column; gap:10px; box-shadow: var(--shadow);
     }
-    .progress{
-        height: 16px; border-radius: 999px; background:#f1f5f9; border:1px solid var(--ring); overflow:hidden;
-    }
+    .progress{ height:16px; border-radius:999px; background:#f1f5f9; border:1px solid var(--ring); overflow:hidden; }
     .progress .bar{
         height:100%; width:0%;
         background: linear-gradient(90deg, var(--brand), var(--brand-2));
@@ -147,9 +135,7 @@
         font-size: var(--fs-xs); font-weight:900; letter-spacing:.2px; transition: width .25s ease; color:#0a0f1f;
     }
 
-    .totales{
-        display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;
-    }
+    .totales{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; }
     .tcard{
         background:#fff; border:1px solid var(--ring); border-radius:var(--radius); text-align:center; padding:8px;
         min-height:var(--hit); display:flex; flex-direction:column; justify-content:center;
@@ -177,7 +163,6 @@
     }
 
     .meta{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
-
     .sort{
         appearance:none; padding:6px 8px; border-radius:10px; border:1px solid var(--ring);
         background:#fff; color:var(--text); font-weight:700; cursor:pointer; min-width:140px; box-shadow: var(--shadow);
@@ -203,13 +188,13 @@
     .item{
         display:flex; align-items:center; gap:8px; background: var(--item);
         border:1px solid var(--ring); border-radius:var(--radius); padding:8px; transition:.2s ease; flex-wrap:wrap;
-        min-height:var(--hit); touch-action: pan-y; /* para gestos horizontales */
+        min-height:var(--hit); touch-action: pan-y;
     }
     .item:hover{ box-shadow: 0 0 0 2px rgba(147,197,253,.30) inset }
     .item.checked{ background: var(--item-checked); }
     .item.expensive{ box-shadow: 0 0 0 2px rgba(185,28,28,.85) inset; background: var(--item-exp); }
 
-    /* CHECKBOX más chico */
+    /* CHECKBOX compacto */
     .check{
         width:20px; height:20px; min-width:20px; min-height:20px;
         cursor:pointer; accent-color:#8b5cf6;
@@ -219,7 +204,7 @@
 
     .pc{ display:flex; align-items:center; gap:6px; flex:1 1 auto; flex-wrap:wrap; }
     .pc input[type="number"]{
-        width: 100px; background:#fff; border:1px solid var(--ring); border-radius:10px; padding:8px 10px; color:#111827; font-weight:700; font-size:var(--fs-sm);
+        width:100px; background:#fff; border:1px solid var(--ring); border-radius:10px; padding:8px 10px; color:#111827; font-weight:700; font-size:var(--fs-sm);
         min-height:var(--hit);
     }
     .subtotal{
@@ -244,7 +229,7 @@
     }
     .admin .note{ font-size:var(--fs-xs); color:var(--muted) }
 
-    /* Overlay confirmación genérico */
+    /* Overlay confirmación */
     .overlay{
         position:fixed; inset:0; z-index:90; background: rgba(2,6,23,.20);
         display:flex; align-items:center; justify-content:center; backdrop-filter: blur(2px);
@@ -259,7 +244,7 @@
     .cbtn.y{ background:#fee2e2; color:#7f1d1d; border-color:#fecaca }
     .cbtn.n{ background:#eef2ff; color:#1e3a8a; border-color:#c7d2fe }
 
-    /* Bottom bar fija */
+    /* Bottom bar */
     .bottom-bar{
         position:fixed; left:0; right:0; bottom:0; z-index:60;
         background:rgba(255,255,255,.98); border-top:1px solid var(--ring); backdrop-filter: blur(6px);
@@ -281,21 +266,29 @@
         background:#111827; color:#fff; border:1px solid #0b1224; border-radius:999px; padding:8px 12px;
         box-shadow: var(--shadow-card); display:none; align-items:center; gap:10px;
     }
-    .update-banner .btn{
-        background:#10b981; border-color:#065f46; color:#06281c;
-    }
-    .update-banner .btn-cancel{
-        background:#e5e7eb; border-color:#cbd5e1; color:#111827;
-    }
+    .update-banner .btn{ background:#10b981; border-color:#065f46; color:#06281c; }
+    .update-banner .btn-cancel{ background:#e5e7eb; border-color:#cbd5e1; color:#111827; }
 
-    /* === FAB de búsqueda + hoja inferior (sheet) === */
+    /* FABs flotantes */
+    .fab-stack{
+        position:fixed; right:16px; bottom:96px; z-index:65;
+        display:flex; flex-direction:column; gap:10px;
+    }
+    .fab, .fab-mini{
+        border:1px solid var(--ring); background:#fff; box-shadow: var(--shadow-card); cursor:pointer;
+        display:grid; place-items:center;
+    }
     .fab{
-        position:fixed; right:16px; bottom:88px; z-index:65;
-        width:56px; height:56px; border-radius:50%; border:1px solid var(--ring);
-        background:#fff; box-shadow: var(--shadow-card); display:grid; place-items:center; cursor:pointer;
+        width:56px; height:56px; border-radius:50%;
     }
-    .fab:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+    .fab-mini{
+        width:44px; height:44px; border-radius:12px; opacity:.0; pointer-events:none; transform: translateY(10px);
+        transition: .18s ease;
+    }
+    .fab-speed.open .fab-mini{ opacity:1; pointer-events:auto; transform: translateY(0); }
+    .fab:focus-visible, .fab-mini:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
 
+    /* Sheet búsqueda */
     .sheet{
         position:fixed; left:0; right:0; bottom:-100%; z-index:80;
         background:#fff; border-top:1px solid var(--ring);
@@ -311,9 +304,8 @@
         padding:10px; box-shadow: var(--shadow);
     }
     .sheet input{ flex:1; border:0; outline:0; font-size:var(--fs-md); }
-    .sheet .btn{ min-height:var(--hit); }
 
-    /* === Modal de nuevo producto === */
+    /* Modal nuevo producto */
     .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.25); backdrop-filter: blur(2px); z-index:95; display:none; align-items:center; justify-content:center; }
     .modal{ background:#fff; border:1px solid var(--ring); border-radius:var(--radius-lg); width:min(92vw, 440px); box-shadow: var(--shadow-card); padding:12px; }
     .modal h3{ margin:0 0 8px 0; font-size:var(--fs-lg); }
@@ -326,7 +318,6 @@
     .modal .row{ display:flex; gap:8px; justify-content:flex-end; margin-top:10px; }
     .modal .btn{ min-height:var(--hit); }
 
-    /* Ajustes para pantallas más grandes */
     @media (min-width:640px){
         :root{ --fs-xs:12px; --fs-sm:13px; --fs-md:15px; --fs-lg:18px; }
         .toolbar-inner{ grid-template-columns: 1fr 1fr; align-items:center }
@@ -336,7 +327,7 @@
 </head>
 <body>
 
-<!-- TOOLBAR FIJA -->
+<!-- TOOLBAR -->
 <div class="toolbar">
   <div class="toolbar-inner">
     <div class="brand-row">
@@ -407,15 +398,14 @@
         <option value="conservas">Conservas</option>
         <option value="otros">Otros</option>
       </select>
-      <!-- ahora abre el modal -->
       <button class="btn" id="agregar-producto">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Agregar
       </button>
     </div>
-    <small class="note">Usa el botón “Agregar” para abrir el formulario. Se guarda automáticamente.</small>
+    <small class="note">Se guarda automáticamente en tu navegador.</small>
   </section>
 
-  <!-- CATEGORÍAS (acordeón con estado persistente) -->
+  <!-- CATEGORÍAS (IDs únicos por categoría: cat__slug) -->
   <!-- Higiene -->
   <section class="card higiene" data-cat="higiene">
     <header>
@@ -437,16 +427,16 @@
       </div>
     </header>
     <ul class="items">
-      <li class="item"><input class="check" type="checkbox" id="jabon"><div class="name"><label for="jabon">Jabón de tocador</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="jabonliquido"><div class="name"><label for="jabonliquido">Jabón líquido para manos</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="shampoo"><div class="name"><label for="shampoo">Shampoo</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="pasta"><div class="name"><label for="pasta">Pasta dental</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="cepillo"><div class="name"><label for="cepillo">Cepillo de dientes</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="papel"><div class="name"><label for="papel">Papel higiénico</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="toallitas"><div class="name"><label for="toallitas">Toallitas húmedas</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="toallas"><div class="name"><label for="toallas">Toallas femeninas / tampones</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="desodorante"><div class="name"><label for="desodorante">Desodorante</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="gel"><div class="name"><label for="gel">Gel antibacterial</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="higiene__jabon-de-tocador"><div class="name"><label for="higiene__jabon-de-tocador">Jabón de tocador</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="higiene__jabon-liquido-para-manos"><div class="name"><label for="higiene__jabon-liquido-para-manos">Jabón líquido para manos</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="higiene__shampoo"><div class="name"><label for="higiene__shampoo">Shampoo</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="higiene__pasta-dental"><div class="name"><label for="higiene__pasta-dental">Pasta dental</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="higiene__cepillo-de-dientes"><div class="name"><label for="higiene__cepillo-de-dientes">Cepillo de dientes</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="higiene__papel-higienico"><div class="name"><label for="higiene__papel-higienico">Papel higiénico</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="higiene__toallitas-humedas"><div class="name"><label for="higiene__toallitas-humedas">Toallitas húmedas</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="higiene__toallas-femeninas-tampones"><div class="name"><label for="higiene__toallas-femeninas-tampones">Toallas femeninas / tampones</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="higiene__desodorante"><div class="name"><label for="higiene__desodorante">Desodorante</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="higiene__gel-antibacterial"><div class="name"><label for="higiene__gel-antibacterial">Gel antibacterial</label></div></li>
     </ul>
   </section>
 
@@ -471,17 +461,17 @@
       </div>
     </header>
     <ul class="items">
-      <li class="item"><input class="check" type="checkbox" id="detergente"><div class="name"><label for="detergente">Detergente para ropa</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="suavizante"><div class="name"><label for="suavizante">Suavizante de ropa</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="cloro"><div class="name"><label for="cloro">Cloro / lejía</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="limpiador"><div class="name"><label for="limpiador">Limpiador multiusos</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="escoba"><div class="name"><label for="escoba">Escoba</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="trapeador"><div class="name"><label for="trapeador">Trapeador</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="basura"><div class="name"><label for="basura">Bolsas de basura</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="esponja"><div class="name"><label for="esponja">Esponja / estropajo</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="desinfectante"><div class="name"><label for="desinfectante">Desinfectante</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="guantes"><div class="name"><label for="guantes">Guantes de limpieza</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="limpia-vidrios"><div class="name"><label for="limpia-vidrios">Limpiavidrios</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__detergente-para-ropa"><div class="name"><label for="limpieza__detergente-para-ropa">Detergente para ropa</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__suavizante-de-ropa"><div class="name"><label for="limpieza__suavizante-de-ropa">Suavizante de ropa</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__cloro-lejia"><div class="name"><label for="limpieza__cloro-lejia">Cloro / lejía</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__limpiador-multiusos"><div class="name"><label for="limpieza__limpiador-multiusos">Limpiador multiusos</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__escoba"><div class="name"><label for="limpieza__escoba">Escoba</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__trapeador"><div class="name"><label for="limpieza__trapeador">Trapeador</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__bolsas-de-basura"><div class="name"><label for="limpieza__bolsas-de-basura">Bolsas de basura</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__esponja-estropajo"><div class="name"><label for="limpieza__esponja-estropajo">Esponja / estropajo</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__desinfectante"><div class="name"><label for="limpieza__desinfectante">Desinfectante</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__guantes-de-limpieza"><div class="name"><label for="limpieza__guantes-de-limpieza">Guantes de limpieza</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="limpieza__limpiavidrios"><div class="name"><label for="limpieza__limpiavidrios">Limpiavidrios</label></div></li>
     </ul>
   </section>
 
@@ -506,13 +496,13 @@
       </div>
     </header>
     <ul class="items">
-      <li class="item"><input class="check" type="checkbox" id="arroz"><div class="name"><label for="arroz">Arroz</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="frijol"><div class="name"><label for="frijol">Frijol</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="aceite"><div class="name"><label for="aceite">Aceite</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="sal"><div class="name"><label for="sal">Sal</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="azucar"><div class="name"><label for="azucar">Azúcar</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="harina"><div class="name"><label for="harina">Harina</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="cafe"><div class="name"><label for="cafe">Café / té</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="alimentos__arroz"><div class="name"><label for="alimentos__arroz">Arroz</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="alimentos__frijol"><div class="name"><label for="alimentos__frijol">Frijol</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="alimentos__aceite"><div class="name"><label for="alimentos__aceite">Aceite</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="alimentos__sal"><div class="name"><label for="alimentos__sal">Sal</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="alimentos__azucar"><div class="name"><label for="alimentos__azucar">Azúcar</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="alimentos__harina"><div class="name"><label for="alimentos__harina">Harina</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="alimentos__cafe-te"><div class="name"><label for="alimentos__cafe-te">Café / té</label></div></li>
     </ul>
   </section>
 
@@ -537,12 +527,12 @@
       </div>
     </header>
     <ul class="items">
-      <li class="item"><input class="check" type="checkbox" id="atun"><div class="name"><label for="atun">Atún en lata</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="sopa"><div class="name"><label for="sopa">Sopa instantánea / sopas en sobre</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="vegetales"><div class="name"><label for="vegetales">Vegetales enlatados</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="fruta"><div class="name"><label for="fruta">Frutas enlatadas</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="miel"><div class="name"><label for="miel">Miel / mantequilla</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="jugo"><div class="name"><label for="jugo">Jugo en caja</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="conservas__atun-en-lata"><div class="name"><label for="conservas__atun-en-lata">Atún en lata</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="conservas__sopa-instantanea-sobres"><div class="name"><label for="conservas__sopa-instantanea-sobres">Sopa instantánea / sopas en sobre</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="conservas__vegetales-enlatados"><div class="name"><label for="conservas__vegetales-enlatados">Vegetales enlatados</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="conservas__frutas-enlatadas"><div class="name"><label for="conservas__frutas-enlatadas">Frutas enlatadas</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="conservas__miel-mantequilla"><div class="name"><label for="conservas__miel-mantequilla">Miel / mantequilla</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="conservas__jugo-en-caja"><div class="name"><label for="conservas__jugo-en-caja">Jugo en caja</label></div></li>
     </ul>
   </section>
 
@@ -567,17 +557,17 @@
       </div>
     </header>
     <ul class="items">
-      <li class="item"><input class="check" type="checkbox" id="pilas"><div class="name"><label for="pilas">Pilas</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="velas"><div class="name"><label for="velas">Velas</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="cerillos"><div class="name"><label for="cerillos">Cerillos / encendedores</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="pañales"><div class="name"><label for="pañales">Pañales</label></div></li>
-      <li class="item"><input class="check" type="checkbox" id="toallitas-bb"><div class="name"><label for="toallitas-bb">Toallitas bebé</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="otros__pilas"><div class="name"><label for="otros__pilas">Pilas</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="otros__velas"><div class="name"><label for="otros__velas">Velas</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="otros__cerillos-encendedores"><div class="name"><label for="otros__cerillos-encendedores">Cerillos / encendedores</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="otros__panales"><div class="name"><label for="otros__panales">Pañales</label></div></li>
+      <li class="item"><input class="check" type="checkbox" id="otros__toallitas-bebe"><div class="name"><label for="otros__toallitas-bebe">Toallitas bebé</label></div></li>
     </ul>
   </section>
 
 </div>
 
-<!-- BARRA INFERIOR FIJA -->
+<!-- BARRA INFERIOR -->
 <div class="bottom-bar" role="region" aria-label="Resumen rápido">
   <div class="bb-metrics">
     <div class="bb-chip">✓ <strong id="bb-sel">0</strong></div>
@@ -593,10 +583,36 @@
   </div>
 </div>
 
-<!-- FAB de búsqueda -->
-<button class="fab" id="fab-search" aria-label="Buscar">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg>
-</button>
+<!-- FABs: Buscar + Agregar + Speed dial -->
+<div class="fab-stack">
+  <button class="fab" id="fab-add" aria-label="Agregar producto">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <div class="fab-speed" id="fab-speed">
+    <button class="fab" id="fab-more" aria-label="Más acciones">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+    </button>
+    <div class="fab-mini-list">
+      <button class="fab-mini" id="fab-expand" title="Expandir todo" aria-label="Expandir todo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <button class="fab-mini" id="fab-collapse" title="Colapsar todo" aria-label="Colapsar todo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M5 12h14"/></svg>
+      </button>
+      <button class="fab-mini" id="fab-share" title="Compartir" aria-label="Compartir">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v14"/></svg>
+      </button>
+      <button class="fab-mini" id="fab-print" title="Imprimir" aria-label="Imprimir">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M6 9V2h12v7M6 18h12v4H6zM6 14h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2v1a2 2 0 002 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <button class="fab" id="fab-search" aria-label="Buscar">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg>
+  </button>
+</div>
 
 <!-- Sheet de búsqueda -->
 <div class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
@@ -657,13 +673,14 @@
 const money = v => (isFinite(v)?Number(v):0).toLocaleString('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:2});
 const qS=(s,c=document)=>c.querySelector(s);
 const qSA=(s,c=document)=>Array.from(c.querySelectorAll(s));
-const LS_KEY='despensa_v5_state';
-const UI_KEY='despensa_v5_ui';
+const LS_KEY='despensa_v6_state';
+const UI_KEY='despensa_v6_ui';
 
 const haptics = ms => { try{ if(navigator.vibrate) navigator.vibrate(ms); }catch{} };
 const getCat = (card)=> card?.getAttribute('data-cat') || [...card.classList].find(c=>['higiene','limpieza','alimentos','conservas','otros'].includes(c));
 const CSS_ESCAPE = (window.CSS && CSS.escape) ? CSS.escape : (s)=> String(s).replace(/[^a-zA-Z0-9_\-]/g, '\\$&');
-const slug = (t)=> t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+const slug = (t)=> String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+const idKey = (cat,name)=> `${cat}__${slug(name)}`;
 
 /* ====== Estado (localStorage) ====== */
 function readState(){
@@ -673,7 +690,7 @@ function readState(){
     qSA('.items > .item', card).forEach(li=>{
       const chk = qS('.check', li);
       const label = li.querySelector('label');
-      const id = chk?.id || (label?.textContent.trim().toLowerCase().replace(/\s+/g,'-'));
+      const id = chk?.id || idKey(cat, label?.textContent.trim()||'');
       const cant = Number(qS('input.cant', li)?.value)||0;
       const cost = Number(qS('input.precio', li)?.value)||0;
       data.push({ id, nombre: label?.textContent.trim()||'', categoria:cat, checked:!!chk?.checked, cantidad:cant, costo:cost });
@@ -684,14 +701,35 @@ function readState(){
 function saveState(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(readState())); }catch{} }
 function loadState(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'null'); }catch{ return null; } }
 
-/* Reconstrucción de ítems que no están en el HTML base */
+/* ====== Migración de estados antiguos ====== */
+function migrateState(state){
+  if(!Array.isArray(state)) return state;
+  let changed=false;
+  const migrated = state.map(it=>{
+    let {id, nombre, categoria} = it;
+    // si no trae categoria, mejor caer en 'otros'
+    categoria = categoria || 'otros';
+    // caso especial viejo: "Pasta dental" con id 'pasta'
+    if(categoria==='higiene' && /pasta\s*dental/i.test(nombre)) id = idKey('higiene','Pasta dental');
+    // IDs sin prefijo -> normalizar
+    if(!id || !id.includes('__')) id = idKey(categoria, nombre);
+    // normalizar slug de nombre por si cambió el texto
+    if(id.split('__')[1] !== slug(nombre)) id = idKey(categoria, nombre);
+    changed = changed || (id!==it.id);
+    return {...it, id, categoria};
+  });
+  if(changed){ try{ localStorage.setItem(LS_KEY, JSON.stringify(migrated)); }catch{} }
+  return migrated;
+}
+
+/* ====== Reconstrucción de ítems faltantes ====== */
 function ensureItemFromState(it){
   if(!it || !it.id || !it.nombre) return;
   const cat = it.categoria || 'otros';
   const ul = qS(`.card.${cat} .items`) || qS(`.card[data-cat="${cat}"] .items`);
   if(!ul) return;
 
-  let li = qS('#'+CSS_ESCAPE(it.id));
+  let li = document.getElementById(it.id);
   li = li ? li.closest('.item') : null;
 
   if(!li){
@@ -713,7 +751,7 @@ function rebuildFromState(state){
   state.forEach(ensureItemFromState);
 }
 
-/* Aplica estado (sobre ítems ya existentes o recién reconstruidos) */
+/* ====== Aplicar estado a DOM ====== */
 function applyState(state){
   if(!state) return;
   const map = new Map(state.map(i=>[i.id,i]));
@@ -722,7 +760,8 @@ function applyState(state){
       ensureControls(li);
       const chk = qS('.check', li);
       const label = li.querySelector('label');
-      const id = chk?.id || (label?.textContent.trim().toLowerCase().replace(/\s+/g,'-'));
+      const cat = getCat(card);
+      const id = chk?.id || idKey(cat, label?.textContent.trim()||'');
       const item = map.get(id);
       if(!item) return;
       if(chk) chk.checked = !!item.checked;
@@ -734,10 +773,11 @@ function applyState(state){
   updateAll();
 }
 
+/* ====== UI (acordeones/orden) ====== */
 function readUI(){ try{ return JSON.parse(localStorage.getItem(UI_KEY)||'{}'); }catch{ return {}; } }
 function writeUI(ui){ try{ localStorage.setItem(UI_KEY, JSON.stringify(ui)); }catch{} }
 
-/* ====== UI de Item ====== */
+/* ====== Controles de ítem ====== */
 function ensureControls(li){
   if(qS('.pc', li)) return;
   const pc = document.createElement('div'); pc.className='pc';
@@ -764,21 +804,12 @@ function ensureControls(li){
     chk.addEventListener('change',()=>{ li.classList.toggle('checked', chk.checked); updateAll(); saveState(); haptics(15); });
   }
 
-  // eliminar
   del.addEventListener('click',()=>{
     const name=li.querySelector('label')?.textContent.trim()||'el producto';
     confirmUI(`¿Eliminar “${name}”?`, ()=>{ li.remove(); updateAll(); saveState(); haptics(30); });
   });
 
-  // Gestos: swipe left para eliminar, doble tap para marcar
   addGestures(li);
-}
-function prepareList(container){
-  qSA('.item', container).forEach(li=>{
-    ensureControls(li);
-    const chk = qS('.check', li);
-    if(chk) li.classList.toggle('checked', chk.checked);
-  });
 }
 
 /* ====== Gestos ====== */
@@ -797,7 +828,7 @@ function addGestures(li){
     dx = t.clientX-startX;
     if(dy<10 && Math.abs(dx)>8){ swiping=true; e.preventDefault(); }
     if(swiping){
-      const tx = Math.min(0, dx); // solo izquierda
+      const tx = Math.min(0, dx);
       li.style.transform=`translateX(${tx}px)`;
       li.style.opacity = 1 - Math.min(0.5, Math.abs(tx)/200);
     }
@@ -869,8 +900,6 @@ function updateAll(){
   qS('#total-seleccionados').textContent=checked;
   qS('#total-cantidad').textContent=totalQty;
   qS('#total-dinero').textContent=money(totalMoney);
-
-  // Bottom bar
   qS('#bb-sel').textContent = String(checked);
   qS('#bb-total').textContent = (Number(totalMoney).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}));
 
@@ -879,7 +908,6 @@ function updateAll(){
     span.textContent=money(perCat[k]||0);
   });
 
-  // Marcar "más caros"
   const maxSub=Math.max(0, ...subs.map(s=>s.sub));
   const thr=maxSub*0.9;
   qSA('.item').forEach(li=>li.classList.remove('expensive'));
@@ -887,7 +915,6 @@ function updateAll(){
     subs.forEach(({li,sub})=>{ if(sub>=thr) li.classList.add('expensive'); });
   }
 
-  // Asegura subtotales visibles
   qSA('.item').forEach(li=>{
     const q=Number(qS('input.cant',li)?.value)||0;
     const p=Number(qS('input.precio',li)?.value)||0;
@@ -931,7 +958,7 @@ function confirmUI(text, onYes){
   qS('.cbtn.n', ov).addEventListener('click', ()=>ov.remove());
 }
 
-/* ====== Acordeones (con persistencia) ====== */
+/* ====== Acordeones (persistencia) ====== */
 function setCollapsed(card, collapsed){
   const items = qS('.items', card);
   const btn = qS('.toggle', card);
@@ -940,7 +967,6 @@ function setCollapsed(card, collapsed){
   card.classList.toggle('collapsed', collapsed);
   btn.setAttribute('aria-expanded', String(!collapsed));
 
-  // guardar en UI
   const ui = readUI();
   ui.accordions = ui.accordions || {};
   ui.accordions[getCat(card)] = !!collapsed;
@@ -965,7 +991,7 @@ function filterTerm(term){
   });
 }
 
-/* ====== PWA: Install prompt ====== */
+/* ====== PWA & SW ====== */
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
@@ -984,13 +1010,10 @@ window.addEventListener('beforeinstallprompt', (e) => {
   };
 });
 
-/* ====== SW Update flow (aviso "Hay nueva versión") ====== */
 function showUpdateBanner(waitingSW){
   const banner = qS('#update-banner');
   banner.style.display = 'flex';
-  qS('#btn-update').onclick = ()=>{
-    waitingSW.postMessage({type:'SKIP_WAITING'});
-  };
+  qS('#btn-update').onclick = ()=> waitingSW.postMessage({type:'SKIP_WAITING'});
   qS('#btn-update-cancel').onclick = ()=> banner.style.display='none';
 }
 if ('serviceWorker' in navigator) {
@@ -1006,31 +1029,25 @@ if ('serviceWorker' in navigator) {
           }
         });
       });
-      navigator.serviceWorker.addEventListener('controllerchange', ()=>{
-        window.location.reload();
-      });
+      navigator.serviceWorker.addEventListener('controllerchange', ()=> window.location.reload());
     }).catch(()=>{});
   });
 }
 
 /* ====== Inicialización ====== */
 document.addEventListener('DOMContentLoaded', ()=>{
-  // Inyectar controles en todos los ítems base
-  qSA('.items').forEach(prepareList);
+  // Preparar base
+  qSA('.items').forEach(ul=> qSA('.item', ul).forEach(ensureControls));
 
-  // Cargar estado guardado y reconstruir ítems faltantes
-  const state = loadState();
+  // Cargar estado, migrar, reconstruir faltantes y aplicar
+  let state = loadState();
+  state = migrateState(state || []);
   rebuildFromState(state);
   applyState(state);
 
   // Restaurar UI (acordeones + orden)
   const ui = readUI();
-  if(ui.accordions){
-    qSA('.card').forEach(card=>{
-      const cat=getCat(card);
-      if(cat in ui.accordions) setCollapsed(card, !!ui.accordions[cat]);
-    });
-  }
+  if(ui.accordions){ qSA('.card').forEach(card=>{ const cat=getCat(card); if(cat in ui.accordions) setCollapsed(card, !!ui.accordions[cat]); }); }
   if(ui.sort){
     qSA('.card').forEach(card=>{
       const cat=getCat(card);
@@ -1043,9 +1060,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
   }
 
-  // Buscar (barra superior)
+  // Búsqueda (arriba y sheet)
   const searchTop=qS('#busqueda');
+  const sheet = qS('#search-sheet');
+  const sheetInput = qS('#busqueda-sheet');
   searchTop.addEventListener('input', ()=> filterTerm(searchTop.value));
+  const openSheet = ()=>{ sheet.classList.add('open'); setTimeout(()=>sheetInput.focus(), 50); };
+  const closeSheet = ()=>{ sheet.classList.remove('open'); sheetInput.value=''; filterTerm(''); };
+  qS('#fab-search').addEventListener('click', openSheet);
+  qS('#sheet-close').addEventListener('click', closeSheet);
+  sheetInput.addEventListener('input', ()=> filterTerm(sheetInput.value));
 
   // Orden por categoría (+ persistencia)
   qSA('.card .sort').forEach(sel=>{
@@ -1067,35 +1091,33 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const btn = qS('.toggle', card);
     if(btn){
       btn.addEventListener('click', ()=>{
-        const collapsed = btn.getAttribute('aria-expanded')!=='false';
+        const collapsed = btn.getAttribute('aria-expanded')!=='false'; // si estaba true -> colapsar
         setCollapsed(card, collapsed);
       });
     }
   });
 
-  // Expandir/Colapsar todo
+  // Expandir/Colapsar todo (top + FABs)
   qS('#btn-expandir').addEventListener('click', ()=> collapseAll(false));
   qS('#btn-colapsar').addEventListener('click', ()=> collapseAll(true));
+  qS('#fab-expand').addEventListener('click', ()=> collapseAll(false));
+  qS('#fab-collapse').addEventListener('click', ()=> collapseAll(true));
 
-  // FAB / Sheet búsqueda
-  const sheet = qS('#search-sheet');
-  const sheetInput = qS('#busqueda-sheet');
-  const openSheet = ()=>{ sheet.classList.add('open'); setTimeout(()=>sheetInput.focus(), 50); };
-  const closeSheet = ()=>{ sheet.classList.remove('open'); sheetInput.value=''; filterTerm(''); };
-  qS('#fab-search').addEventListener('click', openSheet);
-  qS('#sheet-close').addEventListener('click', closeSheet);
-  sheetInput.addEventListener('input', ()=> filterTerm(sheetInput.value));
+  // Speed dial toggle
+  const speed = qS('#fab-speed');
+  qS('#fab-more').addEventListener('click', ()=> speed.classList.toggle('open'));
 
-  // Botones compartir/imprimir
+  // Compartir / Imprimir (todos los botones)
   qS('#btn-compartir').addEventListener('click', shareResumen);
   qS('#btn-compartir-bottom').addEventListener('click', shareResumen);
+  qS('#fab-share').addEventListener('click', shareResumen);
   qS('#btn-imprimir').addEventListener('click', printResumen);
   qS('#btn-imprimir-bottom').addEventListener('click', printResumen);
+  qS('#fab-print').addEventListener('click', printResumen);
 
-  // Abrir modal de nuevo producto
-  qS('#agregar-producto').addEventListener('click', ()=>{
-    openModalNuevo();
-  });
+  // Abrir modal desde admin y FAB (+)
+  qS('#agregar-producto').addEventListener('click', ()=> openModalNuevo());
+  qS('#fab-add').addEventListener('click', ()=> openModalNuevo());
 
   updateAll();
   saveState();
@@ -1130,14 +1152,16 @@ function openModalNuevo(prefill={}){
     const precio = Number(mPrec.value)||0;
     if(!nombre){ mNombre.focus(); return; }
 
-    const id = slug(nombre);
+    let baseId = idKey(categoria, nombre);
+    let id = baseId;
+    let n=2;
+    while(document.getElementById(id)){ id = `${baseId}-${n++}`; } // asegurar ID único
+
     const ul = qS(`.card.${categoria} .items`);
     if(!ul){ close(); return; }
 
-    // Si ya existe, solo actualizar
-    let li = qS('#'+CSS_ESCAPE(id));
+    let li = document.getElementById(id);
     li = li ? li.closest('.item') : null;
-
     if(!li){
       li = document.createElement('li'); li.className='item';
       li.innerHTML = `<input class="check" type="checkbox" id="${id}">
@@ -1146,7 +1170,7 @@ function openModalNuevo(prefill={}){
       ensureControls(li);
     }
 
-    // Asegurar categoría visible
+    // Mostrar categoría
     const card = ul.closest('.card');
     setCollapsed(card, false);
 
@@ -1156,7 +1180,6 @@ function openModalNuevo(prefill={}){
     const inP = qS('input.precio', li); if(inP) inP.value = precio || 0;
     li.classList.add('checked');
 
-    // Guardar + UI
     updateAll(); saveState(); haptics(20);
     li.scrollIntoView({behavior:'smooth', block:'center'});
 
@@ -1164,41 +1187,46 @@ function openModalNuevo(prefill={}){
   };
 }
 
-/* ====== Compartir ====== */
+/* ====== Compartir (mensaje mejorado) ====== */
+const CAT_ICON = {higiene:'🧼', limpieza:'🧽', alimentos:'🍚', conservas:'🥫', otros:'🧰'};
 function buildResumenTexto(){
   const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
-  const groups={};
-  let grand=0;
+  const order=['higiene','limpieza','alimentos','conservas','otros'];
+  const groups={higiene:[], limpieza:[], alimentos:[], conservas:[], otros:[]};
+  let grand=0, count=0;
+
   selected.forEach(li=>{
     const card=li.closest('.card');
     const cat=getCat(card)||'otros';
-    (groups[cat]??=[]).push(li);
+    groups[cat].push(li);
   });
 
-  let out = `🛒 *Despensa* – ${new Date().toLocaleString('es-MX')}\n`;
-  Object.entries(groups).forEach(([cat, lis])=>{
+  let out = `🛍️ *Despensa* · ${new Date().toLocaleString('es-MX')}\n`;
+  order.forEach(cat=>{
+    const lis = groups[cat];
+    if(!lis || !lis.length) return;
     let tot=0;
-    out += `\n— ${cat.toUpperCase()} —\n`;
+    out += `\n${CAT_ICON[cat]||'•'} *${cat[0].toUpperCase()+cat.slice(1)}*\n`;
     lis.forEach(li=>{
       const name=li.querySelector('label')?.textContent.trim()||'';
       const q=Number(qS('input.cant',li)?.value)||0;
       const p=Number(qS('.precio',li)?.value)||0;
       const s=q*p; tot+=s;
-      out += `• ${name} × ${q} @ ${p.toLocaleString('es-MX', {minimumFractionDigits:2})} = ${s.toLocaleString('es-MX', {minimumFractionDigits:2})}\n`;
+      count += q>0 ? 1 : 0;
+      out += `  • *${name}* × ${q} · $${p.toLocaleString('es-MX',{minimumFractionDigits:2})} = $${s.toLocaleString('es-MX',{minimumFractionDigits:2})}\n`;
     });
-    out += `Subtotal ${cat}: ${tot.toLocaleString('es-MX', {minimumFractionDigits:2})}\n`;
+    out += `  _Subtotal ${cat}_: *$${tot.toLocaleString('es-MX',{minimumFractionDigits:2})}*\n`;
     grand+=tot;
   });
-  out += `\nTOTAL: ${grand.toLocaleString('es-MX', {minimumFractionDigits:2})}`;
+
+  out += `\n*Artículos marcados:* ${selected.length}  |  *Total:* $${grand.toLocaleString('es-MX',{minimumFractionDigits:2})}\n`;
+  out += `— Compartido desde *Primera Despensa*`;
   return out;
 }
 async function shareResumen(){
   const texto = buildResumenTexto();
   if(navigator.share){
-    try{
-      await navigator.share({ text: texto });
-      return;
-    }catch(e){ /* fallback */ }
+    try{ await navigator.share({ text: texto }); return; }catch(e){}
   }
   const enc = encodeURIComponent(texto);
   const wa = `https://wa.me/?text=${enc}`;
@@ -1207,11 +1235,12 @@ async function shareResumen(){
   setTimeout(()=>window.open(tg, '_blank'), 300);
 }
 
-/* ====== Imprimir ====== */
+/* ====== PDF / Imprimir (mejorado) ====== */
 function printResumen(){
   const selected=qSA('.item .check:checked').map(c=>c.closest('.item'));
   if(!selected.length){ alert('No hay productos seleccionados.'); return; }
 
+  const order=['higiene','limpieza','alimentos','conservas','otros'];
   const groups={};
   selected.forEach(li=>{
     const card=li.closest('.card');
@@ -1219,20 +1248,37 @@ function printResumen(){
     (groups[cat]??=[]).push(li);
   });
 
-  let grand=0;
+  let grand=0, totalSel=selected.length;
   const w=window.open('','_blank');
-  const css=`body{font-family:Segoe UI,Arial,sans-serif;padding:16px;color:#111;font-size:13px}
-  h1{margin:0 0 6px} h2{margin:12px 0 6px;font-size:14px}
+  const css=`@page{margin:16mm}
+  body{font-family:Segoe UI,Arial,sans-serif;color:#111;font-size:12px}
+  h1{margin:0 0 6px}
+  .meta{color:#374151;margin-bottom:12px}
+  h2{margin:12px 0 6px;font-size:13px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
   table{width:100%;border-collapse:collapse;margin-bottom:10px}
   th,td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left}
-  th{background:#f3f4f6} tfoot td{font-weight:700}`;
-  let html=`<html><head><meta charset="UTF-8"><title>Resumen</title><style>${css}</style></head><body>`;
-  html+=`<h1>Resumen de compra</h1><small>${new Date().toLocaleString('es-MX')}</small>`;
+  th{background:#f8fafc}
+  tfoot td{font-weight:700}
+  .tot{font-size:14px;font-weight:800;margin-top:12px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 12px}
+  .chip{border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;display:inline-block;background:#fff}
+  .muted{color:#6b7280}
+  .footer{margin-top:18px;color:#6b7280;font-size:11px}`;
+  let html=`<html><head><meta charset="UTF-8"><title>Resumen de compra</title><style>${css}</style></head><body>`;
+  html+=`<h1>Resumen de compra</h1><div class="meta">${new Date().toLocaleString('es-MX')}</div>`;
 
-  Object.entries(groups).forEach(([cat, lis])=>{
+  // Resumen rápido
+  html+=`<div class="grid">
+    <div class="chip">Marcados: <b>${totalSel}</b></div>
+    <div class="chip">Generado con Primera Despensa</div>
+  </div>`;
+
+  order.forEach(cat=>{
+    const lis = groups[cat];
+    if(!lis || !lis.length) return;
     let tot=0;
     html+=`<h2>${cat.charAt(0).toUpperCase()+cat.slice(1)}</h2>`;
-    html+=`<table><thead><tr><th>Producto</th><th>Cant.</th><th>Costo</th><th>Subtotal</th></tr></thead><tbody>`;
+    html+=`<table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Subtotal</th></tr></thead><tbody>`;
     lis.forEach(li=>{
       const name=li.querySelector('label')?.textContent.trim()||'';
       const q=Number(qS('input.cant',li)?.value)||0;
@@ -1240,11 +1286,12 @@ function printResumen(){
       const s=q*p; tot+=s;
       html+=`<tr><td>${name}</td><td>${q}</td><td>${money(p)}</td><td>${money(s)}</td></tr>`;
     });
-    html+=`</tbody><tfoot><tr><td colspan="3">Total categoría</td><td>${money(tot)}</td></tr></tfoot></table>`;
+    html+=`</tbody><tfoot><tr><td colspan="3">Total ${cat}</td><td>${money(tot)}</td></tr></tfoot></table>`;
     grand+=tot;
   });
 
-  html+=`<h2>Total</h2><p style="font-size:14px;font-weight:900">${money(grand)}</p>`;
+  html+=`<div class="tot">TOTAL: ${money(grand)}</div>`;
+  html+=`<div class="footer">Este documento fue generado para impresión rápida. Precios en MXN.</div>`;
   html+=`</body></html>`;
   w.document.write(html); w.document.close(); w.focus(); w.print();
 }
